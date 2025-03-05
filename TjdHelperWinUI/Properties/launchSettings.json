@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TjdHelperWinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "TjdHelperWinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
