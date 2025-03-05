@@ -32,8 +32,10 @@
                 KeyboardAcceleratorPlacementMode="Hidden"
                 PlaceholderText="Search"
                 QueryIcon="Find"
-                QuerySubmitted="OnControlsSearchBoxQuerySubmitted"
-                    TextChanged="OnControlsSearchBoxTextChanged">
+                ItemsSource="{Binding SearchItemsResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding StrSearchInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextMemberPath="Name"
+                SuggestionChosen="controlsSearchBox_SuggestionChosen">
                     <AutoSuggestBox.ItemTemplate>
                         <DataTemplate x:DataType="local1:PageInfo">
                             <StackPanel Orientation="Horizontal">

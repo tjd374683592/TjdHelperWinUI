@@ -5,10 +5,12 @@ using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using TjdHelperWinUI.Models;
 using TjdHelperWinUI.Pages;
 using TjdHelperWinUI.ViewModels; // 需要 WinRT 进行 COM 互操作
@@ -26,13 +28,6 @@ namespace TjdHelperWinUI
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-        // 在 MainWindow.xaml.cs 或 ViewModel 中定义
-        private List<PageInfo> _allPages = new List<PageInfo>
-        {
-            new PageInfo { Name = "主页", PageType = typeof(Pages.HomePage) },
-            new PageInfo { Name = "Debug页", PageType = typeof(Pages.DebugPage) },
-        };
-
         public MainWindow()
         {
             this.InitializeComponent();
@@ -49,6 +44,7 @@ namespace TjdHelperWinUI
             SetWindowSizeAndCenter(1500, 900); // 设置窗口大小并居中
         }
 
+        #region 设置Mica效果
         private MicaController micaController;
         private SystemBackdropConfiguration backdropConfig;
 
@@ -83,31 +79,9 @@ namespace TjdHelperWinUI
                 micaController.AddSystemBackdropTarget(this.As<ICompositionSupportsSystemBackdrop>());
             }
         }
+        #endregion
 
-        private void MainNavigation_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
-        {
-            if (args.InvokedItemContainer is NavigationViewItem item && item.Tag != null)
-            {
-                // 根据 Tag 导航到对应页面
-                var pageType = Type.GetType($"TjdHelperWinUI.Pages.{item.Tag}");
-                if (pageType != null) { MainFrame.Navigate(pageType); }
-            }
-        }
-
-        private void MainNavigation_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
-        {
-            if (MainFrame.CanGoBack)
-            {
-                MainFrame.GoBack();
-            }
-        }
-
-        private void MainNavigation_Loaded(object sender, RoutedEventArgs e)
-        {
-            // 初始导航到首页
-            MainFrame.Navigate(typeof(HomePage));
-        }
-
+        #region 窗体关闭，disposed Mica控制器
         private void Window_Closed(object sender, WindowEventArgs args)
         {
             // Make sure any Mica/Acrylic controller is disposed
@@ -117,7 +91,9 @@ namespace TjdHelperWinUI
                 micaController = null;
             }
         }
+        #endregion
 
+        #region 设置启动位置和窗体默认大小
         private void SetWindowSizeAndCenter(int width, int height)
         {
             IntPtr hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
@@ -141,6 +117,7 @@ namespace TjdHelperWinUI
                 }
             }
         }
+        #endregion
 
         private void OnControlsSearchBoxQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
@@ -157,26 +134,60 @@ namespace TjdHelperWinUI
             }
         }
 
-        private void OnControlsSearchBoxTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            // 搜索建议
-            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-            {
-                // 根据输入过滤页面
-                var query = sender.Text.ToLower();
-                var filteredPages = _allPages
-                    .Where(p => p.Name.ToLower().Contains(query))
-                    .ToList();
-
-                // 更新建议项
-                sender.ItemsSource = filteredPages;
-            }
-        }
-
         private void CtrlF_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
             // Ctrl + F 快捷键
             controlsSearchBox.Focus(FocusState.Programmatic);
+        }
+
+        #region 导航相关
+        /// <summary>
+        /// 导航加载
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainNavigation_Loaded(object sender, RoutedEventArgs e)
+        {
+            // 初始导航到首页
+            MainFrame.Navigate(typeof(HomePage));
+        }
+
+        /// <summary>
+        /// 选中了NavigationView具体一项
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void MainNavigation_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            if (args.InvokedItemContainer is NavigationViewItem item && item.Tag != null)
+            {
+                // 根据 Tag 导航到对应页面
+                var pageType = Type.GetType($"TjdHelperWinUI.Pages.{item.Tag}");
+                if (pageType != null) { MainFrame.Navigate(pageType); }
+            }
+        }
+
+        /// <summary>
+        /// 点击回退
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void MainNavigation_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            if (MainFrame.CanGoBack)
+            {
+                MainFrame.GoBack();
+            }
+        }
+        #endregion
+
+        private void controlsSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            if (args.SelectedItem != null)
+            {
+                // 根据用户选中项目导航到对应页面
+                MainFrame.Navigate(((PageInfo)args.SelectedItem).PageType);
+            }
         }
     }
 }

@@ -11,5 +11,4 @@ namespace TjdHelperWinUI.Tools
         Task ShowMessageAsync(string title, string message);
         Task<bool> ShowConfirmDialogAsync(string title, string message);
     }
-
 }

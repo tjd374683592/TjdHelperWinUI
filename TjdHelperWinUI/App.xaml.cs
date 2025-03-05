@@ -51,7 +51,7 @@ namespace TjdHelperWinUI
             Services = services.BuildServiceProvider();
 
             m_window = new MainWindow();
-            MainWindow = (MainWindow)m_window;
+            MainWindow = (MainWindow)m_window;//公开给其他页面使用（XamlRoot）
 
             // 扩展内容到标题栏
             m_window.ExtendsContentIntoTitleBar = true;
