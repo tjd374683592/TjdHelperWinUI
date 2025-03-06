@@ -1,4 +1,8 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using TjdHelperWinUI.ControlHelper;
+using TjdHelperWinUI.ViewModels;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -14,6 +18,20 @@ namespace TjdHelperWinUI.Pages
         public DebugPage()
         {
             this.InitializeComponent();
+
+            if (Content is FrameworkElement rootElement)
+            {
+                // 从 DI 容器中获取 ViewModel
+                rootElement.DataContext = App.Services.GetService<DebugPageViewModel>();
+            }
+        }
+
+        private void RichEditBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is RichEditBox richEditBox)
+            {
+                RichEditBoxHelper.Initialize(richEditBox);
+            }
         }
     }
 }
