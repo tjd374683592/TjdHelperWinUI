@@ -42,7 +42,7 @@
                     <RichEditBox PlaceholderText="Example: 00007fff`93335000" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrEndAddress, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
                     <Button Content="计算" Margin="5 0 0 0" Command="{Binding CalcVSizeSizeCommand}"/>
                     <TextBlock Text="VSize:" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                    <RichEditBox PlaceholderText="Example: 148 KB" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrVSize,Mode=TwoWay}" Loaded="RichEditBox_Loaded" MaxWidth="250"/>
+                    <RichEditBox PlaceholderText="Example: Size:  151552 byte    148KB    0MB" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrVSize,Mode=TwoWay}" Loaded="RichEditBox_Loaded" MaxWidth="350"/>
                     <Button Content="清空" Margin="5 0 0 0" Command="{Binding CalcResultClearCommand}"/>
                 </StackPanel>
             </Expander>
