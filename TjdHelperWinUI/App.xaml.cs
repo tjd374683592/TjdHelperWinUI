@@ -61,6 +61,7 @@ namespace TjdHelperWinUI
             var services = new ServiceCollection();
             services.AddSingleton<MainWindowViewModel>(); // 让 ViewModel 在整个应用中可用
             services.AddSingleton<DebugPageViewModel>();
+            services.AddSingleton<ToolsPageViewModel>();
             services.AddSingleton<TestPageViewModel>();
             Services = services.BuildServiceProvider();
 

@@ -12,6 +12,9 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using TjdHelperWinUI.ControlHelper;
+using Microsoft.Extensions.DependencyInjection;
+using TjdHelperWinUI.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,6 +29,20 @@ namespace TjdHelperWinUI.Pages
         public ToolsPage()
         {
             this.InitializeComponent();
+
+            if (Content is FrameworkElement rootElement)
+            {
+                // 从 DI 容器中获取 ViewModel
+                rootElement.DataContext = App.Services.GetService<ToolsPageViewModel>();
+            }
+        }
+
+        private void RichEditBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is RichEditBox richEditBox)
+            {
+                RichEditBoxHelper.Initialize(richEditBox);
+            }
         }
     }
 }

@@ -6,10 +6,40 @@
     xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controlhelpers="using:TjdHelperWinUI.ControlHelper"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        
-    </Grid>
+    <ScrollViewer VerticalScrollMode="Auto"
+              VerticalScrollBarVisibility="Auto"
+              HorizontalScrollMode="Disabled">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="SHA Encryption" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="String To Encrypt:" VerticalAlignment="Center"/>
+                        <Button Content="计算" Margin="10 0 0 0" Command="{Binding EncryptCommand}"/>
+                        <Button Content="清空" Margin="10 0 0 0" Command="{Binding ClearEncryptStrAndResultCommand}"/>
+                    </StackPanel>
+                    <Grid Margin="0 10 0 0">
+                        <RichEditBox PlaceholderText="type here" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrToEncrypt, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    </Grid>
+
+                    <TextBlock Text="Encrypt Result:" VerticalAlignment="Center" Margin=" 0 15 0 0"/>
+                    <Grid Margin="0 10 0 0">
+                        <RichEditBox PlaceholderText="result here" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrEncryptResult, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    </Grid>
+
+                </StackPanel>
+            </Expander>
+
+            
+
+        </Grid>
+    </ScrollViewer>
 </Page>

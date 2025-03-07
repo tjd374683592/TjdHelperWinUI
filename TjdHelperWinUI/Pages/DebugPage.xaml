@@ -26,7 +26,7 @@
                     <StackPanel Orientation="Horizontal">
                         <RichEditBox PlaceholderText="Example:5 Or 0x5" MinWidth="150" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrWinErrorCode, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
                         <Button Content="查询" Margin="10 0 0 0" Command="{Binding CheckWinErrorDetailsCommand}"/>
-                        <Button Content="清空" Margin="10 0 0 0" />
+                        <Button Content="清空" Margin="10 0 0 0" Command="{Binding WinErrorAndDetailsClearCommand}"/>
                     </StackPanel>
 
                     <TextBlock Text="Error Details:" VerticalAlignment="Center" Margin="0 10 0 0"/>
@@ -37,13 +37,13 @@
             <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Down" Header="Calc Virtual Size By HEX Address" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0 20 0 0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Start Addr:" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                    <RichEditBox PlaceholderText="Example: 00007fff`93310000" Margin="5 0 0 0 " />
+                    <RichEditBox PlaceholderText="Example: 00007fff`93310000" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrStartAddress,Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
                     <TextBlock Text="End Addr:" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                    <RichEditBox PlaceholderText="Example: 00007fff`93335000" Margin="5 0 0 0 "/>
-                    <Button Content="计算" Margin="5 0 0 0"/>
+                    <RichEditBox PlaceholderText="Example: 00007fff`93335000" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrEndAddress, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    <Button Content="计算" Margin="5 0 0 0" Command="{Binding CalcVSizeSizeCommand}"/>
                     <TextBlock Text="VSize:" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                    <RichEditBox PlaceholderText="Example: 148 KB" Margin="5 0 0 0 "/>
-                    <Button Content="清空" Margin="5 0 0 0"/>
+                    <RichEditBox PlaceholderText="Example: 148 KB" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrVSize,Mode=TwoWay}" Loaded="RichEditBox_Loaded" MaxWidth="250"/>
+                    <Button Content="清空" Margin="5 0 0 0" Command="{Binding CalcResultClearCommand}"/>
                 </StackPanel>
             </Expander>
 

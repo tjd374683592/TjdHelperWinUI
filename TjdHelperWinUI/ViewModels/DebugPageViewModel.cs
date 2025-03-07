@@ -135,7 +135,8 @@ namespace TjdHelperWinUI.ViewModels
             string currentPath = AppDomain.CurrentDomain.BaseDirectory;
             string exePath = Path.Combine(currentPath, @"Resources\Tools\Err_6.4.5.exe");
             string errorCodesJsonFilePath = Path.Combine(currentPath, @"Resources\Tools\errorCodes.json");
-            string arguments = StrWinErrorCode.Trim();  // 传递的参数
+            
+            string arguments = string.IsNullOrEmpty(StrWinErrorCode) ? "" : StrWinErrorCode.Trim();  // 传递的参数
 
             try
             {
