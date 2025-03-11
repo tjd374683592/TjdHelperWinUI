@@ -137,7 +137,7 @@ namespace TjdHelperWinUI
         private void CtrlF_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
             // Ctrl + F 快捷键
-            controlsSearchBox.Focus(FocusState.Programmatic);
+            //controlsSearchBox.Focus(FocusState.Programmatic);
         }
 
         #region 导航相关

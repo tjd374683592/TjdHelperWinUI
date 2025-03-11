@@ -9,7 +9,7 @@ using TjdHelperWinUI.Tools;
 
 namespace TjdHelperWinUI.ViewModels
 {
-    public class ToolsPageViewModel : INotifyPropertyChanged
+    public class EncryptHelperPageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -57,7 +57,7 @@ namespace TjdHelperWinUI.ViewModels
         public ICommand EncryptCommand { get; set; }
         public ICommand ClearEncryptStrAndResultCommand { get; set; }
 
-        public ToolsPageViewModel()
+        public EncryptHelperPageViewModel()
         {
             EncryptCommand = new RelayCommand(EncryptCommandExecute);
             ClearEncryptStrAndResultCommand = new RelayCommand(ClearEncryptStrAndResultCommandExecute);

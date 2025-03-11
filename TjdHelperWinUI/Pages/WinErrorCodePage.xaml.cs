@@ -12,10 +12,9 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Windows.UI.ApplicationSettings;
 using Microsoft.Extensions.DependencyInjection;
 using TjdHelperWinUI.ViewModels;
-using Microsoft.Web.WebView2.Core;
+using TjdHelperWinUI.ControlHelper;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -25,34 +24,17 @@ namespace TjdHelperWinUI.Pages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class TestPage : Page
+    public sealed partial class WinErrorCodePage : Page
     {
-        public TestPage()
+        public WinErrorCodePage()
         {
             this.InitializeComponent();
 
             if (Content is FrameworkElement rootElement)
             {
                 // 从 DI 容器中获取 ViewModel
-                var viewModel = App.Services.GetService<TestPageViewModel>();
-                rootElement.DataContext = App.Services.GetService<TestPageViewModel>();
+                rootElement.DataContext = App.Services.GetService<WinErrorCodeViewModel>();
             }
-        }
-
-        private void MyTabView_AddTabButtonClick(TabView sender, object args)
-        {
-            var newTab = new TabViewItem
-            {
-                Header = "New Tab"
-            };
-
-            var webView = new WebView2
-            {
-                Source = new Uri("https://www.onenote.com/notebooks")
-            };
-
-            newTab.Content = webView;
-            sender.TabItems.Add(newTab);
         }
     }
 }

@@ -10,32 +10,31 @@
    
     Title="TjdHelperWinUI" Closed="Window_Closed">
 
-    <Grid Margin="0 30 0 0">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <NavigationView x:Name="MainNavigation" Grid.Row="1"
-                PaneDisplayMode="Left"
-                IsBackEnabled="{x:Bind MainFrame.CanGoBack, Mode=OneWay}"
-                BackRequested="MainNavigation_BackRequested"
-                ItemInvoked="MainNavigation_ItemInvoked"
-                Loaded="MainNavigation_Loaded">
+    IsBackEnabled="{x:Bind MainFrame.CanGoBack, Mode=OneWay}"
+    BackRequested="MainNavigation_BackRequested"
+    ItemInvoked="MainNavigation_ItemInvoked"
+    Loaded="MainNavigation_Loaded">
 
             <NavigationView.AutoSuggestBox>
                 <AutoSuggestBox
-                x:Name="controlsSearchBox"
-                MinWidth="200"
-                VerticalAlignment="Center"
-                x:FieldModifier="public"
-                KeyboardAcceleratorPlacementMode="Hidden"
-                PlaceholderText="Search"
-                QueryIcon="Find"
-                ItemsSource="{Binding SearchItemsResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Text="{Binding StrSearchInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                TextMemberPath="Name"
-                SuggestionChosen="controlsSearchBox_SuggestionChosen">
+    x:Name="controlsSearchBox"
+    MinWidth="200"
+    VerticalAlignment="Center"
+    x:FieldModifier="public"
+    KeyboardAcceleratorPlacementMode="Hidden"
+    PlaceholderText="Search"
+    QueryIcon="Find"
+    ItemsSource="{Binding SearchItemsResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    Text="{Binding StrSearchInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+    TextMemberPath="Name"
+    SuggestionChosen="controlsSearchBox_SuggestionChosen">
                     <AutoSuggestBox.ItemTemplate>
                         <DataTemplate x:DataType="local1:PageInfo">
                             <StackPanel Orientation="Horizontal">
@@ -45,20 +44,32 @@
                     </AutoSuggestBox.ItemTemplate>
                     <AutoSuggestBox.KeyboardAccelerators>
                         <KeyboardAccelerator
-                Key="F"
-                Invoked="CtrlF_Invoked"
-                Modifiers="Control" />
+    Key="F"
+    Invoked="CtrlF_Invoked"
+    Modifiers="Control" />
                     </AutoSuggestBox.KeyboardAccelerators>
                 </AutoSuggestBox>
             </NavigationView.AutoSuggestBox>
 
             <!-- 定义菜单项 -->
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Home" Tag="HomePage" />
-                <NavigationViewItem Content="Tools" Tag="ToolsPage" />
-                <NavigationViewItem Content="Debug" Tag="DebugPage" />
+                <NavigationViewItem Content="Home" Tag="HomePage" Icon="Home"/>
+                <NavigationViewItem Content="Tools" Icon="Repair">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Encryption" Icon="Permissions" Tag="EncryptHelperPage"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+
+                <NavigationViewItem Content="Debug" Icon="Library">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Win Error Code" Tag="WinErrorCodePage" Icon="Zoom"/>
+                        <NavigationViewItem Content="Calc" Tag="AddressHelperPage" Icon="Calculator"/>
+                        <NavigationViewItem Content="Library" Tag="DebugNotePage" Icon="OutlineStar"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+
                 <NavigationViewItem Content="Json Format" Tag="JsonFormatPage" />
-                <NavigationViewItem Content="Test Page" Tag="TestPage" />
+                <NavigationViewItem Content="OneNote" Tag="OneNotePage" />
             </NavigationView.MenuItems>
 
             <!-- 内容区域 -->

@@ -67,7 +67,9 @@ namespace TjdHelperWinUI.ViewModels
         private ObservableCollection<PageInfo> _allPages = new ObservableCollection<PageInfo>
         {
             new PageInfo { Name = "主页", PageType = typeof(Pages.HomePage) },
-            new PageInfo { Name = "Debug页", PageType = typeof(Pages.DebugPage) },
+            new PageInfo { Name = "Encryption", PageType = typeof(Pages.AddressHelperPage) },
+            new PageInfo { Name = "WinErrCode", PageType = typeof(Pages.WinErrorCodePage) },
+            new PageInfo { Name = "Address Calc", PageType = typeof(Pages.AddressHelperPage) }
         };
 
         public MainWindowViewModel()

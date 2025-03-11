@@ -60,8 +60,9 @@ namespace TjdHelperWinUI
         {
             var services = new ServiceCollection();
             services.AddSingleton<MainWindowViewModel>(); // 让 ViewModel 在整个应用中可用
-            services.AddSingleton<DebugPageViewModel>();
-            services.AddSingleton<ToolsPageViewModel>();
+            services.AddSingleton<EncryptHelperPageViewModel>();
+            services.AddSingleton<WinErrorCodeViewModel>();
+            services.AddSingleton<AddressHelperPageViewModel>();
             services.AddSingleton<TestPageViewModel>();
             Services = services.BuildServiceProvider();
 
@@ -74,7 +75,7 @@ namespace TjdHelperWinUI
             // 扩展内容到标题栏
             m_window.ExtendsContentIntoTitleBar = true;
             // 重要：必须设置空标题才能完全隐藏系统标题文字
-            m_window.Title = "TjdHelperWinUI";
+            //m_window.Title = "TjdHelperWinUI";
             m_window.Activate();
 
 

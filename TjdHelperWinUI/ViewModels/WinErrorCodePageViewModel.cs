@@ -13,7 +13,7 @@ using TjdHelperWinUI.Tools;
 
 namespace TjdHelperWinUI.ViewModels
 {
-    public class DebugPageViewModel: INotifyPropertyChanged
+    public class WinErrorCodeViewModel: INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -24,8 +24,6 @@ namespace TjdHelperWinUI.ViewModels
 
         public ICommand CheckWinErrorDetailsCommand { get; set; }
         public ICommand WinErrorAndDetailsClearCommand { get; set; }
-        public ICommand CalcVSizeSizeCommand { get; set; }
-        public ICommand CalcResultClearCommand { get; set; }
 
         /// <summary>
         /// WinError Code字符串
@@ -62,67 +60,10 @@ namespace TjdHelperWinUI.ViewModels
                 }
             }
         }
-
-        /// <summary>
-        /// 起始地址
-        /// </summary>
-        private string _strStartAddress;
-
-        public string StrStartAddress
-        {
-            get { return _strStartAddress; }
-            set
-            {
-                if (_strStartAddress != value)
-                {
-                    _strStartAddress = value;
-                    OnPropertyChanged(nameof(StrStartAddress));
-                }
-            }
-        }
-
-        /// <summary>
-        /// 结束地址
-        /// </summary>
-        private string _strEndAddress;
-
-        public string StrEndAddress
-        {
-            get { return _strEndAddress; }
-            set
-            {
-                if (_strEndAddress != value)
-                {
-                    _strEndAddress = value;
-                    OnPropertyChanged(nameof(StrEndAddress));
-                }
-            }
-        }
-
-        /// <summary>
-        /// 虚拟空间大小
-        /// </summary>
-        private string _strVSize;
-
-        public string StrVSize
-        {
-            get { return _strVSize; }
-            set
-            {
-                if (_strVSize != value)
-                {
-                    _strVSize = value;
-                    OnPropertyChanged(nameof(StrVSize));
-                }
-            }
-        }
-
-        public DebugPageViewModel()
+        public WinErrorCodeViewModel()
         {
             CheckWinErrorDetailsCommand = new RelayCommand(CheckWinErrorDetailsCommandExecute);
             WinErrorAndDetailsClearCommand = new RelayCommand(WinErrorAndDetailsClearCommandExecute);
-            CalcVSizeSizeCommand = new RelayCommand(CalcVSizeSizeCommandExecute);
-            CalcResultClearCommand = new RelayCommand(CalcResultClearCommandExecute);
         }
 
         /// <summary>
@@ -135,7 +76,7 @@ namespace TjdHelperWinUI.ViewModels
             string currentPath = AppDomain.CurrentDomain.BaseDirectory;
             string exePath = Path.Combine(currentPath, @"Resources\Tools\Err_6.4.5.exe");
             string errorCodesJsonFilePath = Path.Combine(currentPath, @"Resources\Tools\errorCodes.json");
-            
+
             string arguments = string.IsNullOrEmpty(StrWinErrorCode) ? "" : StrWinErrorCode.Trim();  // 传递的参数
 
             try
@@ -216,53 +157,6 @@ namespace TjdHelperWinUI.ViewModels
         {
             StrWinErrorCode = "";
             StrWinErrorCodeDetails = "";
-        }
-
-        /// <summary>
-        /// 根据地址计算文件大小
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void CalcVSizeSizeCommandExecute(object obj)
-        {
-            try
-            {
-                // 清理输入：移除反引号、0x前缀和空白字符
-                string startAddr = StrStartAddress.Replace("`", "").Replace("0x", "").Replace(" ", "").Trim().ToUpper();
-                string endAddr = StrEndAddress.Replace("`", "").Replace("0x", "").Replace(" ", "").Trim().ToUpper();
-
-                // 转换为数字
-                IntPtr start = new IntPtr(Convert.ToInt64(startAddr, 16));
-                IntPtr end = new IntPtr(Convert.ToInt64(endAddr, 16));
-
-                //计算大小
-                long vsize = end.ToInt64() - start.ToInt64();
-
-                if (vsize <= 0)
-                {
-                    //((MainWindowViewModel)Application.Current.MainWindow.DataContext).ShowFlyOut = true;
-                    //((MainWindowViewModel)Application.Current.MainWindow.DataContext).LogInfo = $"结束地址：{StrEndAddress} 必须大于起始地址：{StrStartAddress}";
-                }
-
-                StrVSize = "Size:  " + vsize + " byte    " + vsize / 1024 + "KB    " + vsize / 1024 / 1024 + "MB";
-            }
-            catch (Exception ex)
-            {
-                //((MainWindowViewModel)Application.Current.MainWindow.DataContext).ShowFlyOut = true;
-                //((MainWindowViewModel)Application.Current.MainWindow.DataContext).LogInfo = "Exception: " + ex.Message;
-            }
-        }
-
-        /// <summary>
-        /// 清空计算结果
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void CalcResultClearCommandExecute(object obj)
-        {
-            StrStartAddress = "";
-            StrEndAddress = "";
-            StrVSize = "";
         }
     }
 }

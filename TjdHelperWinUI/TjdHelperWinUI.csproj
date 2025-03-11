@@ -15,11 +15,15 @@
   <ItemGroup>
     <None Remove="Assets\GalleryHeaderImage.png" />
     <None Remove="Assets\logo.ico" />
-    <None Remove="Pages\DebugPage.xaml" />
+    <None Remove="Pages\AddressHelperPage.xaml" />
+    <None Remove="Pages\DebugNotePage.xaml" />
+    <None Remove="Pages\EncryptHelperPage.xaml" />
     <None Remove="Pages\HomePage.xaml" />
     <None Remove="Pages\JsonFormatPage.xaml" />
+    <None Remove="Pages\OneNotePage.xaml" />
     <None Remove="Pages\TestPage.xaml" />
-    <None Remove="Pages\ToolsPage.xaml" />
+    <None Remove="Pages\WinErrorCodePage.xaml" />
+    <None Remove="Resources\bookmarks.json" />
     <None Remove="Resources\Tools\errorCodes.json" />
     <None Remove="Resources\Tools\Err_6.4.5.exe" />
   </ItemGroup>
@@ -32,6 +36,9 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Resources\bookmarks.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -81,17 +88,32 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\DebugPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Pages\ToolsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="Pages\TestPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\DebugNotePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\OneNotePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\EncryptHelperPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\AddressHelperPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\WinErrorCodePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
