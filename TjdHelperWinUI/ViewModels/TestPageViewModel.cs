@@ -27,8 +27,6 @@ namespace TjdHelperWinUI.ViewModels
         {
             MessageService = new MessageService();
 
-            ClearJsonCommand = new RelayCommand(ClearJsonCommandExecute);
-
             ShowMessageCommand = new RelayCommand(async _ => await MessageService.ShowMessageAsync("提示", "这是一个 MVVM 消息框"));
             ShowConfirmCommand = new RelayCommand(async _ =>
             {
@@ -42,11 +40,6 @@ namespace TjdHelperWinUI.ViewModels
 
         public IMessageService MessageService { get; set; }
 
-
-        private void ClearJsonCommandExecute(object obj)
-        {
-
-        }
 
         public ICommand ClearJsonCommand { get; set; }
 

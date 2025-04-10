@@ -7,9 +7,32 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" SizeChanged="JsonFormatPage_SizeChanged">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <Expander Header="Json处理" IsExpanded="True" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Button Content="校验/格式化Json"  Margin="0 5 5 5" Click="btnCheckAndFormatClicked"/>
+                    <Button Content="压缩" Margin="0 5 5 5" Click="btnCompresseJsonClicked"/>
+                    <Button Content="转义" Margin="0 5 5 5" Click="btnSerializeJsonClicked"/>
+                    <Button Content="去转义" Margin="0 5 5 5" Command="{Binding DeserializeJsonCommand}"/>
+                    <Button Content="清空" Margin="0 5 5 5" Command="{Binding ClearJsonCommand}"/>
+                    <Button Content="切换主题" Margin="0 5 5 5" Click="btnChangeThemeClicked"/>
+                </StackPanel>
+            </Grid>
+        </Expander>
+
+        <WebView2 x:Name="MonacoWebView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
     </Grid>
 </Page>

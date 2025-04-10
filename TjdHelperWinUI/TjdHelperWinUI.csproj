@@ -20,10 +20,10 @@
     <None Remove="Pages\EncryptHelperPage.xaml" />
     <None Remove="Pages\HomePage.xaml" />
     <None Remove="Pages\JsonFormatPage.xaml" />
-    <None Remove="Pages\OneNotePage.xaml" />
     <None Remove="Pages\TestPage.xaml" />
     <None Remove="Pages\WinErrorCodePage.xaml" />
     <None Remove="Resources\bookmarks.json" />
+    <None Remove="Resources\monaco.html" />
     <None Remove="Resources\Tools\errorCodes.json" />
     <None Remove="Resources\Tools\Err_6.4.5.exe" />
   </ItemGroup>
@@ -37,6 +37,9 @@
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Resources\bookmarks.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\monaco.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -63,6 +66,8 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ColorCode.Core" Version="2.0.15" />
+    <PackageReference Include="ColorCode.WinUI" Version="2.0.15" />
     <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.0.230907" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.0.230907" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.13.0" />
@@ -94,11 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\DebugNotePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Pages\OneNotePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -16,6 +16,9 @@ using Windows.UI.ApplicationSettings;
 using Microsoft.Extensions.DependencyInjection;
 using TjdHelperWinUI.ViewModels;
 using Microsoft.Web.WebView2.Core;
+using ColorCode;
+using Windows.Globalization;
+using Microsoft.UI.Xaml.Documents;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,25 +37,35 @@ namespace TjdHelperWinUI.Pages
             if (Content is FrameworkElement rootElement)
             {
                 // 从 DI 容器中获取 ViewModel
-                var viewModel = App.Services.GetService<TestPageViewModel>();
                 rootElement.DataContext = App.Services.GetService<TestPageViewModel>();
             }
+
+
+
+            var formatter = new RichTextBlockFormatter();
+
+            string code = @"
+[
+  {
+    ""Catagory"": ""Windows Performance Toolkit"",
+    ""Name"": ""Windows Performance Step-by-Step Guides"",
+    ""Url"": ""https://learn.microsoft.com/en-us/windows-hardware/test/wpt/windows-performance-step-by-step-guides""
+  },
+  {
+    ""Catagory"": ""Windows Performance Toolkit"",
+    ""Name"": ""WPA Exercise - UI delay problem"",
+    ""Url"": ""https://learn.microsoft.com/en-us/windows-hardware/test/wpt/optimizing-performance-and-responsiveness-exercise-3""
+  },
+  {
+    ""Catagory"": ""WinDbg"",
+    ""Name"": ""user mode debug"",
+    ""Url"": ""https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/getting-started-with-windbg""
+  }
+];
+    }
+}";
+            formatter.FormatRichTextBlock(code, Languages.Typescript, richb);
         }
 
-        private void MyTabView_AddTabButtonClick(TabView sender, object args)
-        {
-            var newTab = new TabViewItem
-            {
-                Header = "New Tab"
-            };
-
-            var webView = new WebView2
-            {
-                Source = new Uri("https://www.onenote.com/notebooks")
-            };
-
-            newTab.Content = webView;
-            sender.TabItems.Add(newTab);
-        }
     }
 }

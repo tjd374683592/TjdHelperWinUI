@@ -69,7 +69,7 @@
                 </NavigationViewItem>
 
                 <NavigationViewItem Content="Json Format" Tag="JsonFormatPage" />
-                <NavigationViewItem Content="OneNote" Tag="OneNotePage" />
+                <NavigationViewItem Content="test" Tag="TestPage" />
             </NavigationView.MenuItems>
 
             <!-- 内容区域 -->

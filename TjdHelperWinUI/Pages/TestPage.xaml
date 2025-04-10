@@ -13,6 +13,8 @@
     <Grid>
       <!--<Button Content="清空" Margin="0 5 5 5" Command="{Binding ShowConfirmCommand}" MinWidth="55"/>-->
 
-        <WebView2 Source="https://www.onenote.com/notebooks"/>
+        <RichTextBlock x:Name="richb"/>
+
+
     </Grid>
 </Page>

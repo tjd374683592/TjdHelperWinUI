@@ -63,6 +63,7 @@ namespace TjdHelperWinUI
             services.AddSingleton<EncryptHelperPageViewModel>();
             services.AddSingleton<WinErrorCodeViewModel>();
             services.AddSingleton<AddressHelperPageViewModel>();
+            services.AddSingleton<JsonFormatPageViewModel>();
             services.AddSingleton<TestPageViewModel>();
             Services = services.BuildServiceProvider();
 
@@ -77,8 +78,6 @@ namespace TjdHelperWinUI
             // 重要：必须设置空标题才能完全隐藏系统标题文字
             //m_window.Title = "TjdHelperWinUI";
             m_window.Activate();
-
-
         }
 
         private Window? m_window;
