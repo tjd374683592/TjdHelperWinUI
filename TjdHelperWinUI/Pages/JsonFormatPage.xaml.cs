@@ -98,6 +98,16 @@ namespace TjdHelperWinUI.Pages
                 string script = $"setEditorContent('{trimmed}')";
                 await MonacoWebView.CoreWebView2.ExecuteScriptAsync(script);
             }
+
+            //去转义Json
+            if (monacoPostMsgStr.StartsWith("deSerializeJson->"))
+            {
+                string content = monacoPostMsgStr.Split("->")[1];
+                viewModel.StrJsonPrase = content;
+                viewModel.DeserializeJsonCommandExecute(null);
+                string script = $"setEditorContent('{viewModel.StrJsonPrase}')";
+                await MonacoWebView.CoreWebView2.ExecuteScriptAsync(script);
+            }
         }
         #endregion
 
@@ -243,7 +253,31 @@ namespace TjdHelperWinUI.Pages
         private async void btnSerializeJsonClicked(object sender, RoutedEventArgs e)
         {
             await MonacoWebView.CoreWebView2.ExecuteScriptAsync("window.chrome.webview.postMessage('serializeJson->'+editor.getValue())");
-        } 
+        }
+        #endregion
+
+        #region 反序列化Json
+        /// <summary>
+        /// 反序列化Json
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void btnDeserializeJsonClicked(object sender, RoutedEventArgs e)
+        {
+            await MonacoWebView.CoreWebView2.ExecuteScriptAsync("window.chrome.webview.postMessage('deSerializeJson->'+editor.getValue())");
+        }
+        #endregion
+
+        #region 清空Json
+        /// <summary>
+        /// 清空Json
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void btnClearJsonClicked(object sender, RoutedEventArgs e)
+        {
+            await MonacoWebView.CoreWebView2.ExecuteScriptAsync("setEditorContent('')");
+        }
         #endregion
     }
 }

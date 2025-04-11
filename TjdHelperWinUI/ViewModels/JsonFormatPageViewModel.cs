@@ -11,6 +11,8 @@ using System.Windows.Input;
 using TjdHelperWinUI.Tools;
 using System.Buffers.Text;
 using ColorCode;
+using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace TjdHelperWinUI.ViewModels
 {
@@ -29,8 +31,8 @@ namespace TjdHelperWinUI.ViewModels
         /// <summary>
         /// Json节点
         /// </summary>
-        private BindingList<JsonNode> _nodes;
-        public BindingList<JsonNode> Nodes
+        private ObservableCollection<JsonNode> _nodes;
+        public ObservableCollection<JsonNode> Nodes
         {
             get { return _nodes; }
             set
@@ -61,6 +63,43 @@ namespace TjdHelperWinUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Monaco编辑器显示状态
+        /// </summary>
+        private bool _isMonacoShown;
+
+        public bool IsMonacoShown
+        {
+            get { return _isMonacoShown; }
+            set
+            {
+                if (_isMonacoShown != value)
+                {
+                    _isMonacoShown = value;
+                    OnPropertyChanged(nameof(IsMonacoShown));
+                }
+            }
+        }
+
+        /// <summary>
+        /// TreeViewShown显示状态
+        /// </summary>
+        private bool _isTreeViewShown;
+
+        public bool IsTreeViewShown
+        {
+            get { return _isTreeViewShown; }
+            set
+            {
+                if (_isTreeViewShown != value)
+                {
+                    _isTreeViewShown = value;
+                    OnPropertyChanged(nameof(IsTreeViewShown));
+                }
+            }
+        }
+
+
         public IMessageService MessageService { get; set; }
 
         public ICommand CheckAndFormatJsonCommand { get; set; }
@@ -73,6 +112,8 @@ namespace TjdHelperWinUI.ViewModels
         public JsonFormatPageViewModel()
         {
             MessageService = new MessageService();
+            IsMonacoShown = true;
+            IsTreeViewShown = false;
 
             CheckAndFormatJsonCommand = new RelayCommand(CheckAndFormatJsonCommandExecute);
             CompresseJsonCommand = new RelayCommand(CompresseJsonCommandExecute);
@@ -96,7 +137,6 @@ namespace TjdHelperWinUI.ViewModels
                     JToken token = JToken.Parse(StrJsonPrase);
                     // 使用 Formatting.Indented 参数来实现缩进格式化
                     StrJsonPrase = token.ToString(Formatting.Indented);
-                    MessageService.ShowMessageAsync("提示", "Json格式ok，check & format完毕");
                 }
                 catch (Exception ex)
                 {
@@ -125,7 +165,7 @@ namespace TjdHelperWinUI.ViewModels
                 catch (Exception ex)
                 {
                     //不是json
-                    MessageService.ShowMessageAsync("请检查Json格式", ex.Message);
+                    MessageService.ShowMessageAsync("压缩失败", ex.Message);
                 }
             }
         }
@@ -146,7 +186,7 @@ namespace TjdHelperWinUI.ViewModels
             }
             catch (Exception ex)
             {
-                
+                MessageService.ShowMessageAsync("转义失败", ex.Message);
             }
         }
 
@@ -179,7 +219,7 @@ namespace TjdHelperWinUI.ViewModels
             }
             catch (Exception ex)
             {
-
+                MessageService.ShowMessageAsync("去转义失败", ex.Message);
             }
         }
 
@@ -200,37 +240,39 @@ namespace TjdHelperWinUI.ViewModels
         /// <param name="obj"></param>
         public void ShowJsonTreeCommandExecute(object obj)
         {
+            if (IsMonacoShown)
+            {
+                IsMonacoShown = false;
+                IsTreeViewShown = true;
+            }
+            else
+            {
+                IsMonacoShown = true;
+                IsTreeViewShown = false;
+            }
+
             if (!string.IsNullOrEmpty(StrJsonPrase))
             {
-                //折叠Json原文
-                CompresseJsonCommandExecute(obj);
-
-                //装在tree node
-                Nodes = new BindingList<JsonNode>();
-                LoadJson(StrJsonPrase);
+                //装载tree node
+                Nodes = new ObservableCollection<JsonNode>();
+                try
+                {
+                    Nodes.Clear();
+                    var rootNode = CreateNode("Root", JToken.Parse(StrJsonPrase));
+                    Nodes.Add(rootNode);
+                }
+                catch (Exception ex)
+                {
+                    MessageService.ShowMessageAsync("错误", ex.Message);
+                }
             }
-        }
-
-
-        public void LoadJson(string jsonString)
-        {
-            try
-            {
-                Nodes.Clear();
-                var rootNode = CreateNode("Root", JToken.Parse(jsonString));
-                Nodes.Add(rootNode);
-            }
-            catch (Exception ex)
-            {
-
-            }
-
         }
 
         private JsonNode CreateNode(string name, JToken token)
         {
             var node = new JsonNode();
             node.Name = name;
+            node.NameAndValue = name;
 
             switch (token.Type)
             {
@@ -256,6 +298,7 @@ namespace TjdHelperWinUI.ViewModels
                 case JTokenType.Boolean:
                 case JTokenType.Null:
                     node.Value = token.ToString();
+                    node.NameAndValue = $"{name}: {node.Value}";
                     break;
             }
 
@@ -268,10 +311,11 @@ public class JsonNode
 {
     public string Name { get; set; }
     public string Value { get; set; }
-    public List<JsonNode> Children { get; set; }
+    public string NameAndValue { get; set; }
+    public ObservableCollection<JsonNode> Children { get; set; }
 
     public JsonNode()
     {
-        Children = new List<JsonNode>();
+        Children = new ObservableCollection<JsonNode>();
     }
 }

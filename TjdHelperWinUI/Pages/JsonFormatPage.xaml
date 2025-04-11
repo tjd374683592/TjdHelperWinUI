@@ -5,9 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:TjdHelperWinUI.Converter"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" SizeChanged="JsonFormatPage_SizeChanged">
+
+    <Page.Resources>
+        <local1:BoolToVisibilityConverter x:Key="BoolToVisibility" />
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -26,13 +30,24 @@
                     <Button Content="校验/格式化Json"  Margin="0 5 5 5" Click="btnCheckAndFormatClicked"/>
                     <Button Content="压缩" Margin="0 5 5 5" Click="btnCompresseJsonClicked"/>
                     <Button Content="转义" Margin="0 5 5 5" Click="btnSerializeJsonClicked"/>
-                    <Button Content="去转义" Margin="0 5 5 5" Command="{Binding DeserializeJsonCommand}"/>
-                    <Button Content="清空" Margin="0 5 5 5" Command="{Binding ClearJsonCommand}"/>
+                    <Button Content="去转义" Margin="0 5 5 5" Click="btnDeserializeJsonClicked"/>
+                    <Button Content="清空" Margin="0 5 5 5" Click="btnClearJsonClicked"/>
                     <Button Content="切换主题" Margin="0 5 5 5" Click="btnChangeThemeClicked"/>
+                    <Button Content="切换Monaco/TreeView" Margin="0 5 5 5" Command="{Binding ShowJsonTreeCommand}"/>
+                    <TextBlock Text="Value:" Margin="0 5 5 5" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding StrJsonPrase, Mode=TwoWay}" Margin="0 5 5 5" MinWidth="300"/>
                 </StackPanel>
             </Grid>
         </Expander>
 
-        <WebView2 x:Name="MonacoWebView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1"/>
+        <WebView2 x:Name="MonacoWebView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Visibility="{Binding IsMonacoShown, Converter={StaticResource BoolToVisibility}}"/>
+
+        <TreeView ItemsSource="{Binding Nodes}" Grid.Row="1" Visibility="{Binding IsTreeViewShown, Converter={StaticResource BoolToVisibility}}">
+            <TreeView.ItemTemplate>
+                <DataTemplate>
+                    <TreeViewItem ItemsSource="{Binding Children}" Content="{Binding NameAndValue}" IsExpanded="True"/>
+                </DataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
     </Grid>
 </Page>
