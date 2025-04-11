@@ -277,6 +277,9 @@ namespace TjdHelperWinUI.Pages
         private async void btnClearJsonClicked(object sender, RoutedEventArgs e)
         {
             await MonacoWebView.CoreWebView2.ExecuteScriptAsync("setEditorContent('')");
+            viewModel.StrJsonPrase = "";
+            viewModel.IsMonacoShown = true;
+            viewModel.IsTreeViewShown = false;
         }
         #endregion
     }
