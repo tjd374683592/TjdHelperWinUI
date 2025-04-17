@@ -100,7 +100,7 @@ namespace TjdHelperWinUI.ViewModels
         }
 
 
-        public IMessageService MessageService { get; set; }
+        public IMessageService MsgService { get; set; }
 
         public ICommand CheckAndFormatJsonCommand { get; set; }
         public ICommand CompresseJsonCommand { get; set; }
@@ -111,7 +111,7 @@ namespace TjdHelperWinUI.ViewModels
 
         public JsonFormatPageViewModel()
         {
-            MessageService = new MessageService();
+            MsgService = new MessageService();
             IsMonacoShown = true;
             IsTreeViewShown = false;
 
@@ -141,7 +141,7 @@ namespace TjdHelperWinUI.ViewModels
                 catch (Exception ex)
                 {
                     //不是json
-                    MessageService.ShowMessageAsync("请检查Json格式", ex.Message);
+                    MsgService.ShowMessageAsync("请检查Json格式", ex.Message);
                 }
             }
         }
@@ -165,7 +165,7 @@ namespace TjdHelperWinUI.ViewModels
                 catch (Exception ex)
                 {
                     //不是json
-                    MessageService.ShowMessageAsync("压缩失败", ex.Message);
+                    MsgService.ShowMessageAsync("压缩失败", ex.Message);
                 }
             }
         }
@@ -186,7 +186,7 @@ namespace TjdHelperWinUI.ViewModels
             }
             catch (Exception ex)
             {
-                MessageService.ShowMessageAsync("转义失败", ex.Message);
+                MsgService.ShowMessageAsync("转义失败", ex.Message);
             }
         }
 
@@ -219,7 +219,7 @@ namespace TjdHelperWinUI.ViewModels
             }
             catch (Exception ex)
             {
-                MessageService.ShowMessageAsync("去转义失败", ex.Message);
+                MsgService.ShowMessageAsync("去转义失败", ex.Message);
             }
         }
 
@@ -263,7 +263,7 @@ namespace TjdHelperWinUI.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageService.ShowMessageAsync("错误", ex.Message);
+                    MsgService.ShowMessageAsync("错误", ex.Message);
                 }
             }
         }

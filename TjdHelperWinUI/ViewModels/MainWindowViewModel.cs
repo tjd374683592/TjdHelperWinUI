@@ -66,10 +66,12 @@ namespace TjdHelperWinUI.ViewModels
         // 在 MainWindow.xaml.cs 或 ViewModel 中定义
         private ObservableCollection<PageInfo> _allPages = new ObservableCollection<PageInfo>
         {
-            new PageInfo { Name = "主页", PageType = typeof(Pages.HomePage) },
+            new PageInfo { Name = "Home", PageType = typeof(Pages.HomePage) },
             new PageInfo { Name = "Encryption", PageType = typeof(Pages.AddressHelperPage) },
-            new PageInfo { Name = "WinErrCode", PageType = typeof(Pages.WinErrorCodePage) },
-            new PageInfo { Name = "Address Calc", PageType = typeof(Pages.AddressHelperPage) }
+            new PageInfo { Name = "Time Helper", PageType = typeof(Pages.TimeHelperPage) },
+            new PageInfo { Name = "Win Err Code", PageType = typeof(Pages.WinErrorCodePage) },
+            new PageInfo { Name = "Address Calc", PageType = typeof(Pages.AddressHelperPage) },
+            new PageInfo { Name = "Library", PageType = typeof(Pages.DebugNotePage) }
         };
 
         public MainWindowViewModel()

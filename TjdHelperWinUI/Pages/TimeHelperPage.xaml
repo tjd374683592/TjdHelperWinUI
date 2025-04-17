@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="TjdHelperWinUI.Pages.TimeHelperPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TjdHelperWinUI.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <ScrollViewer VerticalScrollMode="Auto"
+          VerticalScrollBarVisibility="Auto"
+          HorizontalScrollMode="Disabled">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="Timestamp Converter" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Vertical" Grid.Row="0">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="rbtnSecond" Content="秒(s)" IsChecked="{Binding SecondsIsChecked, Mode=TwoWay}"/>
+                            <RadioButton x:Name="rbtnMillisecond" Content="毫秒(ms)" IsChecked="{Binding MillisecondsIsChecked, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                            <Button x:Name="btnConvertToTime" Content="时间戳 -> 时间" Command="{Binding ConvertToTimeCommand}" />
+                            <TextBlock Text="时间戳：" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                            <TextBox Margin="5 0 0 0 " x:Name="txtTimestampToTime" Width="150" HorizontalContentAlignment="Stretch" Text="{Binding TimestampStr,Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                            <Button x:Name="btnConvertToTimestamp" Content="时间 -> 时间戳" Command="{Binding ConvertToTimestampCommand}"/>
+                            <TextBlock Text="时间：" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                            <!--<TextBox Margin="5 0 0 0 " Width="190" HorizontalContentAlignment="Stretch" Text="{Binding TimeStr}"/>-->
+                            <CalendarDatePicker PlaceholderText="Pick a date" Height="30" DateFormat="{}{year.full}/{month.integer}/{day.integer}" Date="{Binding SelectedDate,Mode=TwoWay}"/>
+                            <TimePicker Height="30" Margin="3 0 0 0" ClockIdentifier="24HourClock" Time="{Binding SelectedTime,Mode=TwoWay}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1"  Margin="0 20 0 0">
+                        <TextBlock Text="转换结果："/>
+                        <TextBox TextWrapping="Wrap" Text="{Binding TimeConvertResult}" MinHeight="100" Margin="0 5 0 0"/>
+                    </StackPanel>
+
+                </Grid>
+
+            </Expander>
+
+        </Grid>
+    </ScrollViewer>
+</Page>

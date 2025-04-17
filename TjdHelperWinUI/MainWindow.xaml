@@ -57,18 +57,19 @@
                 <NavigationViewItem Content="Tools" Icon="Repair">
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem Content="Encryption" Icon="Permissions" Tag="EncryptHelperPage"/>
+                        <NavigationViewItem Content="Time Helper" Icon="Calendar" Tag="TimeHelperPage"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
                 <NavigationViewItem Content="Debug" Icon="Library">
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem Content="Win Error Code" Tag="WinErrorCodePage" Icon="Zoom"/>
-                        <NavigationViewItem Content="Calc" Tag="AddressHelperPage" Icon="Calculator"/>
+                        <NavigationViewItem Content="Address Calc" Tag="AddressHelperPage" Icon="Calculator"/>
                         <NavigationViewItem Content="Library" Tag="DebugNotePage" Icon="OutlineStar"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
-                <NavigationViewItem Content="Json Format" Tag="JsonFormatPage" />
+                <NavigationViewItem Content="Json Format" Tag="JsonFormatPage" Icon="Edit"/>
                 <NavigationViewItem Content="test" Tag="TestPage" />
             </NavigationView.MenuItems>
 

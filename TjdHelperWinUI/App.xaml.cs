@@ -65,6 +65,7 @@ namespace TjdHelperWinUI
             services.AddSingleton<AddressHelperPageViewModel>();
             services.AddSingleton<JsonFormatPageViewModel>();
             services.AddSingleton<TestPageViewModel>();
+            services.AddScoped<TimeHelperPageViewModel>();
             Services = services.BuildServiceProvider();
 
             m_window = new MainWindow();

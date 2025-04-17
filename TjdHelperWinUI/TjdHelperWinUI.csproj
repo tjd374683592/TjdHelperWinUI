@@ -21,6 +21,7 @@
     <None Remove="Pages\HomePage.xaml" />
     <None Remove="Pages\JsonFormatPage.xaml" />
     <None Remove="Pages\TestPage.xaml" />
+    <None Remove="Pages\TimeHelperPage.xaml" />
     <None Remove="Pages\WinErrorCodePage.xaml" />
     <None Remove="Resources\bookmarks.json" />
     <None Remove="Resources\monaco.html" />
@@ -119,6 +120,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\TimeHelperPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!--
