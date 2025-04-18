@@ -198,7 +198,7 @@ namespace TjdHelperWinUI.Pages
         /// <param name="theme"></param>
         private async void ChangeEditorTheme(string theme)
         {
-            if (MonacoWebView.CoreWebView2 != null && SystemThemeHelper.IsSystemDarkTheme())
+            if (MonacoWebView.CoreWebView2 != null)
             {
                 string script = $"setEditorTheme('{theme}');";
                 string result = await MonacoWebView.CoreWebView2.ExecuteScriptAsync(script);
