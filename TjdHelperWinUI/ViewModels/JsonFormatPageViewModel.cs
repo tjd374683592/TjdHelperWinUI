@@ -13,6 +13,8 @@ using System.Buffers.Text;
 using ColorCode;
 using System.Collections.ObjectModel;
 using System.Threading;
+using Microsoft.Windows.AppNotifications.Builder;
+using Microsoft.Windows.AppNotifications;
 
 namespace TjdHelperWinUI.ViewModels
 {
@@ -137,6 +139,8 @@ namespace TjdHelperWinUI.ViewModels
                     JToken token = JToken.Parse(StrJsonPrase);
                     // 使用 Formatting.Indented 参数来实现缩进格式化
                     StrJsonPrase = token.ToString(Formatting.Indented);
+
+                    NotificationHelper.Show("Json格式化完毕");
                 }
                 catch (Exception ex)
                 {

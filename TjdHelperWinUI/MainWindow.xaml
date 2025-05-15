@@ -57,7 +57,9 @@
                 <NavigationViewItem Content="Tools" Icon="Repair">
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem Content="Encryption" Icon="Permissions" Tag="EncryptHelperPage"/>
-                        <NavigationViewItem Content="Time Helper" Icon="Calendar" Tag="TimeHelperPage"/>
+                        <NavigationViewItem Content="Time Converter" Icon="Calendar" Tag="TimeHelperPage"/>
+                        <NavigationViewItem Content="Encoding Converter" Icon="Globe"  Tag="EnDecodePage"/>
+                        <NavigationViewItem Content="QR Code" Icon="Camera"  Tag="QRCodePage"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
@@ -70,7 +72,6 @@
                 </NavigationViewItem>
 
                 <NavigationViewItem Content="Json Format" Tag="JsonFormatPage" Icon="Edit"/>
-                <NavigationViewItem Content="test" Tag="TestPage" />
             </NavigationView.MenuItems>
 
             <!-- 内容区域 -->

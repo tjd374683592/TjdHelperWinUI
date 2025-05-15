@@ -68,10 +68,13 @@ namespace TjdHelperWinUI.ViewModels
         {
             new PageInfo { Name = "Home", PageType = typeof(Pages.HomePage) },
             new PageInfo { Name = "Encryption", PageType = typeof(Pages.AddressHelperPage) },
-            new PageInfo { Name = "Time Helper", PageType = typeof(Pages.TimeHelperPage) },
+            new PageInfo { Name = "Encoding Converter", PageType = typeof(Pages.EnDecodePage) },
+            new PageInfo { Name = "Time Converter", PageType = typeof(Pages.TimeHelperPage) },
+            new PageInfo { Name = "QR Code", PageType = typeof(Pages.QRCodePage) },
             new PageInfo { Name = "Win Err Code", PageType = typeof(Pages.WinErrorCodePage) },
             new PageInfo { Name = "Address Calc", PageType = typeof(Pages.AddressHelperPage) },
-            new PageInfo { Name = "Library", PageType = typeof(Pages.DebugNotePage) }
+            new PageInfo { Name = "Library", PageType = typeof(Pages.DebugNotePage) },
+            new PageInfo { Name = "Json Format", PageType = typeof(Pages.JsonFormatPage) }
         };
 
         public MainWindowViewModel()

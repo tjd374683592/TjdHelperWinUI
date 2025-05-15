@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using TjdHelperWinUI.Tools;
 
 namespace TjdHelperWinUI.ViewModels
 {
-    public class TimeHelperPageViewModel: INotifyPropertyChanged
+    public class TimeHelperPageViewModel : INotifyPropertyChanged
     {
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -31,8 +32,6 @@ namespace TjdHelperWinUI.ViewModels
 
             SecondsIsChecked = true;
             MillisecondsIsChecked = false;
-
-            TimeStr =  DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             DateTimeOffset date = DateTimeOffset.Now.Date;
             SelectedDate = date;
@@ -191,7 +190,7 @@ namespace TjdHelperWinUI.ViewModels
         {
             if (string.IsNullOrEmpty(TimestampStr))
             {
-                MsgService.ShowMessageAsync("注意","时间戳为空");
+                MsgService.ShowMessageAsync("注意", "时间戳为空");
                 return;
             }
 
@@ -224,14 +223,31 @@ namespace TjdHelperWinUI.ViewModels
         /// <param name="parameter"></param>
         private void ConvertToTimestampCommandExecute(object parameter)
         {
-            // 合并 date 和 time
-            DateTime combinedDateTime = SelectedDate.Date + SelectedTime;
+            string timeValue = "";
+            if (!string.IsNullOrEmpty(TimeStr))
+            {
+                //时间字符串格式校验
+                bool isValidFormat = DateTime.TryParseExact(TimeStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDateTime);
+                if (isValidFormat)
+                {
+                    timeValue = parsedDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                }
+                else
+                {
+                    MsgService.ShowMessageAsync("注意", "时间格式不正确，请使用yyyy-MM-dd HH:mm:ss");
+                    return;
+                }
+            }
+            else
+            {
+                // 合并 date 和 time
+                DateTime combinedDateTime = SelectedDate.Date + SelectedTime;
 
-            // 格式化成字符串
-            string TimeStr = combinedDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                // 格式化成字符串
+                timeValue = combinedDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+            }
 
-
-            long timestampNow = TimeHelper.ConvertToTimestampByTime(TimeStr, MillisecondsIsChecked);
+            long timestampNow = TimeHelper.ConvertToTimestampByTime(timeValue, MillisecondsIsChecked);
             TimeSpan span = TimeSpan.FromMinutes(5);
             //5分钟前的时间戳
             TimeResultObj timeBefore = TimeHelper.GetTimeBefore(timestampNow.ToString(), span, MillisecondsIsChecked);
@@ -240,6 +256,8 @@ namespace TjdHelperWinUI.ViewModels
             TimeResultObj timeAftere = TimeHelper.GetTimeAfter(timestampNow.ToString(), span, MillisecondsIsChecked);
 
             TimeConvertResult = GetFinalTimeResultStr(timestampNow.ToString(), timeBefore, timeAftere);
+
+
         }
 
         /// <summary>

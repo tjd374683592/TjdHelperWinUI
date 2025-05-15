@@ -37,9 +37,10 @@
                         <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                             <Button x:Name="btnConvertToTimestamp" Content="时间 -> 时间戳" Command="{Binding ConvertToTimestampCommand}"/>
                             <TextBlock Text="时间：" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                            <!--<TextBox Margin="5 0 0 0 " Width="190" HorizontalContentAlignment="Stretch" Text="{Binding TimeStr}"/>-->
                             <CalendarDatePicker PlaceholderText="Pick a date" Height="30" DateFormat="{}{year.full}/{month.integer}/{day.integer}" Date="{Binding SelectedDate,Mode=TwoWay}"/>
                             <TimePicker Height="30" Margin="3 0 0 0" ClockIdentifier="24HourClock" Time="{Binding SelectedTime,Mode=TwoWay}"/>
+                            <TextBlock Text="OR" Margin="5 0 0 0" VerticalAlignment="Center"/>
+                            <TextBox Margin="5 0 0 0" PlaceholderText="输入时间str：1970-01-01 00:00:00" Text="{Binding TimeStr,Mode=TwoWay}"/>
                         </StackPanel>
                     </StackPanel>
 
