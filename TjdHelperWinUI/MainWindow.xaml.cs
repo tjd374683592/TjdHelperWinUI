@@ -42,7 +42,7 @@ namespace TjdHelperWinUI
             //设置 Mica 背景
             TrySetMicaBackground();
 
-            SetWindowSizeAndCenter(1500, 900); // 设置窗口大小并居中
+            SetWindowSizeAndCenter(1400, 900); // 设置窗口大小并居中
         }
 
         #region 设置Mica效果

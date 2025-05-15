@@ -171,32 +171,14 @@ namespace TjdHelperWinUI.ViewModels
         /// <param name="obj"></param>
         private async void ChooseQRCodePathCommandExecute(object obj)
         {
-            // 创建一个文件选择器
-            var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
+            string? selectedPath = await FilePickerHelper.PickSingleFilePathAsync(App.MainWindow);
 
-            // 从 App 类中获取窗口对象（可参考示例代码实现 App.MainWindow）
-            var window = App.MainWindow;
-
-            // 获取当前 WinUI 3 窗口的句柄 (HWND)
-            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
-
-            // 使用窗口句柄初始化文件选择器
-            WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hWnd);
-
-            // 设置文件选择器的选项
-            openPicker.ViewMode = PickerViewMode.Thumbnail; // 使用缩略图视图模式
-            openPicker.FileTypeFilter.Add("*"); // 允许选择所有类型的文件
-
-            // 打开文件选择器让用户选择文件
-            var file = await openPicker.PickSingleFileAsync();
-            if (file != null)
+            if (!string.IsNullOrEmpty(selectedPath))
             {
-                // 用户选择了文件，获取文件路径
-                DecodeQRImagePath = file.Path;
+                DecodeQRImagePath = selectedPath;
             }
             else
             {
-                // 用户取消了操作
                 NotificationHelper.Show("通知", "操作已取消");
             }
         }

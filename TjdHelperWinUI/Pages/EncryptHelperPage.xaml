@@ -38,6 +38,37 @@
                 </StackPanel>
             </Expander>
 
+            <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Down" Header="MD5 Hash" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="String To Calc:" VerticalAlignment="Center"/>
+                        <Button Content="计算字符串MD5" Margin="10 0 0 0" Command="{Binding CalcStrMD5HashCommand}"/>
+                        <Button Content="全部清空" Margin="10 0 0 0" Command="{Binding ClearMD5StrAndValueCommand}"/>
+                    </StackPanel>
+                    <Grid Margin="0 10 0 0">
+                        <RichEditBox PlaceholderText="type here" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrToCalcMD5, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    </Grid>
+
+                    <Grid Margin="0 10 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Content="文件选择" Command="{Binding ChooseFilePathCommand,Mode=TwoWay}" MaxWidth="300" Grid.Column="0"/>
+                        <TextBox Margin="5 0 0 0" PlaceholderText="文件Path" Text="{Binding StrMD5FilePath}" HorizontalAlignment="Stretch" Grid.Column="1" TextWrapping="Wrap"/>
+                        <Button Content="计算文件MD5" Command="{Binding CalcFileMD5HashCommand}" MaxWidth="300" Margin="5 0 0 0" Grid.Column="2"/>
+                    </Grid>
+
+                    <TextBlock Text="MD5 Result:" VerticalAlignment="Center" Margin=" 0 15 0 0"/>
+                    <Grid Margin="0 10 0 0">
+                        <RichEditBox PlaceholderText="result here" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrMD5Result, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    </Grid>
+
+                </StackPanel>
+            </Expander>
+
 
 
         </Grid>
