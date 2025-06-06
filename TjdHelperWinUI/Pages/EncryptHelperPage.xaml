@@ -17,6 +17,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="SHA1 Encryption" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
@@ -70,6 +71,17 @@
             </Expander>
 
 
+
+            <Expander Grid.Row="2" IsExpanded="True" ExpandDirection="Down" Header="GUID" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="GUID:" VerticalAlignment="Center"/>
+                        <RichEditBox Margin="10 0 0 0" PlaceholderText="to be generated" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrGUID, Mode=TwoWay}" MinWidth="200" TextWrapping="NoWrap"/>
+                        <Button Content="生成" Margin="10 0 0 0" Command="{Binding GenerateGUIDCommand}"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Expander>
 
         </Grid>
     </ScrollViewer>

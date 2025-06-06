@@ -108,12 +108,31 @@ namespace TjdHelperWinUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// GUID结果
+        /// </summary>
+        private string _strGUID;
+
+        public string StrGUID
+        {
+            get { return _strGUID; }
+            set
+            {
+                if (_strGUID != value)
+                {
+                    _strGUID = value;
+                    OnPropertyChanged(nameof(StrGUID));
+                }
+            }
+        }
+
         public ICommand EncryptCommand { get; set; }
         public ICommand ClearEncryptStrAndResultCommand { get; set; }
         public ICommand ChooseFilePathCommand { get; set; }
         public ICommand CalcStrMD5HashCommand { get; set; }
         public ICommand ClearMD5StrAndValueCommand { get; set; }
         public ICommand CalcFileMD5HashCommand { get; set; }
+        public ICommand GenerateGUIDCommand { get; set; }
 
         public EncryptHelperPageViewModel()
         {
@@ -123,6 +142,12 @@ namespace TjdHelperWinUI.ViewModels
             CalcStrMD5HashCommand = new RelayCommand(CalcStrMD5HashCommandExecute);
             ClearMD5StrAndValueCommand = new RelayCommand(ClearMD5StrAndValueCommandExecute);
             CalcFileMD5HashCommand = new RelayCommand(CalcFileMD5HashCommandExecute);
+            GenerateGUIDCommand = new RelayCommand(GenerateGUIDCommandExecute);
+        }
+
+        private void GenerateGUIDCommandExecute(object obj)
+        {
+            StrGUID = Guid.NewGuid().ToString();
         }
 
         private async void CalcStrMD5HashCommandExecute(object obj)

@@ -132,7 +132,7 @@ namespace TjdHelperWinUI.Pages
 
             ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
             {
-                Thread.Sleep(500);
+                Thread.Sleep(2000);
                 DispatcherQueue.TryEnqueue(() =>
                 {
                     if (SystemThemeHelper.IsSystemDarkTheme())
