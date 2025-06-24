@@ -75,6 +75,12 @@
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
+                <NavigationViewItem Content="Media" Icon="MusicInfo">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Media Converter" Tag="MediaConverterPage" Icon="Play"/>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+
                 <NavigationViewItem Content="Json Format" Tag="JsonFormatPage" Icon="Edit"/>
             </NavigationView.MenuItems>
 

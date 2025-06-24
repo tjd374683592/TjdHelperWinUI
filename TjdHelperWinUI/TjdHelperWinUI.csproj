@@ -21,6 +21,7 @@
     <None Remove="Pages\EnDecodePage.xaml" />
     <None Remove="Pages\HomePage.xaml" />
     <None Remove="Pages\JsonFormatPage.xaml" />
+    <None Remove="Pages\MediaConverterPage.xaml" />
     <None Remove="Pages\QRCodePage.xaml" />
     <None Remove="Pages\TestPage.xaml" />
     <None Remove="Pages\TimeHelperPage.xaml" />
@@ -29,6 +30,16 @@
     <None Remove="Resources\monaco.html" />
     <None Remove="Resources\Tools\errorCodes.json" />
     <None Remove="Resources\Tools\Err_6.4.5.exe" />
+    <None Remove="Resources\Tools\ffmpeg\avcodec-62.dll" />
+    <None Remove="Resources\Tools\ffmpeg\avdevice-62.dll" />
+    <None Remove="Resources\Tools\ffmpeg\avfilter-11.dll" />
+    <None Remove="Resources\Tools\ffmpeg\avformat-62.dll" />
+    <None Remove="Resources\Tools\ffmpeg\avutil-60.dll" />
+    <None Remove="Resources\Tools\ffmpeg\ffmpeg.exe" />
+    <None Remove="Resources\Tools\ffmpeg\ffplay.exe" />
+    <None Remove="Resources\Tools\ffmpeg\ffprobe.exe" />
+    <None Remove="Resources\Tools\ffmpeg\swresample-6.dll" />
+    <None Remove="Resources\Tools\ffmpeg\swscale-9.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +63,36 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Tools\Err_6.4.5.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\avcodec-62.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\avdevice-62.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\avfilter-11.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\avformat-62.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\avutil-60.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\ffmpeg.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\ffplay.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\ffprobe.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\swresample-6.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Tools\ffmpeg\swscale-9.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
@@ -126,6 +167,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\MediaConverterPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\QRCodePage.xaml">

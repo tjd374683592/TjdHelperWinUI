@@ -68,6 +68,7 @@ namespace TjdHelperWinUI
             services.AddScoped<TimeHelperPageViewModel>();
             services.AddScoped<EnDecodePageViewModel>();
             services.AddScoped<QRCodePageViewModel>();
+            services.AddScoped<MediaConverterPageViewModel>();
             Services = services.BuildServiceProvider();
 
             m_window = new MainWindow();
