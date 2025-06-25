@@ -61,8 +61,8 @@
                 <NavigationViewItem Content="Tools" Icon="Repair">
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem Content="Encryption" Icon="Permissions" Tag="EncryptHelperPage"/>
-                        <NavigationViewItem Content="Time Converter" Icon="Calendar" Tag="TimeHelperPage"/>
                         <NavigationViewItem Content="Encoding Converter" Icon="Globe"  Tag="EnDecodePage"/>
+                        <NavigationViewItem Content="Time Converter" Icon="Calendar" Tag="TimeHelperPage"/>
                         <NavigationViewItem Content="QR Code" Icon="Camera"  Tag="QRCodePage"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>

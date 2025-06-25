@@ -16,6 +16,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="URL Encode / URL Decode" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
@@ -28,6 +29,64 @@
                         <TextBox PlaceholderText="type URL here" Text="{Binding StrUrl, Mode=TwoWay}"/>
                     </Grid>
                 </StackPanel>
+            </Expander>
+
+            <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Down" Header="Base64 Encode" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" Grid.Row="0">
+                            <RadioButton Content="计算文件" IsChecked="{Binding NeedCalcFileBase64, Mode=TwoWay}"/>
+                            <RadioButton Content="计算字符串" IsChecked="{Binding NeedCalcStringBase64,Mode=TwoWay}"/>
+                            <Button Content="Base64编码" Command="{Binding CalcBase64Command}" MaxWidth="300" Margin="5 0 0 0"/>
+                            <Button Content="清空" Command="{Binding ClearBase64Command}" MaxWidth="300" Margin="5 0 0 0"/>
+                        </StackPanel>
+
+                        <Grid Grid.Row="1" Margin="0 10 0 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Content="选择文件" Command="{Binding ChooseFileToBase64PathCommand,Mode=TwoWay}" MaxWidth="300" Grid.Column="0"/>
+                            <TextBox Margin="5 0 0 0" PlaceholderText="需要计算Base64文件Path" Text="{Binding StrFileToBase64Path}" HorizontalAlignment="Stretch" Grid.Column="1" TextWrapping="Wrap"/>
+                        </Grid>
+
+                        <TextBox PlaceholderText="需要计算Base64的字符串" Text="{Binding StrStringToBase64,Mode=TwoWay}" Grid.Row="2" Margin="0 10 0 0" TextWrapping="Wrap"/>
+
+                    </Grid>
+
+                    <TextBox MinWidth="50" PlaceholderText="转换详情" Text="{Binding StrBase64Result}" Grid.Row="1" TextWrapping="Wrap" Margin="0 10 0 0"/>
+                </Grid>
+            </Expander>
+
+            <Expander Grid.Row="2" IsExpanded="True" ExpandDirection="Down" Header="Base64 Decode" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox PlaceholderText="Base64 String" Text="{Binding StrBase64StringToDecode,Mode=TwoWay}" HorizontalAlignment="Stretch" Grid.Column="1" TextWrapping="Wrap"/>
+                        <Button Content="Base64解码" Command="{Binding DecodeBase64Command}" MaxWidth="300" Margin="5 0 0 0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="2"/>
+                    </Grid>
+
+                    <TextBox MinWidth="50" PlaceholderText="转换详情" Text="{Binding StrBase64DecodeResult}" Grid.Row="1" TextWrapping="Wrap" Margin="0 10 0 0"/>
+                </Grid>
             </Expander>
         </Grid>
     </ScrollViewer>

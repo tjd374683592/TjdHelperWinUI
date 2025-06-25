@@ -164,7 +164,7 @@ namespace TjdHelperWinUI
             {
                 // 根据 Tag 导航到对应页面
                 var pageType = Type.GetType($"TjdHelperWinUI.Pages.{item.Tag}");
-                if (pageType != null) { MainFrame.Navigate(pageType); }
+                if (pageType != null) { MainFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight }); }
             }
         }
 
