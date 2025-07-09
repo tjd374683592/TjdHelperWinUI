@@ -16,6 +16,7 @@ using TjdHelperWinUI.Models;
 using TjdHelperWinUI.Pages;
 using TjdHelperWinUI.ViewModels; // 需要 WinRT 进行 COM 互操作
 using Windows.Graphics;
+using Windows.Storage;
 using WinRT;
 
 
@@ -29,6 +30,8 @@ namespace TjdHelperWinUI
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        // MainWindow.xaml.cs
+        public NavigationView MainNavigationView { get; private set; }  // 必须是 public
         public MainWindow()
         {
             this.InitializeComponent();
@@ -43,6 +46,10 @@ namespace TjdHelperWinUI
             TrySetMicaBackground();
 
             SetWindowSizeAndCenter(1400, 900); // 设置窗口大小并居中
+
+            MainNavigationView = this.MainNavigation;
+            MainNavigationView.PaneDisplayMode = LoadPaneDisplayMode();
+
         }
 
         #region 设置Mica效果
@@ -164,6 +171,10 @@ namespace TjdHelperWinUI
             {
                 // 根据 Tag 导航到对应页面
                 var pageType = Type.GetType($"TjdHelperWinUI.Pages.{item.Tag}");
+                if (item.Tag.ToString() == "Settings")
+                {
+                    pageType = Type.GetType("TjdHelperWinUI.Pages.SettingPage");
+                }
                 if (pageType != null) { MainFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight }); }
             }
         }
@@ -189,6 +200,20 @@ namespace TjdHelperWinUI
                 // 根据用户选中项目导航到对应页面
                 MainFrame.Navigate(((PageInfo)args.SelectedItem).PageType);
             }
+        }
+
+        // 读取设置
+        NavigationViewPaneDisplayMode LoadPaneDisplayMode()
+        {
+            var settings = ApplicationData.Current.LocalSettings;
+            if (settings.Values.TryGetValue("PaneDisplayMode", out object value))
+            {
+                if (Enum.TryParse(value.ToString(), out NavigationViewPaneDisplayMode mode))
+                {
+                    return mode;
+                }
+            }
+            return NavigationViewPaneDisplayMode.Left; // 默认值
         }
     }
 }

@@ -75,7 +75,8 @@ namespace TjdHelperWinUI.ViewModels
             new PageInfo { Name = "Address Calc", PageType = typeof(Pages.AddressHelperPage) },
             new PageInfo { Name = "Library", PageType = typeof(Pages.DebugNotePage) },
             new PageInfo { Name = "Json Format", PageType = typeof(Pages.JsonFormatPage) },
-            new PageInfo { Name = "Media Converter", PageType = typeof(Pages.MediaConverterPage) }
+            new PageInfo { Name = "Media Converter", PageType = typeof(Pages.MediaConverterPage) },
+            new PageInfo { Name = "Settings", PageType = typeof(Pages.SettingPage) }
         };
 
         public MainWindowViewModel()

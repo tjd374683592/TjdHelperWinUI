@@ -86,6 +86,7 @@
 
             <!-- 内容区域 -->
             <Frame x:Name="MainFrame" />
+
         </NavigationView>
     </Grid>
 </Window>
