@@ -14,7 +14,7 @@ namespace TjdHelperWinUI.Tools
         /// <param name="timestamp"></param>
         /// <param name="isMilliSeconds"></param>
         /// <returns></returns>
-        public static string ConvertToTimeByTimestamp(long timestamp, bool isMilliSeconds)
+        public static string ConvertToTimeByTimestamp(long timestamp, bool isMilliSeconds, string strTimeZone)
         {
             // 创建UTC时间
             DateTime utcTime;
@@ -28,7 +28,7 @@ namespace TjdHelperWinUI.Tools
             }
 
             // 转换为北京时间
-            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
+            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById(strTimeZone);
             DateTime beijingTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, cstZone);
             // 格式化为字符串
             return beijingTime.ToString("yyyy-MM-dd HH:mm:ss");
@@ -39,12 +39,12 @@ namespace TjdHelperWinUI.Tools
         /// </summary>
         /// <param name="timeStr">时间字符串（yyyy-dd-MM HH:mm:ss）</param>
         /// <returns></returns>
-        public static long ConvertToTimestampByTime(string timeStr, bool isMilliSeconds)
+        public static long ConvertToTimestampByTime(string timeStr, bool isMilliSeconds, string strTimeZone)
         {
             // 将时间字符串解析为日期时间对象
             DateTime dateTime = DateTime.ParseExact(timeStr, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             // 转换为北京时间
-            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
+            TimeZoneInfo cstZone = TimeZoneInfo.FindSystemTimeZoneById(strTimeZone);
             dateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, cstZone);
 
             // 计算时间戳
@@ -67,7 +67,7 @@ namespace TjdHelperWinUI.Tools
         /// <param name="span"></param>
         /// <param name="isMilliSeconds"></param>
         /// <returns></returns>
-        public static TimeResultObj GetTimeBefore(string timestampStr, TimeSpan span, bool isMilliSeconds)
+        public static TimeResultObj GetTimeBefore(string timestampStr, TimeSpan span, bool isMilliSeconds,string strTimeZone)
         {
             DateTime dateTimeBefore;
             if (isMilliSeconds)
@@ -88,7 +88,7 @@ namespace TjdHelperWinUI.Tools
             {
                 beforeTimestamp = ((long)(beforeTime - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds);
             }
-            string beforeTimeStr = ConvertToTimeByTimestamp(beforeTimestamp, isMilliSeconds);
+            string beforeTimeStr = ConvertToTimeByTimestamp(beforeTimestamp, isMilliSeconds, strTimeZone);
 
             return new TimeResultObj() { TimeBefore = beforeTimeStr, TimestampBefore = beforeTimestamp };
         }
@@ -100,7 +100,7 @@ namespace TjdHelperWinUI.Tools
         /// <param name="span"></param>
         /// <param name="isMilliSeconds"></param>
         /// <returns></returns>
-        public static TimeResultObj GetTimeAfter(string timestampStr, TimeSpan span, bool isMilliSeconds)
+        public static TimeResultObj GetTimeAfter(string timestampStr, TimeSpan span, bool isMilliSeconds, string strTimeZone)
         {
             DateTime dateTimeAfter;
             if (isMilliSeconds)
@@ -121,7 +121,7 @@ namespace TjdHelperWinUI.Tools
             {
                 afterTimestamp = ((long)(afterTime - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds);
             }
-            string afterTimeStr = ConvertToTimeByTimestamp(afterTimestamp, isMilliSeconds);
+            string afterTimeStr = ConvertToTimeByTimestamp(afterTimestamp, isMilliSeconds, strTimeZone);
 
             return new TimeResultObj() { TimeAfter = afterTimeStr, TimestampAfter = afterTimestamp };
         }

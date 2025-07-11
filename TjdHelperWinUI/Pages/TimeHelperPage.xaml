@@ -28,6 +28,8 @@
                         <StackPanel Orientation="Horizontal">
                             <RadioButton x:Name="rbtnSecond" Content="秒(s)" IsChecked="{Binding SecondsIsChecked, Mode=TwoWay}"/>
                             <RadioButton x:Name="rbtnMillisecond" Content="毫秒(ms)" IsChecked="{Binding MillisecondsIsChecked, Mode=TwoWay}"/>
+                            <TextBlock Text="时区" VerticalAlignment="Center"/>
+                            <ComboBox  ItemsSource="{Binding TimeZones}" SelectedItem="{Binding SelectedTimeZone, Mode=TwoWay}" DisplayMemberPath="DisplayName" Width="200" Margin="5 0 0 0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                             <Button x:Name="btnConvertToTime" Content="时间戳 -> 时间" Command="{Binding ConvertToTimeCommand}" />

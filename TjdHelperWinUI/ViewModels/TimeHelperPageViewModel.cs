@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -29,6 +30,11 @@ namespace TjdHelperWinUI.ViewModels
         public TimeHelperPageViewModel()
         {
             MsgService = new MessageService();
+
+            TimeZones = new ObservableCollection<TimeZoneInfo>(TimeZoneInfo.GetSystemTimeZones());
+
+            // 默认选中 "China Standard Time"
+            SelectedTimeZone = TimeZones.FirstOrDefault(tz => tz.Id == "China Standard Time");
 
             SecondsIsChecked = true;
             MillisecondsIsChecked = false;
@@ -183,6 +189,28 @@ namespace TjdHelperWinUI.ViewModels
         }
 
         /// <summary>
+        /// 可用的时区列表
+        /// </summary>
+        public ObservableCollection<TimeZoneInfo> TimeZones { get; }
+
+        /// <summary>
+        /// 选中的时区
+        /// </summary>
+        private TimeZoneInfo _selectedTimeZone;
+        public TimeZoneInfo SelectedTimeZone
+        {
+            get => _selectedTimeZone;
+            set
+            {
+                if (_selectedTimeZone != value)
+                {
+                    _selectedTimeZone = value;
+                    OnPropertyChanged(nameof(SelectedTimeZone));
+                }
+            }
+        }
+
+        /// <summary>
         /// 时间戳转换时间
         /// </summary>
         /// <param name="parameter"></param>
@@ -206,13 +234,13 @@ namespace TjdHelperWinUI.ViewModels
                 MillisecondsIsChecked = true;
                 SecondsIsChecked = false;
             }
-            string strTimeResult = TimeHelper.ConvertToTimeByTimestamp(long.Parse(TimestampStr), MillisecondsIsChecked);
+            string strTimeResult = TimeHelper.ConvertToTimeByTimestamp(long.Parse(TimestampStr), MillisecondsIsChecked, SelectedTimeZone.Id);
             TimeSpan span = TimeSpan.FromMinutes(5);
             //5分钟前的时间戳
-            TimeResultObj timeBefore = TimeHelper.GetTimeBefore(TimestampStr, span, MillisecondsIsChecked);
+            TimeResultObj timeBefore = TimeHelper.GetTimeBefore(TimestampStr, span, MillisecondsIsChecked, SelectedTimeZone.Id);
 
             //5分钟后的时间戳
-            TimeResultObj timeAftere = TimeHelper.GetTimeAfter(TimestampStr, span, MillisecondsIsChecked);
+            TimeResultObj timeAftere = TimeHelper.GetTimeAfter(TimestampStr, span, MillisecondsIsChecked, SelectedTimeZone.Id);
 
             TimeConvertResult = GetFinalTimeResultStr(strTimeResult, timeBefore, timeAftere);
         }
@@ -247,13 +275,13 @@ namespace TjdHelperWinUI.ViewModels
                 timeValue = combinedDateTime.ToString("yyyy-MM-dd HH:mm:ss");
             }
 
-            long timestampNow = TimeHelper.ConvertToTimestampByTime(timeValue, MillisecondsIsChecked);
+            long timestampNow = TimeHelper.ConvertToTimestampByTime(timeValue, MillisecondsIsChecked, SelectedTimeZone.Id);
             TimeSpan span = TimeSpan.FromMinutes(5);
             //5分钟前的时间戳
-            TimeResultObj timeBefore = TimeHelper.GetTimeBefore(timestampNow.ToString(), span, MillisecondsIsChecked);
+            TimeResultObj timeBefore = TimeHelper.GetTimeBefore(timestampNow.ToString(), span, MillisecondsIsChecked, SelectedTimeZone.Id);
 
             //5分钟后的时间戳
-            TimeResultObj timeAftere = TimeHelper.GetTimeAfter(timestampNow.ToString(), span, MillisecondsIsChecked);
+            TimeResultObj timeAftere = TimeHelper.GetTimeAfter(timestampNow.ToString(), span, MillisecondsIsChecked, SelectedTimeZone.Id);
 
             TimeConvertResult = GetFinalTimeResultStr(timestampNow.ToString(), timeBefore, timeAftere);
 
