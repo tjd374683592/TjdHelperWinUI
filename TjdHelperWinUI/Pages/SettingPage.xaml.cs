@@ -31,14 +31,36 @@ namespace TjdHelperWinUI.Pages
     /// </summary>
     public sealed partial class SettingPage : Page
     {
-        private int lastNavigationSelectionMode = 0;
+        private bool _isInitialized = false;
         public SettingPage()
         {
             this.InitializeComponent();
+
+            var settings = ApplicationData.Current.LocalSettings;
+            if (settings.Values.ContainsKey("PaneDisplayMode"))
+            {
+                var paneDisplayMode = settings.Values["PaneDisplayMode"].ToString();
+                if (paneDisplayMode == Microsoft.UI.Xaml.Controls.NavigationViewPaneDisplayMode.Left.ToString())
+                {
+                    navigationLocation.SelectedIndex = 0;
+                }
+                else if (paneDisplayMode == Microsoft.UI.Xaml.Controls.NavigationViewPaneDisplayMode.Top.ToString())
+                {
+                    navigationLocation.SelectedIndex = 1;
+                }
+            }
+            else
+            {
+                navigationLocation.SelectedIndex = 0; // Default to Left
+            }
+
+            _isInitialized = true; // ✅ 设定初始化完成
         }
 
         private void navigationLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (!_isInitialized) return; // ✅ 防止初始化阶段触发逻辑
+
             if (navigationLocation.SelectedIndex == 0)
             {
                 App.MainWindow.MainNavigationView.PaneDisplayMode = Microsoft.UI.Xaml.Controls.NavigationViewPaneDisplayMode.Left;
