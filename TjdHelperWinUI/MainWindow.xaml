@@ -63,6 +63,7 @@
                         <NavigationViewItem Content="Encryption" Icon="Permissions" Tag="EncryptHelperPage"/>
                         <NavigationViewItem Content="Encoding Converter" Icon="Globe"  Tag="EnDecodePage"/>
                         <NavigationViewItem Content="Time Converter" Icon="Calendar" Tag="TimeHelperPage"/>
+                        <NavigationViewItem Content="File" Icon="Folder"  Tag="FileHelperPage"/>
                         <NavigationViewItem Content="QR Code" Icon="Camera"  Tag="QRCodePage"/>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
