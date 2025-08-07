@@ -40,7 +40,7 @@
             </Grid>
         </Expander>
 
-        <WebView2 x:Name="MonacoWebView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Visibility="{Binding IsMonacoShown, Converter={StaticResource BoolToVisibility}}"/>
+        <WebView2 x:Name="MonacoWebView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Visibility="{Binding IsMonacoShown, Converter={StaticResource BoolToVisibility}}" AllowDrop="True" Drop="MonacoWebView_Drop"/>
 
         <TreeView ItemsSource="{Binding Nodes}" Grid.Row="1" Visibility="{Binding IsTreeViewShown, Converter={StaticResource BoolToVisibility}}">
             <TreeView.ItemTemplate>

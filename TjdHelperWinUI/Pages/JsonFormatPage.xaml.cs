@@ -22,6 +22,8 @@ using Windows.UI.ViewManagement;
 using Windows.UI;
 using TjdHelperWinUI.Tools;
 using System.Text.Json;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.Storage;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -282,5 +284,204 @@ namespace TjdHelperWinUI.Pages
             viewModel.IsTreeViewShown = false;
         }
         #endregion
+
+        //private async void MonacoWebView_Drop(object sender, DragEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (e.DataView.Contains(StandardDataFormats.StorageItems))
+        //        {
+        //            var items = await e.DataView.GetStorageItemsAsync();
+        //            var file = items.FirstOrDefault() as StorageFile;
+
+        //            if (file != null)
+        //            {
+        //                string text = await FileIO.ReadTextAsync(file);
+
+        //                // 把内容发给 JS，让 Monaco 显示
+        //                await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent({JsonSerializer.Serialize(text)});");
+
+        //                // 根据扩展名设置语言（你也可以传给 JS 处理）
+        //                string lang = GetLanguageFromExtension(Path.GetExtension(file.Name));
+        //                await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorLanguage('{lang}');");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // 处理异常，比如文件读取错误
+        //        NotificationHelper.Show("文件读取失败: " + ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        e.Handled = true; // 标记事件已处理
+        //    }
+        //}
+        private async void MonacoWebView_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                if (e.DataView.Contains(StandardDataFormats.StorageItems))
+                {
+                    var items = await e.DataView.GetStorageItemsAsync();
+                    var file = items.FirstOrDefault() as StorageFile;
+
+                    if (file != null)
+                    {
+                        // 判断文件类型，PDF 或 图片时直接用系统默认方式打开（新窗口/默认程序）
+                        string contentType = file.ContentType.ToLower();
+
+                        if (contentType == "application/pdf" || contentType.StartsWith("image/"))
+                        {
+                            // 这里用 Launcher 打开文件，系统会选择默认应用打开（通常是新窗口预览）
+                            var success = await Windows.System.Launcher.LaunchFileAsync(file);
+                            if (!success)
+                            {
+                                NotificationHelper.Show("无法打开文件: " + file.Name);
+                            }
+                            return; // 直接返回，不继续下面读文本流程
+                        }
+
+                        // 非 PDF/图片，按文本读取显示
+                        string text = await FileIO.ReadTextAsync(file);
+
+                        await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent({JsonSerializer.Serialize(text)});");
+
+                        string lang = GetLanguageFromExtension(Path.GetExtension(file.Name));
+                        await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorLanguage('{lang}');");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                NotificationHelper.Show("文件读取失败: " + ex.Message);
+            }
+            finally
+            {
+                e.Handled = true;
+            }
+        }
+
+
+        private string GetLanguageFromExtension(string ext)
+        {
+            return ext.ToLower() switch
+            {
+                // Web & Frontend
+                ".html" => "html",
+                ".htm" => "html",
+                ".css" => "css",
+                ".scss" => "scss",
+                ".sass" => "scss",
+                ".less" => "less",
+                ".xml" => "xml",
+                ".xhtml" => "xml",
+                ".svg" => "xml",
+
+                // JavaScript & TypeScript
+                ".js" => "javascript",
+                ".jsx" => "javascript",
+                ".ts" => "typescript",
+                ".tsx" => "typescript",
+
+                // JSON / YAML
+                ".json" => "json",
+                ".jsonc" => "jsonc",
+                ".yaml" => "yaml",
+                ".yml" => "yaml",
+
+                // C/C++
+                ".c" => "c",
+                ".cpp" => "cpp",
+                ".cc" => "cpp",
+                ".cxx" => "cpp",
+                ".h" => "cpp",
+                ".hpp" => "cpp",
+
+                // C#
+                ".cs" => "csharp",
+
+                // Java
+                ".java" => "java",
+
+                // Python
+                ".py" => "python",
+
+                // Go
+                ".go" => "go",
+
+                // Rust
+                ".rs" => "rust",
+
+                // PHP
+                ".php" => "php",
+
+                // Ruby
+                ".rb" => "ruby",
+
+                // Shell
+                ".sh" => "shell",
+                ".bash" => "shell",
+
+                // PowerShell
+                ".ps1" => "powershell",
+                ".psm1" => "powershell",
+
+                // SQL
+                ".sql" => "sql",
+
+                // Markdown & 文本
+                ".md" => "markdown",
+                ".markdown" => "markdown",
+                ".txt" => "plaintext",
+                ".log" => "plaintext",
+
+                // INI / TOML / Config
+                ".ini" => "ini",
+                ".toml" => "toml",
+                ".env" => "ini",
+
+                // Lua
+                ".lua" => "lua",
+
+                // Dart
+                ".dart" => "dart",
+
+                // Kotlin
+                ".kt" => "kotlin",
+                ".kts" => "kotlin",
+
+                // Swift
+                ".swift" => "swift",
+
+                // R
+                ".r" => "r",
+
+                // Objective-C
+                ".m" => "objective-c",
+                ".mm" => "objective-cpp",
+
+                // Assembly
+                ".asm" => "asm",
+                ".s" => "asm",
+
+                // F#
+                ".fs" => "fsharp",
+
+                // Docker
+                "dockerfile" => "dockerfile",
+                ".dockerfile" => "dockerfile",
+
+                // Makefile
+                "makefile" => "makefile",
+                ".mk" => "makefile",
+
+                // Misc
+                ".bat" => "bat",
+                ".cmd" => "bat",
+
+                _ => "plaintext"
+            };
+        }
     }
 }
