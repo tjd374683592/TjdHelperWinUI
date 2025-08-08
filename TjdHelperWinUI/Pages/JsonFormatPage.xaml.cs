@@ -285,38 +285,12 @@ namespace TjdHelperWinUI.Pages
         }
         #endregion
 
-        //private async void MonacoWebView_Drop(object sender, DragEventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (e.DataView.Contains(StandardDataFormats.StorageItems))
-        //        {
-        //            var items = await e.DataView.GetStorageItemsAsync();
-        //            var file = items.FirstOrDefault() as StorageFile;
-
-        //            if (file != null)
-        //            {
-        //                string text = await FileIO.ReadTextAsync(file);
-
-        //                // 把内容发给 JS，让 Monaco 显示
-        //                await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent({JsonSerializer.Serialize(text)});");
-
-        //                // 根据扩展名设置语言（你也可以传给 JS 处理）
-        //                string lang = GetLanguageFromExtension(Path.GetExtension(file.Name));
-        //                await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorLanguage('{lang}');");
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // 处理异常，比如文件读取错误
-        //        NotificationHelper.Show("文件读取失败: " + ex.Message);
-        //    }
-        //    finally
-        //    {
-        //        e.Handled = true; // 标记事件已处理
-        //    }
-        //}
+        #region MonacoWebView拖拽事件
+        /// <summary>
+        /// MonacoWebView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void MonacoWebView_Drop(object sender, DragEventArgs e)
         {
             try
@@ -328,12 +302,12 @@ namespace TjdHelperWinUI.Pages
 
                     if (file != null)
                     {
-                        // 判断文件类型，PDF 或 图片时直接用系统默认方式打开（新窗口/默认程序）
+                        // 判断文件类型，PDF、图片、视频、压缩包时直接用系统默认方式打开
                         string contentType = file.ContentType.ToLower();
 
-                        if (contentType == "application/pdf" || contentType.StartsWith("image/"))
+                        if (contentType == "application/pdf" || contentType.StartsWith("image/") || contentType.StartsWith("video/") || contentType.StartsWith("application/x-zip-compressed"))
                         {
-                            // 这里用 Launcher 打开文件，系统会选择默认应用打开（通常是新窗口预览）
+                            // 这里用 Launcher 打开文件，系统会选择默认应用打开
                             var success = await Windows.System.Launcher.LaunchFileAsync(file);
                             if (!success)
                             {
@@ -342,7 +316,7 @@ namespace TjdHelperWinUI.Pages
                             return; // 直接返回，不继续下面读文本流程
                         }
 
-                        // 非 PDF/图片，按文本读取显示
+                        // 非 PDF/图片/视频/压缩包，按文本读取显示
                         string text = await FileIO.ReadTextAsync(file);
 
                         await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent({JsonSerializer.Serialize(text)});");
@@ -361,8 +335,14 @@ namespace TjdHelperWinUI.Pages
                 e.Handled = true;
             }
         }
+        #endregion
 
-
+        #region 根据文件扩展名获取对应的代码语言
+        /// <summary>
+        /// 根据文件扩展名获取对应的代码语言
+        /// </summary>
+        /// <param name="ext"></param>
+        /// <returns></returns>
         private string GetLanguageFromExtension(string ext)
         {
             return ext.ToLower() switch
@@ -483,5 +463,6 @@ namespace TjdHelperWinUI.Pages
                 _ => "plaintext"
             };
         }
+        #endregion
     }
 }
