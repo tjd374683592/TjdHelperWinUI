@@ -49,7 +49,7 @@
                             Margin="5,0,0,0"
                             HorizontalAlignment="Stretch"
                             PlaceholderText="pcm格式音频文件Path"
-                            Text="{Binding StrAudioFilePath}"
+                            Text="{Binding StrAudioFilePath, Mode=TwoWay}"
                             TextWrapping="Wrap" />
                         <Button
                             Grid.Column="2"
@@ -70,7 +70,7 @@
                         MinWidth="50"
                         Margin="0,10,0,0"
                         PlaceholderText="转换详情"
-                        Text="{Binding StrPCMConvertLog}"
+                        Text="{Binding StrPCMConvertLog, Mode=TwoWay}"
                         TextWrapping="Wrap" />
                 </Grid>
             </Expander>

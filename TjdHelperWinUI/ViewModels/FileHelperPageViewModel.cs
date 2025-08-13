@@ -240,64 +240,34 @@ namespace TjdHelperWinUI.ViewModels
             UnzipProgressValue = 0;
 
             // 确保分片和解压目录存在
-            SplitFileSavePath = EnsureDirectory("Split");
-            UnzipFilePath = EnsureDirectory("Unzip");
+            // 目录初始化
+            SplitFileSavePath = FileHelper.EnsureDirectory("Split");
+            UnzipFilePath = FileHelper.EnsureDirectory("Unzip");
 
-            // 命令绑定
+            // 选择文件
             ChooseSplitFileCommand = new RelayCommand(async _ =>
             {
-                await ChooseFilePathAsync(path => ToSplitFilePath = path);
+                await FileHelper.ChooseFilePathAsync(path => ToSplitFilePath = path);
             });
 
             ChooseUnzipFileCommand = new RelayCommand(async _ =>
             {
-                await ChooseFilePathAsync(path => ToUnzipFilePath = path);
+                await FileHelper.ChooseFilePathAsync(path => ToUnzipFilePath = path);
             });
 
             StartFileSplitCommand = new RelayCommand(StartFileSplitCommandExecute);
             StartUnzipCommand = new RelayCommand(StartUnzipCommandExecute);
 
+            // 打开文件夹
             OpenSplitFilePathCommand = new RelayCommand(_ =>
             {
-                string unzipPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Split");
-                OpenFolder(unzipPath);
+                FileHelper.OpenFolder(SplitFileSavePath);
             });
 
             OpenUnzipFilePathCommand = new RelayCommand(_ =>
             {
-                string unzipPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Unzip");
-                OpenFolder(unzipPath);
+                FileHelper.OpenFolder(UnzipFilePath);
             });
-        }
-
-        /// <summary>
-        /// 确保指定名称的目录存在，不存在则创建
-        /// </summary>
-        /// <param name="folderName">目录名（相对于应用基目录）</param>
-        /// <returns>目录完整路径</returns>
-        private static string EnsureDirectory(string folderName)
-        {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, folderName);
-            Directory.CreateDirectory(path); // 不存在时创建，存在则无操作
-            return path;
-        }
-
-        /// <summary>
-        /// 弹出文件选择对话框，选择单个文件路径，结果通过回调返回
-        /// </summary>
-        /// <param name="setPathAction">回调，用于接收选择的文件路径</param>
-        private async Task ChooseFilePathAsync(Action<string> setPathAction)
-        {
-            string? selectedPath = await FilePickerHelper.PickSingleFilePathAsync(App.MainWindow);
-
-            if (!string.IsNullOrEmpty(selectedPath))
-            {
-                setPathAction(selectedPath);
-            }
-            else
-            {
-                NotificationHelper.Show("通知", "操作已取消");
-            }
         }
 
         /// <summary>
@@ -329,7 +299,7 @@ namespace TjdHelperWinUI.ViewModels
                 await Task.Run(() =>
                 {
                     // 调用文件分片工具，返回分片后的文件列表
-                    var partFiles = FileSplitter.CreatePhysicalChunks(
+                    var partFiles = FileHelper.CreatePhysicalChunks(
                         ToSplitFilePath,
                         splitSizeBytes,
                         outputPath,
@@ -360,7 +330,7 @@ namespace TjdHelperWinUI.ViewModels
                 });
 
                 NotificationHelper.Show("通知", "文件分片完成");
-                Process.Start("explorer.exe", SplitFileSavePath);
+                FileHelper.OpenFolder(SplitFileSavePath);
             }
             catch (Exception ex)
             {
@@ -448,7 +418,7 @@ namespace TjdHelperWinUI.ViewModels
                             dispatcher.TryEnqueue(() =>
                             {
                                 NotificationHelper.Show("通知", "解压成功");
-                                Process.Start("explorer.exe", UnzipFilePath);
+                                FileHelper.OpenFolder(UnzipFilePath);
                                 ResetUnzipUI();
                             });
                         }
@@ -478,22 +448,6 @@ namespace TjdHelperWinUI.ViewModels
             UnzipProgressVisibility = Visibility.Collapsed;
             UnzipProgressValue = 0;
             CurrentUnzipFileName = string.Empty;
-        }
-
-        /// <summary>
-        /// 通过系统文件资源管理器打开指定目录
-        /// </summary>
-        /// <param name="folderPath">文件夹完整路径</param>
-        private void OpenFolder(string folderPath)
-        {
-            if (Directory.Exists(folderPath))
-            {
-                Process.Start("explorer.exe", folderPath);
-            }
-            else
-            {
-                NotificationHelper.Show("错误", $"文件夹不存在: {folderPath}");
-            }
         }
     }
 }

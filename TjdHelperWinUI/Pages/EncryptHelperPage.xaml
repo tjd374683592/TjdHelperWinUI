@@ -106,7 +106,7 @@
                             Margin="5,0,0,0"
                             HorizontalAlignment="Stretch"
                             PlaceholderText="文件Path"
-                            Text="{Binding StrMD5FilePath}"
+                            Text="{Binding StrMD5FilePath, Mode=TwoWay}"
                             TextWrapping="Wrap" />
                         <Button
                             Grid.Column="2"

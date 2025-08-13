@@ -139,7 +139,10 @@ namespace TjdHelperWinUI.ViewModels
         {
             EncryptCommand = new RelayCommand(EncryptCommandExecute);
             ClearEncryptStrAndResultCommand = new RelayCommand(ClearEncryptStrAndResultCommandExecute);
-            ChooseFilePathCommand = new RelayCommand(ChooseFilePathCommandExecute);
+            ChooseFilePathCommand = new RelayCommand(async _ =>
+            {
+                await FileHelper.ChooseFilePathAsync(path => StrMD5FilePath = path);
+            });
             CalcStrMD5HashCommand = new RelayCommand(CalcStrMD5HashCommandExecute);
             ClearMD5StrAndValueCommand = new RelayCommand(ClearMD5StrAndValueCommandExecute);
             CalcFileMD5HashCommand = new RelayCommand(CalcFileMD5HashCommandExecute);
@@ -181,26 +184,6 @@ namespace TjdHelperWinUI.ViewModels
             StrMD5Result = string.Empty;
             StrToCalcMD5 = string.Empty;
         }
-
-        #region 选择文件路径命令执行
-        /// <summary>
-        /// 选择文件路径命令执行
-        /// </summary>
-        /// <param name="obj"></param>
-        private async void ChooseFilePathCommandExecute(object obj)
-        {
-            string? selectedPath = await FilePickerHelper.PickSingleFilePathAsync(App.MainWindow);
-
-            if (!string.IsNullOrEmpty(selectedPath))
-            {
-                StrMD5FilePath = selectedPath;
-            }
-            else
-            {
-                NotificationHelper.Show("通知", "操作已取消");
-            }
-        }
-        #endregion
 
         #region 清空SHA加密字符串和结果
         /// <summary>

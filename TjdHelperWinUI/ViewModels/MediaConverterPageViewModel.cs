@@ -63,38 +63,21 @@ namespace TjdHelperWinUI.ViewModels
 
         public MediaConverterPageViewModel()
         {
-            // 构建文件夹的完整路径
-            PCMAudioSaveFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"PCMFile");
-            // 判断文件夹是否存在
-            if (!Directory.Exists(PCMAudioSaveFilePath))
-            {
-                // 如果不存在，则创建文件夹
-                Directory.CreateDirectory(PCMAudioSaveFilePath);
-            }
+            PCMAudioSaveFilePath = FileHelper.EnsureDirectory("PCMFile");
 
-            ChooseAudioPathCommand = new RelayCommand(ChooseAudioPathCommandExecute);
+            ChooseAudioPathCommand = new RelayCommand(async _ =>
+            {
+                await FileHelper.ChooseFilePathAsync(path => StrAudioFilePath = path);
+            });
             ConvertToPCMCommand = new RelayCommand(ConvertToPCMCommandExecute);
             OpenFilePathCommand = new RelayCommand(OpenFilePathCommandExecute);
         }
 
         private void OpenFilePathCommandExecute(object obj)
         {
-            Process.Start("explorer.exe", PCMAudioSaveFilePath);
+            FileHelper.OpenFolder(PCMAudioSaveFilePath);
         }
 
-        private async void ChooseAudioPathCommandExecute(object obj)
-        {
-            string? selectedPath = await FilePickerHelper.PickSingleFilePathAsync(App.MainWindow);
-
-            if (!string.IsNullOrEmpty(selectedPath))
-            {
-                StrAudioFilePath = selectedPath;
-            }
-            else
-            {
-                NotificationHelper.Show("通知", "操作已取消");
-            }
-        }
         private async void ConvertToPCMCommandExecute(object obj)
         {
             if (string.IsNullOrEmpty(StrAudioFilePath) || !File.Exists(StrAudioFilePath))

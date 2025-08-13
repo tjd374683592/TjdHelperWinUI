@@ -116,19 +116,15 @@ namespace TjdHelperWinUI.ViewModels
         {
             MsgService = new MessageService();
 
-            // 构建文件夹的完整路径
-            QRCodeSaveFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"QRImage");
-            // 判断文件夹是否存在
-            if (!Directory.Exists(QRCodeSaveFilePath))
-            {
-                // 如果不存在，则创建文件夹
-                Directory.CreateDirectory(QRCodeSaveFilePath);
-            }
+            QRCodeSaveFilePath = FileHelper.EnsureDirectory("QRImage");
 
             CreateQRCodeCommand = new RelayCommand(CreateQRCodeCommandExecute);
             OpenQRCodeFolderCommand = new RelayCommand(OpenQRCodeFolderCommandExecute);
             ClearQRCodeCommand = new RelayCommand(ClearQRCodeCommandExecute);
-            ChooseQRCodePathCommand = new RelayCommand(ChooseQRCodePathCommandExecute);
+            ChooseQRCodePathCommand = new RelayCommand(async _ =>
+            {
+                await FileHelper.ChooseFilePathAsync(path => DecodeQRImagePath = path);
+            });
             DecodeQRCodeCommand = new RelayCommand(DecodeQRCodeCommandExecute);
         }
 
@@ -166,24 +162,6 @@ namespace TjdHelperWinUI.ViewModels
         }
 
         /// <summary>
-        /// 选择二维码图片路径
-        /// </summary>
-        /// <param name="obj"></param>
-        private async void ChooseQRCodePathCommandExecute(object obj)
-        {
-            string? selectedPath = await FilePickerHelper.PickSingleFilePathAsync(App.MainWindow);
-
-            if (!string.IsNullOrEmpty(selectedPath))
-            {
-                DecodeQRImagePath = selectedPath;
-            }
-            else
-            {
-                NotificationHelper.Show("通知", "操作已取消");
-            }
-        }
-
-        /// <summary>
         /// 清除二维码str
         /// </summary>
         /// <param name="obj"></param>
@@ -202,7 +180,7 @@ namespace TjdHelperWinUI.ViewModels
         /// <param name="obj"></param>
         private void OpenQRCodeFolderCommandExecute(object obj)
         {
-            Process.Start("explorer.exe", QRCodeSaveFilePath);
+            FileHelper.OpenFolder(QRCodeSaveFilePath);
         }
 
         /// <summary>

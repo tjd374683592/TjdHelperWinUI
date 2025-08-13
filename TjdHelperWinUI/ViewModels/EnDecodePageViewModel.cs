@@ -177,7 +177,10 @@ namespace TjdHelperWinUI.ViewModels
 
             UrlEncodeCommand = new RelayCommand(UrlEncodeCommandExecute);
             UrlDecodeCommand = new RelayCommand(UrlDecodeCommandExecute);
-            ChooseFileToBase64PathCommand = new RelayCommand(ChooseFileToBase64PathCommandExecute);
+            ChooseFileToBase64PathCommand = new RelayCommand(async _ =>
+            {
+                await FileHelper.ChooseFilePathAsync(path => StrFileToBase64Path = path);
+            });
             CalcBase64Command = new RelayCommand(CalcBase64CommandExecute);
             ClearBase64Command = new RelayCommand(ClearBase64CommandExecute);
             DecodeBase64Command = new RelayCommand(DecodeBase64CommandExecute);
@@ -201,24 +204,6 @@ namespace TjdHelperWinUI.ViewModels
         {
             //解码
             StrUrl = HttpUtility.UrlDecode(StrUrl);
-        }
-
-        /// <summary>
-        /// 选择文件路径
-        /// </summary>
-        /// <param name="obj"></param>
-        private async void ChooseFileToBase64PathCommandExecute(object obj)
-        {
-            string? selectedPath = await FilePickerHelper.PickSingleFilePathAsync(App.MainWindow);
-
-            if (!string.IsNullOrEmpty(selectedPath))
-            {
-                StrFileToBase64Path = selectedPath;
-            }
-            else
-            {
-                NotificationHelper.Show("通知", "操作已取消");
-            }
         }
 
         /// <summary>
