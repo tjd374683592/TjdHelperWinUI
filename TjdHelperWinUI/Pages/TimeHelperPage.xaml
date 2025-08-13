@@ -1,54 +1,107 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="TjdHelperWinUI.Pages.TimeHelperPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
 
-    <ScrollViewer VerticalScrollMode="Auto"
-          VerticalScrollBarVisibility="Auto"
-          HorizontalScrollMode="Disabled">
+    <ScrollViewer
+        HorizontalScrollMode="Disabled"
+        VerticalScrollBarVisibility="Auto"
+        VerticalScrollMode="Auto">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="Timestamp Converter" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Expander
+                Grid.Row="0"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ExpandDirection="Down"
+                Header="Timestamp Converter"
+                IsExpanded="True">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Vertical" Grid.Row="0">
+                    <StackPanel Grid.Row="0" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton x:Name="rbtnSecond" Content="秒(s)" IsChecked="{Binding SecondsIsChecked, Mode=TwoWay}"/>
-                            <RadioButton x:Name="rbtnMillisecond" Content="毫秒(ms)" IsChecked="{Binding MillisecondsIsChecked, Mode=TwoWay}"/>
-                            <TextBlock Text="时区" VerticalAlignment="Center"/>
-                            <ComboBox  ItemsSource="{Binding TimeZones}" SelectedItem="{Binding SelectedTimeZone, Mode=TwoWay}" DisplayMemberPath="DisplayName" Width="200" Margin="5 0 0 0"/>
+                            <RadioButton
+                                x:Name="rbtnSecond"
+                                Content="秒(s)"
+                                IsChecked="{Binding SecondsIsChecked, Mode=TwoWay}" />
+                            <RadioButton
+                                x:Name="rbtnMillisecond"
+                                Content="毫秒(ms)"
+                                IsChecked="{Binding MillisecondsIsChecked, Mode=TwoWay}" />
+                            <TextBlock VerticalAlignment="Center" Text="时区" />
+                            <ComboBox
+                                Width="200"
+                                Margin="5,0,0,0"
+                                DisplayMemberPath="DisplayName"
+                                ItemsSource="{Binding TimeZones}"
+                                SelectedItem="{Binding SelectedTimeZone, Mode=TwoWay}" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                            <Button x:Name="btnConvertToTime" Content="时间戳 -> 时间" Command="{Binding ConvertToTimeCommand}" />
-                            <TextBlock Text="时间戳：" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                            <TextBox Margin="5 0 0 0 " x:Name="txtTimestampToTime" Width="150" HorizontalContentAlignment="Stretch" Text="{Binding TimestampStr,Mode=TwoWay}"/>
+                        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                            <Button
+                                x:Name="btnConvertToTime"
+                                Command="{Binding ConvertToTimeCommand}"
+                                Content="时间戳 -&gt; 时间" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="时间戳：" />
+                            <TextBox
+                                x:Name="txtTimestampToTime"
+                                Width="150"
+                                Margin="5,0,0,0"
+                                HorizontalContentAlignment="Stretch"
+                                Text="{Binding TimestampStr, Mode=TwoWay}" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                            <Button x:Name="btnConvertToTimestamp" Content="时间 -> 时间戳" Command="{Binding ConvertToTimestampCommand}"/>
-                            <TextBlock Text="时间：" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                            <CalendarDatePicker PlaceholderText="Pick a date" Height="30" DateFormat="{}{year.full}/{month.integer}/{day.integer}" Date="{Binding SelectedDate,Mode=TwoWay}"/>
-                            <TimePicker Height="30" Margin="3 0 0 0" ClockIdentifier="24HourClock" Time="{Binding SelectedTime,Mode=TwoWay}"/>
-                            <TextBlock Text="OR" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                            <TextBox Margin="5 0 0 0" PlaceholderText="输入时间str：1970-01-01 00:00:00" Text="{Binding TimeStr,Mode=TwoWay}"/>
+                        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                            <Button
+                                x:Name="btnConvertToTimestamp"
+                                Command="{Binding ConvertToTimestampCommand}"
+                                Content="时间 -&gt; 时间戳" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="时间：" />
+                            <CalendarDatePicker
+                                Height="30"
+                                Date="{Binding SelectedDate, Mode=TwoWay}"
+                                DateFormat="{}{year.full}/{month.integer}/{day.integer}"
+                                PlaceholderText="Pick a date" />
+                            <TimePicker
+                                Height="30"
+                                Margin="3,0,0,0"
+                                ClockIdentifier="24HourClock"
+                                Time="{Binding SelectedTime, Mode=TwoWay}" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="OR" />
+                            <TextBox
+                                Margin="5,0,0,0"
+                                PlaceholderText="输入时间str：1970-01-01 00:00:00"
+                                Text="{Binding TimeStr, Mode=TwoWay}" />
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="1"  Margin="0 20 0 0">
-                        <TextBlock Text="转换结果："/>
-                        <TextBox TextWrapping="Wrap" Text="{Binding TimeConvertResult}" MinHeight="100" Margin="0 5 0 0"/>
+                    <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                        <TextBlock Text="转换结果：" />
+                        <TextBox
+                            MinHeight="100"
+                            Margin="0,5,0,0"
+                            Text="{Binding TimeConvertResult}"
+                            TextWrapping="Wrap" />
                     </StackPanel>
 
                 </Grid>

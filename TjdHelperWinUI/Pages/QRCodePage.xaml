@@ -1,59 +1,115 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="TjdHelperWinUI.Pages.QRCodePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
 
-    <ScrollViewer VerticalScrollMode="Auto"
-      VerticalScrollBarVisibility="Auto"
-      HorizontalScrollMode="Disabled">
+    <ScrollViewer
+        HorizontalScrollMode="Disabled"
+        VerticalScrollBarVisibility="Auto"
+        VerticalScrollMode="Auto">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="Create QR Code" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Expander
+                Grid.Row="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ExpandDirection="Down"
+                Header="Create QR Code"
+                IsExpanded="True">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <TextBox MinWidth="500" PlaceholderText="待转换二维码字符串" Text="{Binding QRCodeStr, Mode=TwoWay}"/>
-                        <Button Content="生成二维码" Margin="5 0 0 0" Command="{Binding CreateQRCodeCommand, Mode=TwoWay}" MaxWidth="300"/>
-                        <Button Content="清空" Margin="5 0 0 0" Command="{Binding ClearQRCodeCommand}" MaxWidth="300"/>
-                        <Button Content="打开文件夹" Margin="5 0 0 0" Command="{Binding OpenQRCodeFolderCommand}" MaxWidth="350"/>
+                        <TextBox
+                            MinWidth="500"
+                            PlaceholderText="待转换二维码字符串"
+                            Text="{Binding QRCodeStr, Mode=TwoWay}" />
+                        <Button
+                            MaxWidth="300"
+                            Margin="5,0,0,0"
+                            Command="{Binding CreateQRCodeCommand, Mode=TwoWay}"
+                            Content="生成二维码" />
+                        <Button
+                            MaxWidth="300"
+                            Margin="5,0,0,0"
+                            Command="{Binding ClearQRCodeCommand}"
+                            Content="清空" />
+                        <Button
+                            MaxWidth="350"
+                            Margin="5,0,0,0"
+                            Command="{Binding OpenQRCodeFolderCommand}"
+                            Content="打开文件夹" />
                     </StackPanel>
-                    <Image Source="{Binding QRImage,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="1" MaxWidth="250" MaxHeight="250" Margin="0 15 0 0"/>
+                    <Image
+                        Grid.Row="1"
+                        MaxWidth="250"
+                        MaxHeight="250"
+                        Margin="0,15,0,0"
+                        Source="{Binding QRImage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                 </Grid>
             </Expander>
 
-            <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Down" Header="Scan QR Code" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Expander
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ExpandDirection="Down"
+                Header="Scan QR Code"
+                IsExpanded="True">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Content="二维码选择" Command="{Binding ChooseQRCodePathCommand,Mode=TwoWay}" MaxWidth="300" Grid.Column="0"/>
-                        <TextBox Margin="5 0 0 0" PlaceholderText="二维码 Path" Text="{Binding DecodeQRImagePath}" HorizontalAlignment="Stretch" Grid.Column="1" TextWrapping="Wrap"/>
-                        <Button Content="扫码" Command="{Binding DecodeQRCodeCommand}" MaxWidth="300" Margin="5 0 0 0" Grid.Column="2"/>
+                        <Button
+                            Grid.Column="0"
+                            MaxWidth="300"
+                            Command="{Binding ChooseQRCodePathCommand, Mode=TwoWay}"
+                            Content="二维码选择" />
+                        <TextBox
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Stretch"
+                            PlaceholderText="二维码 Path"
+                            Text="{Binding DecodeQRImagePath}"
+                            TextWrapping="Wrap" />
+                        <Button
+                            Grid.Column="2"
+                            MaxWidth="300"
+                            Margin="5,0,0,0"
+                            Command="{Binding DecodeQRCodeCommand}"
+                            Content="扫码" />
                     </Grid>
 
-                    <TextBox MinWidth="50" PlaceholderText="二维码内容" Text="{Binding QRImageContent}" Grid.Row="1" TextWrapping="Wrap" Margin="0 10 0 0"/>
+                    <TextBox
+                        Grid.Row="1"
+                        MinWidth="50"
+                        Margin="0,10,0,0"
+                        PlaceholderText="二维码内容"
+                        Text="{Binding QRImageContent}"
+                        TextWrapping="Wrap" />
                 </Grid>
             </Expander>
         </Grid>

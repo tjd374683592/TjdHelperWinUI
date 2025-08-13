@@ -1,81 +1,156 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="TjdHelperWinUI.Pages.EncryptHelperPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TjdHelperWinUI.Pages"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controlhelpers="using:TjdHelperWinUI.ControlHelper"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:TjdHelperWinUI.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
 
-    <ScrollViewer VerticalScrollMode="Auto"
-          VerticalScrollBarVisibility="Auto"
-          HorizontalScrollMode="Disabled">
+    <ScrollViewer
+        HorizontalScrollMode="Disabled"
+        VerticalScrollBarVisibility="Auto"
+        VerticalScrollMode="Auto">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="SHA1 Encryption" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Expander
+                Grid.Row="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ExpandDirection="Down"
+                Header="SHA1 Encryption"
+                IsExpanded="True">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="String To Encrypt:" VerticalAlignment="Center"/>
-                        <Button Content="计算" Margin="10 0 0 0" Command="{Binding EncryptCommand}"/>
-                        <Button Content="清空" Margin="10 0 0 0" Command="{Binding ClearEncryptStrAndResultCommand}"/>
+                        <TextBlock VerticalAlignment="Center" Text="String To Encrypt:" />
+                        <Button
+                            Margin="10,0,0,0"
+                            Command="{Binding EncryptCommand}"
+                            Content="计算" />
+                        <Button
+                            Margin="10,0,0,0"
+                            Command="{Binding ClearEncryptStrAndResultCommand}"
+                            Content="清空" />
                     </StackPanel>
-                    <Grid Margin="0 10 0 0">
-                        <RichEditBox PlaceholderText="type here" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrToEncrypt, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    <Grid Margin="0,10,0,0">
+                        <RichEditBox
+                            controlhelpers:RichEditBoxHelper.PlainText="{Binding StrToEncrypt, Mode=TwoWay}"
+                            Loaded="RichEditBox_Loaded"
+                            PlaceholderText="type here" />
                     </Grid>
 
-                    <TextBlock Text="Encrypt Result:" VerticalAlignment="Center" Margin=" 0 15 0 0"/>
-                    <Grid Margin="0 10 0 0">
-                        <RichEditBox PlaceholderText="result here" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrEncryptResult, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    <TextBlock
+                        Margin="0,15,0,0"
+                        VerticalAlignment="Center"
+                        Text="Encrypt Result:" />
+                    <Grid Margin="0,10,0,0">
+                        <RichEditBox
+                            controlhelpers:RichEditBoxHelper.PlainText="{Binding StrEncryptResult, Mode=TwoWay}"
+                            Loaded="RichEditBox_Loaded"
+                            PlaceholderText="result here" />
                     </Grid>
 
                 </StackPanel>
             </Expander>
 
-            <Expander Grid.Row="1" IsExpanded="True" ExpandDirection="Down" Header="MD5 Hash" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Expander
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ExpandDirection="Down"
+                Header="MD5 Hash"
+                IsExpanded="True">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="String To Calc:" VerticalAlignment="Center"/>
-                        <Button Content="计算字符串MD5" Margin="10 0 0 0" Command="{Binding CalcStrMD5HashCommand}"/>
-                        <Button Content="全部清空" Margin="10 0 0 0" Command="{Binding ClearMD5StrAndValueCommand}"/>
+                        <TextBlock VerticalAlignment="Center" Text="String To Calc:" />
+                        <Button
+                            Margin="10,0,0,0"
+                            Command="{Binding CalcStrMD5HashCommand}"
+                            Content="计算字符串MD5" />
+                        <Button
+                            Margin="10,0,0,0"
+                            Command="{Binding ClearMD5StrAndValueCommand}"
+                            Content="全部清空" />
                     </StackPanel>
-                    <Grid Margin="0 10 0 0">
-                        <RichEditBox PlaceholderText="type here" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrToCalcMD5, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    <Grid Margin="0,10,0,0">
+                        <RichEditBox
+                            controlhelpers:RichEditBoxHelper.PlainText="{Binding StrToCalcMD5, Mode=TwoWay}"
+                            Loaded="RichEditBox_Loaded"
+                            PlaceholderText="type here" />
                     </Grid>
 
-                    <Grid Margin="0 10 0 0">
+                    <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Button Content="文件选择" Command="{Binding ChooseFilePathCommand,Mode=TwoWay}" MaxWidth="300" Grid.Column="0"/>
-                        <TextBox Margin="5 0 0 0" PlaceholderText="文件Path" Text="{Binding StrMD5FilePath}" HorizontalAlignment="Stretch" Grid.Column="1" TextWrapping="Wrap"/>
-                        <Button Content="计算文件MD5" Command="{Binding CalcFileMD5HashCommand}" MaxWidth="300" Margin="5 0 0 0" Grid.Column="2"/>
+                        <Button
+                            Grid.Column="0"
+                            MaxWidth="300"
+                            Command="{Binding ChooseFilePathCommand, Mode=TwoWay}"
+                            Content="文件选择" />
+                        <TextBox
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Stretch"
+                            PlaceholderText="文件Path"
+                            Text="{Binding StrMD5FilePath}"
+                            TextWrapping="Wrap" />
+                        <Button
+                            Grid.Column="2"
+                            MaxWidth="300"
+                            Margin="5,0,0,0"
+                            Command="{Binding CalcFileMD5HashCommand}"
+                            Content="计算文件MD5" />
                     </Grid>
 
-                    <TextBlock Text="MD5 Result:" VerticalAlignment="Center" Margin=" 0 15 0 0"/>
-                    <Grid Margin="0 10 0 0">
-                        <RichEditBox PlaceholderText="result here" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrMD5Result, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
+                    <TextBlock
+                        Margin="0,15,0,0"
+                        VerticalAlignment="Center"
+                        Text="MD5 Result:" />
+                    <Grid Margin="0,10,0,0">
+                        <RichEditBox
+                            controlhelpers:RichEditBoxHelper.PlainText="{Binding StrMD5Result, Mode=TwoWay}"
+                            Loaded="RichEditBox_Loaded"
+                            PlaceholderText="result here" />
                     </Grid>
 
                 </StackPanel>
             </Expander>
 
-            <Expander Grid.Row="2" IsExpanded="True" ExpandDirection="Down" Header="GUID" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Expander
+                Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ExpandDirection="Down"
+                Header="GUID"
+                IsExpanded="True">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="GUID:" VerticalAlignment="Center"/>
-                        <RichEditBox Margin="10 0 0 0" PlaceholderText="to be generated" controlhelpers:RichEditBoxHelper.PlainText="{Binding StrGUID, Mode=TwoWay}" MinWidth="200" TextWrapping="NoWrap"/>
-                        <Button Content="生成" Margin="10 0 0 0" Command="{Binding GenerateGUIDCommand}"/>
+                        <TextBlock VerticalAlignment="Center" Text="GUID:" />
+                        <RichEditBox
+                            MinWidth="200"
+                            Margin="10,0,0,0"
+                            controlhelpers:RichEditBoxHelper.PlainText="{Binding StrGUID, Mode=TwoWay}"
+                            PlaceholderText="to be generated"
+                            TextWrapping="NoWrap" />
+                        <Button
+                            Margin="10,0,0,0"
+                            Command="{Binding GenerateGUIDCommand}"
+                            Content="生成" />
                     </StackPanel>
 
                 </StackPanel>

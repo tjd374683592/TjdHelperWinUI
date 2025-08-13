@@ -1,33 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="TjdHelperWinUI.Pages.AddressHelperPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TjdHelperWinUI.Pages"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controlhelpers="using:TjdHelperWinUI.ControlHelper"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:TjdHelperWinUI.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
 
-    <ScrollViewer VerticalScrollMode="Auto"
-              VerticalScrollBarVisibility="Auto"
-              HorizontalScrollMode="Disabled">
+    <ScrollViewer
+        HorizontalScrollMode="Disabled"
+        VerticalScrollBarVisibility="Auto"
+        VerticalScrollMode="Auto">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="Calc Virtual Size By HEX Address" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0">
+            <Expander
+                Grid.Row="0"
+                Margin="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ExpandDirection="Down"
+                Header="Calc Virtual Size By HEX Address"
+                IsExpanded="True">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Start Addr:" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                    <RichEditBox PlaceholderText="Example: 00007fff`93310000" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrStartAddress,Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
-                    <TextBlock Text="End Addr:" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                    <RichEditBox PlaceholderText="Example: 00007fff`93335000" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrEndAddress, Mode=TwoWay}" Loaded="RichEditBox_Loaded"/>
-                    <Button Content="计算" Margin="5 0 0 0" Command="{Binding CalcVSizeSizeCommand}"/>
-                    <TextBlock Text="VSize:" Margin="5 0 0 0" VerticalAlignment="Center"/>
-                    <RichEditBox PlaceholderText="Example: Size:  151552 byte    148KB    0MB" Margin="5 0 0 0 " controlhelpers:RichEditBoxHelper.PlainText="{Binding StrVSize,Mode=TwoWay}" Loaded="RichEditBox_Loaded" MaxWidth="350"/>
-                    <Button Content="清空" Margin="5 0 0 0" Command="{Binding CalcResultClearCommand}"/>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="Start Addr:" />
+                    <RichEditBox
+                        Margin="5,0,0,0"
+                        controlhelpers:RichEditBoxHelper.PlainText="{Binding StrStartAddress, Mode=TwoWay}"
+                        Loaded="RichEditBox_Loaded"
+                        PlaceholderText="Example: 00007fff`93310000" />
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="End Addr:" />
+                    <RichEditBox
+                        Margin="5,0,0,0"
+                        controlhelpers:RichEditBoxHelper.PlainText="{Binding StrEndAddress, Mode=TwoWay}"
+                        Loaded="RichEditBox_Loaded"
+                        PlaceholderText="Example: 00007fff`93335000" />
+                    <Button
+                        Margin="5,0,0,0"
+                        Command="{Binding CalcVSizeSizeCommand}"
+                        Content="计算" />
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="VSize:" />
+                    <RichEditBox
+                        MaxWidth="350"
+                        Margin="5,0,0,0"
+                        controlhelpers:RichEditBoxHelper.PlainText="{Binding StrVSize, Mode=TwoWay}"
+                        Loaded="RichEditBox_Loaded"
+                        PlaceholderText="Example: Size:  151552 byte    148KB    0MB" />
+                    <Button
+                        Margin="5,0,0,0"
+                        Command="{Binding CalcResultClearCommand}"
+                        Content="清空" />
                 </StackPanel>
             </Expander>
 

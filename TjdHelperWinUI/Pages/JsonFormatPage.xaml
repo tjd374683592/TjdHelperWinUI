@@ -1,13 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="TjdHelperWinUI.Pages.JsonFormatPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:TjdHelperWinUI.Converter"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" SizeChanged="JsonFormatPage_SizeChanged">
+    xmlns:local="using:TjdHelperWinUI.Pages"
+    xmlns:local1="using:TjdHelperWinUI.Converter"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    SizeChanged="JsonFormatPage_SizeChanged"
+    mc:Ignorable="d">
 
     <Page.Resources>
         <local1:BoolToVisibilityConverter x:Key="BoolToVisibility" />
@@ -15,37 +17,83 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Expander Header="Json Format" IsExpanded="True" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+        <Expander
+            Grid.Row="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            Header="Json Format"
+            IsExpanded="True">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Button Content="校验/格式化Json"  Margin="0 5 5 5" Click="btnCheckAndFormatClicked"/>
-                    <Button Content="压缩" Margin="0 5 5 5" Click="btnCompresseJsonClicked"/>
-                    <Button Content="转义" Margin="0 5 5 5" Click="btnSerializeJsonClicked"/>
-                    <Button Content="去转义" Margin="0 5 5 5" Click="btnDeserializeJsonClicked"/>
-                    <Button Content="清空" Margin="0 5 5 5" Click="btnClearJsonClicked"/>
-                    <Button Content="切换主题" Margin="0 5 5 5" Click="btnChangeThemeClicked"/>
-                    <Button Content="切换Monaco/TreeView" Margin="0 5 5 5" Command="{Binding ShowJsonTreeCommand}"/>
-                    <TextBlock Text="Value:" Margin="0 5 5 5" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding StrJsonPrase, Mode=TwoWay}" Margin="0 5 5 5" MinWidth="300"/>
+                    <Button
+                        Margin="0,5,5,5"
+                        Click="btnCheckAndFormatClicked"
+                        Content="校验/格式化Json" />
+                    <Button
+                        Margin="0,5,5,5"
+                        Click="btnCompresseJsonClicked"
+                        Content="压缩" />
+                    <Button
+                        Margin="0,5,5,5"
+                        Click="btnSerializeJsonClicked"
+                        Content="转义" />
+                    <Button
+                        Margin="0,5,5,5"
+                        Click="btnDeserializeJsonClicked"
+                        Content="去转义" />
+                    <Button
+                        Margin="0,5,5,5"
+                        Click="btnClearJsonClicked"
+                        Content="清空" />
+                    <Button
+                        Margin="0,5,5,5"
+                        Click="btnChangeThemeClicked"
+                        Content="切换主题" />
+                    <Button
+                        Margin="0,5,5,5"
+                        Command="{Binding ShowJsonTreeCommand}"
+                        Content="切换Monaco/TreeView" />
+                    <TextBlock
+                        Margin="0,5,5,5"
+                        VerticalAlignment="Center"
+                        Text="Value:" />
+                    <TextBox
+                        MinWidth="300"
+                        Margin="0,5,5,5"
+                        Text="{Binding StrJsonPrase, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
         </Expander>
 
-        <WebView2 x:Name="MonacoWebView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Visibility="{Binding IsMonacoShown, Converter={StaticResource BoolToVisibility}}" AllowDrop="True" Drop="MonacoWebView_Drop"/>
+        <WebView2
+            x:Name="MonacoWebView"
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            AllowDrop="True"
+            Drop="MonacoWebView_Drop"
+            Visibility="{Binding IsMonacoShown, Converter={StaticResource BoolToVisibility}}" />
 
-        <TreeView ItemsSource="{Binding Nodes}" Grid.Row="1" Visibility="{Binding IsTreeViewShown, Converter={StaticResource BoolToVisibility}}">
+        <TreeView
+            Grid.Row="1"
+            ItemsSource="{Binding Nodes}"
+            Visibility="{Binding IsTreeViewShown, Converter={StaticResource BoolToVisibility}}">
             <TreeView.ItemTemplate>
                 <DataTemplate>
-                    <TreeViewItem ItemsSource="{Binding Children}" Content="{Binding NameAndValue}" IsExpanded="True"/>
+                    <TreeViewItem
+                        Content="{Binding NameAndValue}"
+                        IsExpanded="True"
+                        ItemsSource="{Binding Children}" />
                 </DataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>

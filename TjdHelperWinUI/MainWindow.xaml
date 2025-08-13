@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Window
     x:Class="TjdHelperWinUI.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TjdHelperWinUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:TjdHelperWinUI.Models" xmlns:vm="using:TjdHelperWinUI.ViewModels"
-    mc:Ignorable="d"
-   
-    Title="TjdHelperWinUI" Closed="Window_Closed">
+    xmlns:local="using:TjdHelperWinUI"
+    xmlns:local1="using:TjdHelperWinUI.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:TjdHelperWinUI.ViewModels"
+    Title="TjdHelperWinUI"
+    Closed="Window_Closed"
+    mc:Ignorable="d">
 
     <!--<Window.SystemBackdrop>
         <DesktopAcrylicBackdrop/>
@@ -16,76 +18,111 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <NavigationView x:Name="MainNavigation" Grid.Row="1"
-    IsBackEnabled="{x:Bind MainFrame.CanGoBack, Mode=OneWay}"
-    BackRequested="MainNavigation_BackRequested"
-    ItemInvoked="MainNavigation_ItemInvoked"
-    Loaded="MainNavigation_Loaded">
+        <NavigationView
+            x:Name="MainNavigation"
+            Grid.Row="1"
+            BackRequested="MainNavigation_BackRequested"
+            IsBackEnabled="{x:Bind MainFrame.CanGoBack, Mode=OneWay}"
+            ItemInvoked="MainNavigation_ItemInvoked"
+            Loaded="MainNavigation_Loaded">
 
             <NavigationView.AutoSuggestBox>
                 <AutoSuggestBox
-    x:Name="controlsSearchBox"
-    MinWidth="200"
-    VerticalAlignment="Center"
-    x:FieldModifier="public"
-    KeyboardAcceleratorPlacementMode="Hidden"
-    PlaceholderText="Search"
-    QueryIcon="Find"
-    ItemsSource="{Binding SearchItemsResult,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-    Text="{Binding StrSearchInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-    TextMemberPath="Name"
-    SuggestionChosen="controlsSearchBox_SuggestionChosen">
+                    x:Name="controlsSearchBox"
+                    MinWidth="200"
+                    VerticalAlignment="Center"
+                    x:FieldModifier="public"
+                    ItemsSource="{Binding SearchItemsResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    KeyboardAcceleratorPlacementMode="Hidden"
+                    PlaceholderText="Search"
+                    QueryIcon="Find"
+                    SuggestionChosen="controlsSearchBox_SuggestionChosen"
+                    Text="{Binding StrSearchInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    TextMemberPath="Name">
                     <AutoSuggestBox.ItemTemplate>
                         <DataTemplate x:DataType="local1:PageInfo">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Bind Name}"/>
+                                <TextBlock Text="{x:Bind Name}" />
                             </StackPanel>
                         </DataTemplate>
                     </AutoSuggestBox.ItemTemplate>
                     <AutoSuggestBox.KeyboardAccelerators>
                         <KeyboardAccelerator
-    Key="F"
-    Invoked="CtrlF_Invoked"
-    Modifiers="Control" />
+                            Key="F"
+                            Invoked="CtrlF_Invoked"
+                            Modifiers="Control" />
                     </AutoSuggestBox.KeyboardAccelerators>
                 </AutoSuggestBox>
             </NavigationView.AutoSuggestBox>
 
-            <!-- 定义菜单项 -->
+            <!--  定义菜单项  -->
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Home" Tag="HomePage" Icon="Home"/>
+                <NavigationViewItem
+                    Content="Home"
+                    Icon="Home"
+                    Tag="HomePage" />
                 <NavigationViewItem Content="Tools" Icon="Repair">
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem Content="Encryption" Icon="Permissions" Tag="EncryptHelperPage"/>
-                        <NavigationViewItem Content="Encoding Converter" Icon="Globe"  Tag="EnDecodePage"/>
-                        <NavigationViewItem Content="Time Converter" Icon="Calendar" Tag="TimeHelperPage"/>
-                        <NavigationViewItem Content="File" Icon="Folder"  Tag="FileHelperPage"/>
-                        <NavigationViewItem Content="QR Code" Icon="Camera"  Tag="QRCodePage"/>
+                        <NavigationViewItem
+                            Content="Encryption"
+                            Icon="Permissions"
+                            Tag="EncryptHelperPage" />
+                        <NavigationViewItem
+                            Content="Encoding Converter"
+                            Icon="Globe"
+                            Tag="EnDecodePage" />
+                        <NavigationViewItem
+                            Content="Time Converter"
+                            Icon="Calendar"
+                            Tag="TimeHelperPage" />
+                        <NavigationViewItem
+                            Content="File"
+                            Icon="Folder"
+                            Tag="FileHelperPage" />
+                        <NavigationViewItem
+                            Content="QR Code"
+                            Icon="Camera"
+                            Tag="QRCodePage" />
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
                 <NavigationViewItem Content="Debug" Icon="Library">
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem Content="Win Error Code" Tag="WinErrorCodePage" Icon="Zoom"/>
-                        <NavigationViewItem Content="Address Calc" Tag="AddressHelperPage" Icon="Calculator"/>
-                        <NavigationViewItem Content="Library" Tag="DebugNotePage" Icon="OutlineStar"/>
+                        <NavigationViewItem
+                            Content="Win Error Code"
+                            Icon="Zoom"
+                            Tag="WinErrorCodePage" />
+                        <NavigationViewItem
+                            Content="Address Calc"
+                            Icon="Calculator"
+                            Tag="AddressHelperPage" />
+                        <NavigationViewItem
+                            Content="Library"
+                            Icon="OutlineStar"
+                            Tag="DebugNotePage" />
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
                 <NavigationViewItem Content="Media" Icon="MusicInfo">
                     <NavigationViewItem.MenuItems>
-                        <NavigationViewItem Content="Media Converter" Tag="MediaConverterPage" Icon="Play"/>
+                        <NavigationViewItem
+                            Content="Media Converter"
+                            Icon="Play"
+                            Tag="MediaConverterPage" />
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
-                <NavigationViewItem Content="Json Format" Tag="JsonFormatPage" Icon="Edit"/>
+                <NavigationViewItem
+                    Content="Json Format"
+                    Icon="Edit"
+                    Tag="JsonFormatPage" />
             </NavigationView.MenuItems>
 
-            <!-- 内容区域 -->
+            <!--  内容区域  -->
             <Frame x:Name="MainFrame" />
 
         </NavigationView>

@@ -1,34 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Page
     x:Class="TjdHelperWinUI.Pages.WinErrorCodePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TjdHelperWinUI.Pages"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controlhelpers="using:TjdHelperWinUI.ControlHelper"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:TjdHelperWinUI.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
 
-    <ScrollViewer VerticalScrollMode="Auto"
-              VerticalScrollBarVisibility="Auto"
-              HorizontalScrollMode="Disabled">
+    <ScrollViewer
+        HorizontalScrollMode="Disabled"
+        VerticalScrollBarVisibility="Auto"
+        VerticalScrollMode="Auto">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Expander Grid.Row="0" IsExpanded="True" ExpandDirection="Down" Header="Windows Error Code" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Expander
+                Grid.Row="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ExpandDirection="Down"
+                Header="Windows Error Code"
+                IsExpanded="True">
                 <StackPanel>
-                    <TextBlock Text="Error Code:" VerticalAlignment="Center"/>
+                    <TextBlock VerticalAlignment="Center" Text="Error Code:" />
                     <StackPanel Orientation="Horizontal">
-                        <TextBox PlaceholderText="Example:5 Or 0x5" MinWidth="150" Text="{Binding StrWinErrorCode}"/>
-                        <Button Content="查询" Margin="10 0 0 0" Command="{Binding CheckWinErrorDetailsCommand}"/>
-                        <Button Content="清空" Margin="10 0 0 0" Command="{Binding WinErrorAndDetailsClearCommand}"/>
+                        <TextBox
+                            MinWidth="150"
+                            PlaceholderText="Example:5 Or 0x5"
+                            Text="{Binding StrWinErrorCode}" />
+                        <Button
+                            Margin="10,0,0,0"
+                            Command="{Binding CheckWinErrorDetailsCommand}"
+                            Content="查询" />
+                        <Button
+                            Margin="10,0,0,0"
+                            Command="{Binding WinErrorAndDetailsClearCommand}"
+                            Content="清空" />
                     </StackPanel>
 
-                    <TextBlock Text="Error Details:" VerticalAlignment="Center" Margin="0 10 0 0"/>
-                    <TextBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Text="{Binding StrWinErrorCodeDetails}" TextWrapping="Wrap"/>
+                    <TextBlock
+                        Margin="0,10,0,0"
+                        VerticalAlignment="Center"
+                        Text="Error Details:" />
+                    <TextBox
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Text="{Binding StrWinErrorCodeDetails}"
+                        TextWrapping="Wrap" />
                 </StackPanel>
             </Expander>
         </Grid>
