@@ -22,6 +22,7 @@
     <None Remove="Pages\FileHelperPage.xaml" />
     <None Remove="Pages\HomePage.xaml" />
     <None Remove="Pages\JsonFormatPage.xaml" />
+    <None Remove="Pages\MarkdownPage.xaml" />
     <None Remove="Pages\MediaConverterPage.xaml" />
     <None Remove="Pages\QRCodePage.xaml" />
     <None Remove="Pages\SettingPage.xaml" />
@@ -114,9 +115,10 @@
     <PackageReference Include="ColorCode.Core" Version="2.0.15" />
     <PackageReference Include="ColorCode.WinUI" Version="2.0.15" />
     <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.0.230907" />
-    <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.0.230907" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
     <PackageReference Include="DotNetZip" Version="1.16.0" />
+    <PackageReference Include="MarkdownTextBlock" Version="0.0.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.13.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
@@ -165,6 +167,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\MarkdownPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\FileHelperPage.xaml">

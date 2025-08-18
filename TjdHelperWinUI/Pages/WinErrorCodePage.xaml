@@ -33,7 +33,7 @@
                         <TextBox
                             MinWidth="150"
                             PlaceholderText="Example:5 Or 0x5"
-                            Text="{Binding StrWinErrorCode}" />
+                            Text="{Binding StrWinErrorCode, Mode=TwoWay}" />
                         <Button
                             Margin="10,0,0,0"
                             Command="{Binding CheckWinErrorDetailsCommand}"

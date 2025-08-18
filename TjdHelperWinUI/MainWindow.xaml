@@ -22,6 +22,35 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <!--  顶部 TitleBar  -->
+        <Grid x:Name="AppTitleBar" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!--  左侧  -->
+            <StackPanel
+                Grid.Column="0"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="8">
+                <TextBlock VerticalAlignment="Center" Text="🐿 TjdHelperWinUI" />
+            </StackPanel>
+
+            <!--  右侧  -->
+            <PersonPicture
+                Grid.Column="2"
+                Width="20"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Right"
+                DisplayName="Jerry Tang" />
+
+
+        </Grid>
+
         <NavigationView
             x:Name="MainNavigation"
             Grid.Row="1"
@@ -120,6 +149,11 @@
                     Content="Json Format"
                     Icon="Edit"
                     Tag="JsonFormatPage" />
+
+                <NavigationViewItem
+                    Content="Markdown"
+                    Icon="Highlight"
+                    Tag="MarkdownPage" />
             </NavigationView.MenuItems>
 
             <!--  内容区域  -->

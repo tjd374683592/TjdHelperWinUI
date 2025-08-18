@@ -36,11 +36,22 @@ namespace TjdHelperWinUI
         {
             this.InitializeComponent();
 
-            if (Content is FrameworkElement rootElement)
+            // 获取当前窗口的 AppWindow 对象
+            var appWindow = GetAppWindowForCurrentWindow();
+
+            // 启用自定义标题栏（把 XAML 里的 AppTitleBar 区域扩展到系统标题栏区域）
+            appWindow.TitleBar.ExtendsContentIntoTitleBar = true;
+
+            // 监听窗口变化事件（比如最大化、缩小、DPI 变化等）
+            appWindow.Changed += (s, e) =>
             {
-                // 从 DI 容器中获取 ViewModel
-                rootElement.DataContext = App.Services.GetService<MainWindowViewModel>();
-            }
+                // AppWindow.TitleBar.RightInset 表示右边系统按钮（最小化、最大化、关闭）的总宽度
+                // 这里动态设置 AppTitleBar 的右 Padding，让右边控件（PersonPicture）避开按钮区域
+                AppTitleBar.Padding = new Thickness(0, 0, appWindow.TitleBar.RightInset, 0);
+            };
+
+            // 告诉 WinUI 使用 AppTitleBar 作为可拖拽的标题栏区域
+            SetTitleBar(AppTitleBar);
 
             //设置 Mica 背景
             TrySetMicaBackground();
@@ -50,6 +61,21 @@ namespace TjdHelperWinUI
             MainNavigationView = this.MainNavigation;
             MainNavigationView.PaneDisplayMode = LoadPaneDisplayMode();
 
+        }
+
+        /// <summary>
+        /// 获取当前 WinUI 3 窗口的 AppWindow 对象
+        /// </summary>
+        private AppWindow GetAppWindowForCurrentWindow()
+        {
+            // 先获取窗口句柄 HWND
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+            // 根据 HWND 获取 WindowId
+            var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+
+            // 根据 WindowId 获取 AppWindow 对象
+            return AppWindow.GetFromWindowId(windowId);
         }
 
         #region 设置Mica效果

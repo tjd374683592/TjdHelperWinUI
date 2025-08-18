@@ -77,9 +77,6 @@ namespace TjdHelperWinUI
             //设置任务栏icon
             SetWindowIcon(m_window);
 
-            // 扩展内容到标题栏
-            m_window.ExtendsContentIntoTitleBar = true;
-
             m_window.Activate();
         }
 
