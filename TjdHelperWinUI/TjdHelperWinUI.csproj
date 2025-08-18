@@ -117,6 +117,7 @@
     <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.0.230907" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.250402" />
     <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="MarkdownTextBlock" Version="0.0.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.13.0" />
