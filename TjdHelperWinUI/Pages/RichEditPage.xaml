@@ -65,8 +65,8 @@
                         <TextBox
                             x:Name="FontSizeBox"
                             Width="50"
-                            Text="{Binding FontSize, Mode=TwoWay}"
-                            KeyDown="FontSizeBox_KeyDown"/>
+                            KeyDown="FontSizeBox_KeyDown"
+                            Text="{Binding FontSize, Mode=TwoWay}" />
                     </AppBarElementContainer>
 
                     <!--  Bold / Italic / Underline  -->
@@ -107,6 +107,11 @@
             Grid.Row="1"
             Margin="10"
             AcceptsReturn="True"
-            TextWrapping="Wrap" PointerWheelChanged="Editor_PointerWheelChanged" LostFocus="Editor_LostFocused"/>
+            AllowDrop="True"
+            DragOver="Editor_DragOver"
+            Drop="Editor_Drop"
+            LostFocus="Editor_LostFocused"
+            PointerWheelChanged="Editor_PointerWheelChanged"
+            TextWrapping="Wrap" />
     </Grid>
 </Page>

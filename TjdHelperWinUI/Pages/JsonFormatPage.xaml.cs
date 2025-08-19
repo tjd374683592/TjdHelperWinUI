@@ -24,6 +24,7 @@ using TjdHelperWinUI.Tools;
 using System.Text.Json;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -285,184 +286,25 @@ namespace TjdHelperWinUI.Pages
         }
         #endregion
 
-        #region MonacoWebView拖拽事件
-        /// <summary>
-        /// MonacoWebView
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private async void MonacoWebView_Drop(object sender, DragEventArgs e)
         {
-            try
-            {
-                if (e.DataView.Contains(StandardDataFormats.StorageItems))
-                {
-                    var items = await e.DataView.GetStorageItemsAsync();
-                    var file = items.FirstOrDefault() as StorageFile;
-
-                    if (file != null)
-                    {
-                        // 判断文件类型，PDF、图片、视频、压缩包时直接用系统默认方式打开
-                        string contentType = file.ContentType.ToLower();
-
-                        if (contentType == "application/pdf" || contentType.StartsWith("image/") || contentType.StartsWith("video/") || contentType.StartsWith("application/x-zip-compressed"))
-                        {
-                            // 这里用 Launcher 打开文件，系统会选择默认应用打开
-                            var success = await Windows.System.Launcher.LaunchFileAsync(file);
-                            if (!success)
-                            {
-                                NotificationHelper.Show("无法打开文件: " + file.Name);
-                            }
-                            return; // 直接返回，不继续下面读文本流程
-                        }
-
-                        // 非 PDF/图片/视频/压缩包，按文本读取显示
-                        string text = await FileIO.ReadTextAsync(file);
-
-                        await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent({JsonSerializer.Serialize(text)});");
-
-                        string lang = GetLanguageFromExtension(Path.GetExtension(file.Name));
-                        await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorLanguage('{lang}');");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                NotificationHelper.Show("文件读取失败: " + ex.Message);
-            }
-            finally
-            {
-                e.Handled = true;
-            }
+            await FileDropHandler.HandleDropAsync(
+                e,
+                OnMonacoTextLoaded,
+                OnMonacoHighlightLang);
         }
-        #endregion
 
-        #region 根据文件扩展名获取对应的代码语言
-        /// <summary>
-        /// 根据文件扩展名获取对应的代码语言
-        /// </summary>
-        /// <param name="ext"></param>
-        /// <returns></returns>
-        private string GetLanguageFromExtension(string ext)
+        private async Task OnMonacoTextLoaded(string text)
         {
-            return ext.ToLower() switch
-            {
-                // Web & Frontend
-                ".html" => "html",
-                ".htm" => "html",
-                ".css" => "css",
-                ".scss" => "scss",
-                ".sass" => "scss",
-                ".less" => "less",
-                ".xml" => "xml",
-                ".xhtml" => "xml",
-                ".svg" => "xml",
-
-                // JavaScript & TypeScript
-                ".js" => "javascript",
-                ".jsx" => "javascript",
-                ".ts" => "typescript",
-                ".tsx" => "typescript",
-
-                // JSON / YAML
-                ".json" => "json",
-                ".jsonc" => "jsonc",
-                ".yaml" => "yaml",
-                ".yml" => "yaml",
-
-                // C/C++
-                ".c" => "c",
-                ".cpp" => "cpp",
-                ".cc" => "cpp",
-                ".cxx" => "cpp",
-                ".h" => "cpp",
-                ".hpp" => "cpp",
-
-                // C#
-                ".cs" => "csharp",
-
-                // Java
-                ".java" => "java",
-
-                // Python
-                ".py" => "python",
-
-                // Go
-                ".go" => "go",
-
-                // Rust
-                ".rs" => "rust",
-
-                // PHP
-                ".php" => "php",
-
-                // Ruby
-                ".rb" => "ruby",
-
-                // Shell
-                ".sh" => "shell",
-                ".bash" => "shell",
-
-                // PowerShell
-                ".ps1" => "powershell",
-                ".psm1" => "powershell",
-
-                // SQL
-                ".sql" => "sql",
-
-                // Markdown & 文本
-                ".md" => "markdown",
-                ".markdown" => "markdown",
-                ".txt" => "plaintext",
-                ".log" => "plaintext",
-
-                // INI / TOML / Config
-                ".ini" => "ini",
-                ".toml" => "toml",
-                ".env" => "ini",
-
-                // Lua
-                ".lua" => "lua",
-
-                // Dart
-                ".dart" => "dart",
-
-                // Kotlin
-                ".kt" => "kotlin",
-                ".kts" => "kotlin",
-
-                // Swift
-                ".swift" => "swift",
-
-                // R
-                ".r" => "r",
-
-                // Objective-C
-                ".m" => "objective-c",
-                ".mm" => "objective-cpp",
-
-                // Assembly
-                ".asm" => "asm",
-                ".s" => "asm",
-
-                // F#
-                ".fs" => "fsharp",
-
-                // Docker
-                "dockerfile" => "dockerfile",
-                ".dockerfile" => "dockerfile",
-
-                // Makefile
-                "makefile" => "makefile",
-                ".mk" => "makefile",
-
-                // Misc
-                ".bat" => "bat",
-                ".cmd" => "bat",
-
-                _ => "plaintext"
-            };
+            await MonacoWebView.CoreWebView2.ExecuteScriptAsync(
+                $"setEditorContent({JsonSerializer.Serialize(text)});");
         }
-        #endregion
+
+        private async Task OnMonacoHighlightLang(string lang)
+        {
+            await MonacoWebView.CoreWebView2.ExecuteScriptAsync(
+                $"setEditorLanguage('{lang}');");
+        }
+
     }
 }

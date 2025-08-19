@@ -6,7 +6,10 @@ using Microsoft.UI.Xaml.Input;
 using System;
 using TjdHelperWinUI.Tools;
 using TjdHelperWinUI.ViewModels;
+using Windows.Storage.Streams;
+using Windows.Storage;
 using Windows.System;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -90,6 +93,25 @@ namespace TjdHelperWinUI.Pages
                 // 阻止事件继续冒泡
                 e.Handled = true;
             }
+        }
+
+        private void Editor_DragOver(object sender, DragEventArgs e)
+        {
+            // 显示复制效果
+            e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+        }
+
+        private async void Editor_Drop(object sender, DragEventArgs e)
+        {
+            await FileDropHandler.HandleDropAsync(
+                e,
+                OnRichEditTextLoaded);
+        }
+
+        private async Task OnRichEditTextLoaded(string text)
+        {
+            Editor.Document.SetText(Microsoft.UI.Text.TextSetOptions.None, text);
+            await Task.CompletedTask; // 占位，保持 async 方法签名
         }
     }
 }
