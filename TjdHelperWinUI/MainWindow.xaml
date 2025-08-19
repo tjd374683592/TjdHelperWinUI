@@ -150,6 +150,11 @@
                     Tag="JsonFormatPage" />
 
                 <NavigationViewItem
+                    Content="Rich Edit"
+                    Icon="Keyboard"
+                    Tag="RichEditPage" />
+
+                <NavigationViewItem
                     Content="Markdown"
                     Icon="Highlight"
                     Tag="MarkdownPage" />

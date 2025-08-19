@@ -78,6 +78,7 @@ namespace TjdHelperWinUI.ViewModels
             new PageInfo { Name = "Json Format", PageType = typeof(Pages.JsonFormatPage) },
             new PageInfo { Name = "Media Converter", PageType = typeof(Pages.MediaConverterPage) },
             new PageInfo { Name = "Markdown", PageType = typeof(Pages.MarkdownPage) },
+            new PageInfo { Name = "Rich Edit", PageType = typeof(Pages.RichEditPage) },
             new PageInfo { Name = "Settings", PageType = typeof(Pages.SettingPage) }
         };
 

@@ -36,6 +36,12 @@ namespace TjdHelperWinUI
         {
             this.InitializeComponent();
 
+            if (Content is FrameworkElement rootElement)
+            {
+                // 从 DI 容器中获取 ViewModel
+                rootElement.DataContext = App.Services.GetService<MainWindowViewModel>();
+            }
+
             // 获取当前窗口的 AppWindow 对象
             var appWindow = GetAppWindowForCurrentWindow();
 
@@ -171,7 +177,7 @@ namespace TjdHelperWinUI
         private void CtrlF_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
             // Ctrl + F 快捷键
-            //controlsSearchBox.Focus(FocusState.Programmatic);
+            controlsSearchBox.Focus(FocusState.Programmatic);
         }
 
         #region 导航相关

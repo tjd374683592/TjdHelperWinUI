@@ -25,6 +25,7 @@
     <None Remove="Pages\MarkdownPage.xaml" />
     <None Remove="Pages\MediaConverterPage.xaml" />
     <None Remove="Pages\QRCodePage.xaml" />
+    <None Remove="Pages\RichEditPage.xaml" />
     <None Remove="Pages\SettingPage.xaml" />
     <None Remove="Pages\TimeHelperPage.xaml" />
     <None Remove="Pages\WinErrorCodePage.xaml" />
@@ -118,6 +119,7 @@
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.TabbedCommandBar" Version="8.2.250402" />
     <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="MarkdownTextBlock" Version="0.0.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.13.0" />
@@ -168,6 +170,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\RichEditPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\MarkdownPage.xaml">
