@@ -177,7 +177,7 @@ namespace TjdHelperWinUI.Tools
                 }
 
                 NotificationHelper.Show("成功", $"图片已保存到: {file.Path}");
-                FileHelper.OpenFolder(Path.GetDirectoryName(file.Path) ?? string.Empty);
+                OpenFolder(Path.GetDirectoryName(file.Path) ?? string.Empty);
             }
             else
             {

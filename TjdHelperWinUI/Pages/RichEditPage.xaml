@@ -198,9 +198,10 @@
                 x:Name="ImageCropperControl"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                AspectRatio="1"
+                AspectRatio="0"
                 CornerRadius="5"
-                ThumbPlacement="Corners"
+                CropShape="Rectangular"
+                ThumbPlacement="All"
                 Visibility="Collapsed" />
         </Grid>
     </Grid>
