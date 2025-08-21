@@ -12,30 +12,33 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <!--  命令栏行  -->
             <RowDefinition Height="Auto" />
+            <!--  内容区域行  -->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  TabbedCommandBar  -->
-        <controls:TabbedCommandBar>
+        <!--  TabbedCommandBar（带选项卡的命令栏）  -->
+        <controls:TabbedCommandBar x:Name="CommandBar" SelectionChanged="CommandBar_SelectionChanged">
             <controls:TabbedCommandBar.MenuItems>
 
-                <!--  Home Tab  -->
-                <controls:TabbedCommandBarItem Header="Text Edit">
-
-                    <!--  Undo / Redo / Paste  -->
+                <!--  文本编辑选项卡  -->
+                <controls:TabbedCommandBarItem x:Name="TextEditTab" Header="Text Edit">
+                    <!--  撤销按钮  -->
                     <AppBarButton Command="{Binding UndoCommand}" Label="Undo">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE7A7;" />
                         </AppBarButton.Icon>
                     </AppBarButton>
 
+                    <!--  重做按钮  -->
                     <AppBarButton Command="{Binding RedoCommand}" Label="Redo">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE7A6;" />
                         </AppBarButton.Icon>
                     </AppBarButton>
 
+                    <!--  粘贴按钮  -->
                     <AppBarButton Command="{Binding PasteCommand}" Label="Paste">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE77F;" />
@@ -44,7 +47,7 @@
 
                     <AppBarSeparator />
 
-                    <!--  Font Family  -->
+                    <!--  字体选择下拉框  -->
                     <AppBarElementContainer>
                         <ComboBox
                             x:Name="FontCombo"
@@ -60,16 +63,16 @@
                         </ComboBox>
                     </AppBarElementContainer>
 
-                    <!--  Font Size  -->
+                    <!--  字号输入框  -->
                     <AppBarElementContainer>
                         <TextBox
                             x:Name="FontSizeBox"
-                            Width="50"
                             KeyDown="FontSizeBox_KeyDown"
+                            PlaceholderText="Font Size"
                             Text="{Binding FontSize, Mode=TwoWay}" />
                     </AppBarElementContainer>
 
-                    <!--  Bold / Italic / Underline  -->
+                    <!--  加粗按钮  -->
                     <AppBarToggleButton
                         x:Name="BoldButton"
                         IsChecked="{Binding IsBold, Mode=TwoWay}"
@@ -79,6 +82,7 @@
                         </AppBarToggleButton.Icon>
                     </AppBarToggleButton>
 
+                    <!--  斜体按钮  -->
                     <AppBarToggleButton
                         x:Name="ItalicButton"
                         IsChecked="{Binding IsItalic, Mode=TwoWay}"
@@ -88,6 +92,7 @@
                         </AppBarToggleButton.Icon>
                     </AppBarToggleButton>
 
+                    <!--  下划线按钮  -->
                     <AppBarToggleButton
                         x:Name="UnderlineButton"
                         IsChecked="{Binding IsUnderline, Mode=TwoWay}"
@@ -96,22 +101,107 @@
                             <FontIcon Glyph="&#xE8DC;" />
                         </AppBarToggleButton.Icon>
                     </AppBarToggleButton>
+                </controls:TabbedCommandBarItem>
 
+                <!--  图片裁剪选项卡  -->
+                <controls:TabbedCommandBarItem x:Name="ImageCropTab" Header="Image Crop">
+                    <!--  选择图片按钮  -->
+                    <AppBarButton
+                        x:Name="PickButton"
+                        Click="PickButton_Click"
+                        Label="Pick Image">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE91B;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+
+                    <!--  保存按钮  -->
+                    <AppBarButton
+                        x:Name="SaveButton"
+                        Click="SaveButton_Click"
+                        Label="Save">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE74E;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+
+                    <!--  重置按钮  -->
+                    <AppBarButton
+                        x:Name="ResetButton"
+                        Click="ResetButton_Click"
+                        Label="Reset">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE72C;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+
+                    <AppBarSeparator />
+
+                    <!--  拖动手柄位置下拉框  -->
+                    <AppBarElementContainer>
+                        <ComboBox
+                            x:Name="ThumbPlacementCombo"
+                            Width="150"
+                            SelectedIndex="0"
+                            SelectionChanged="ThumbPlacementCombo_SelectionChanged">
+                            <ComboBoxItem Content="All" />
+                            <ComboBoxItem Content="Corners" />
+                        </ComboBox>
+                    </AppBarElementContainer>
+
+                    <!--  裁剪形状下拉框  -->
+                    <AppBarElementContainer>
+                        <ComboBox
+                            x:Name="CropShapeCombo"
+                            Width="150"
+                            SelectedIndex="0"
+                            SelectionChanged="CropShapeCombo_SelectionChanged">
+                            <ComboBoxItem Content="Rectangular" />
+                            <ComboBoxItem Content="Circular" />
+                        </ComboBox>
+                    </AppBarElementContainer>
+
+                    <!--  宽高比下拉框  -->
+                    <AppBarElementContainer>
+                        <ComboBox
+                            x:Name="AspectRatioCombo"
+                            Width="150"
+                            SelectedIndex="0"
+                            SelectionChanged="AspectRatioCombo_SelectionChanged">
+                            <ComboBoxItem Content="Custom" />
+                            <ComboBoxItem Content="Square" />
+                            <ComboBoxItem Content="Landscape(16:9)" />
+                            <ComboBoxItem Content="Portrait(9:16)" />
+                            <ComboBoxItem Content="4:3" />
+                            <ComboBoxItem Content="3:2" />
+                        </ComboBox>
+                    </AppBarElementContainer>
                 </controls:TabbedCommandBarItem>
             </controls:TabbedCommandBar.MenuItems>
         </controls:TabbedCommandBar>
 
-        <!--  RichEditBox  -->
-        <RichEditBox
-            x:Name="Editor"
-            Grid.Row="1"
-            Margin="10"
-            AcceptsReturn="True"
-            AllowDrop="True"
-            DragOver="Editor_DragOver"
-            Drop="Editor_Drop"
-            LostFocus="Editor_LostFocused"
-            PointerWheelChanged="Editor_PointerWheelChanged"
-            TextWrapping="Wrap" />
+        <!--  内容区域  -->
+        <Grid Grid.Row="1" Margin="10">
+            <!--  文本编辑框  -->
+            <RichEditBox
+                x:Name="Editor"
+                AcceptsReturn="True"
+                AllowDrop="True"
+                DragOver="Editor_DragOver"
+                Drop="Editor_Drop"
+                LostFocus="Editor_LostFocused"
+                PointerWheelChanged="Editor_PointerWheelChanged"
+                TextWrapping="Wrap" />
+
+            <!--  图片裁剪控件  -->
+            <controls:ImageCropper
+                x:Name="ImageCropperControl"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                AspectRatio="1"
+                CornerRadius="5"
+                ThumbPlacement="Corners"
+                Visibility="Collapsed" />
+        </Grid>
     </Grid>
 </Page>

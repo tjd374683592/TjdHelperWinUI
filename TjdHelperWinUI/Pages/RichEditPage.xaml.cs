@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+ï»¿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -10,6 +10,10 @@ using Windows.Storage.Streams;
 using Windows.Storage;
 using Windows.System;
 using System.Threading.Tasks;
+using CommunityToolkit.WinUI.Controls;
+using Windows.Storage.Pickers;
+using System.Collections.Generic;
+using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -28,18 +32,28 @@ namespace TjdHelperWinUI.Pages
 
             if (Content is FrameworkElement rootElement)
             {
-                // ´Ó DI ÈİÆ÷ÖĞ»ñÈ¡ ViewModel
+                // ä» DI å®¹å™¨ä¸­è·å– ViewModel
                 ViewModel = App.Services.GetService<RichEditPageViewModel>();
                 rootElement.DataContext = ViewModel;
             }
 
-            // µÈÒ³Ãæ¼ÓÔØÍê³ÉºóÔÙ°ó¶¨ RichEditBox
+            // ç­‰é¡µé¢åŠ è½½å®Œæˆåå†ç»‘å®š RichEditBox
             this.Loaded += RichEditPage_Loaded;
+
+            // é»˜è®¤æ˜¾ç¤º Text Edit
+            Editor.Visibility = Visibility.Visible;
+            ImageCropperControl.Visibility = Visibility.Collapsed;
+        }
+
+        private async Task LoadImage()
+        {
+            var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/GalleryHeaderImage.png"));
+            await ImageCropperControl.LoadImageFromFile(file);
         }
 
         private void RichEditPage_Loaded(object sender, RoutedEventArgs e)
         {
-            // È·±£ Editor ÒÑ´´½¨£¬È»ºó¸³Öµ¸ø ViewModel
+            // ç¡®ä¿ Editor å·²åˆ›å»ºï¼Œç„¶åèµ‹å€¼ç»™ ViewModel
             if (ViewModel != null && Editor != null)
             {
                 ViewModel.Editor = Editor;
@@ -48,7 +62,7 @@ namespace TjdHelperWinUI.Pages
 
         private void Editor_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
         {
-            // ¼ì²é Ctrl ¼üÊÇ·ñ°´ÏÂ
+            // æ£€æŸ¥ Ctrl é”®æ˜¯å¦æŒ‰ä¸‹
             bool ctrlPressed = KeyHelper.IsCtrlPressed();
 
             if (!ctrlPressed) return;
@@ -73,10 +87,10 @@ namespace TjdHelperWinUI.Pages
 
         private void Editor_LostFocused(object sender, RoutedEventArgs e)
         {
-            // µ± RichEditBox Ê§È¥½¹µãÊ±£¬¸üĞÂ ViewModel µÄ Editor ÒıÓÃ
+            // å½“ RichEditBox å¤±å»ç„¦ç‚¹æ—¶ï¼Œæ›´æ–° ViewModel çš„ Editor å¼•ç”¨
             if (ViewModel != null)
             {
-                ViewModel.SaveSelection(); // ±£´æµ±Ç°Ñ¡Çø
+                ViewModel.SaveSelection(); // ä¿å­˜å½“å‰é€‰åŒº
             }
         }
 
@@ -84,20 +98,20 @@ namespace TjdHelperWinUI.Pages
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                // ³¢ÊÔ½âÎöÓÃ»§ÊäÈë
+                // å°è¯•è§£æç”¨æˆ·è¾“å…¥
                 if (double.TryParse(FontSizeBox.Text, out double newSize))
                 {
-                    ViewModel.FontSize = newSize; // »á´¥·¢ ApplyFontSize()
+                    ViewModel.FontSize = newSize; // ä¼šè§¦å‘ ApplyFontSize()
                 }
 
-                // ×èÖ¹ÊÂ¼ş¼ÌĞøÃ°Åİ
+                // é˜»æ­¢äº‹ä»¶ç»§ç»­å†’æ³¡
                 e.Handled = true;
             }
         }
 
         private void Editor_DragOver(object sender, DragEventArgs e)
         {
-            // ÏÔÊ¾¸´ÖÆĞ§¹û
+            // æ˜¾ç¤ºå¤åˆ¶æ•ˆæœ
             e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
         }
 
@@ -111,7 +125,131 @@ namespace TjdHelperWinUI.Pages
         private async Task OnRichEditTextLoaded(string text)
         {
             Editor.Document.SetText(Microsoft.UI.Text.TextSetOptions.None, text);
-            await Task.CompletedTask; // Õ¼Î»£¬±£³Ö async ·½·¨Ç©Ãû
+            await Task.CompletedTask; // å ä½ï¼Œä¿æŒ async æ–¹æ³•ç­¾å
+        }
+
+        private void CommandBar_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            var tabbedBar = sender as TabbedCommandBar;
+            var selectedTab = tabbedBar.SelectedItem as TabbedCommandBarItem;
+
+            if (selectedTab == TextEditTab)
+            {
+                Editor.Visibility = Visibility.Visible;
+                ImageCropperControl.Visibility = Visibility.Collapsed;
+            }
+            else if (selectedTab == ImageCropTab)
+            {
+                Editor.Visibility = Visibility.Collapsed;
+                ImageCropperControl.Visibility = Visibility.Visible;
+
+                LoadImage();
+            }
+        }
+
+        private async void PickButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var filePath = await FileHelper.PickSingleFilePathAsync(App.MainWindow);
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    var file = await StorageFile.GetFileFromPathAsync(filePath);
+                    await ImageCropperControl.LoadImageFromFile(file);
+                }
+            }
+            catch (Exception ex)
+            {
+                NotificationHelper.Show("åŠ è½½å›¾ç‰‡å¤±è´¥", ex.Message);
+            }
+        }
+
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (ImageCropperControl == null)
+                {
+                    NotificationHelper.Show("é”™è¯¯", "æ²¡æœ‰å¯ä¿å­˜çš„å›¾ç‰‡");
+                    return;
+                }
+
+                // æŠŠè£å‰ªåçš„å›¾ç‰‡ä¿å­˜åˆ°å†…å­˜æµ
+                using var stream = new InMemoryRandomAccessStream();
+                await ImageCropperControl.SaveAsync(stream, BitmapFileFormat.Png);
+
+                // è®©ç”¨æˆ·é€‰æ‹©ä¿å­˜è·¯å¾„
+                await FileHelper.SaveImageAsync(App.MainWindow, stream);
+            }
+            catch (Exception ex)
+            {
+                NotificationHelper.Show("ä¿å­˜å¤±è´¥", ex.Message);
+            }
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            ImageCropperControl.Reset();
+        }
+
+        private void ThumbPlacementCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ImageCropperControl == null) return;
+
+            var selected = (ThumbPlacementCombo.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            switch (selected)
+            {
+                case "All":
+                    ImageCropperControl.ThumbPlacement = ThumbPlacement.All;
+                    break;
+                case "Corners":
+                    ImageCropperControl.ThumbPlacement = ThumbPlacement.Corners;
+                    break;
+            }
+        }
+
+        private void CropShapeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ImageCropperControl == null) return;
+
+            var selected = (CropShapeCombo.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            switch (selected)
+            {
+                case "Rectangular":
+                    ImageCropperControl.CropShape = CropShape.Rectangular;
+                    break;
+                case "Circular":
+                    ImageCropperControl.CropShape = CropShape.Circular;
+                    break;
+            }
+        }
+
+        private void AspectRatioCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ImageCropperControl == null) return;
+
+            var selected = (AspectRatioCombo.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            switch (selected)
+            {
+                case "Custom":
+                    ImageCropperControl.AspectRatio = 0; // è‡ªç”±æ¯”ä¾‹
+                    break;
+                case "Square":
+                    ImageCropperControl.AspectRatio = 1; // 1:1
+                    break;
+                case "Landscape(16:9)":
+                    ImageCropperControl.AspectRatio = 16.0 / 9.0;
+                    break;
+                case "Portrait(9:16)":
+                    ImageCropperControl.AspectRatio = 9.0 / 16.0;
+                    break;
+                case "4:3":
+                    ImageCropperControl.AspectRatio = 4.0 / 3.0;
+                    break;
+                case "3:2":
+                    ImageCropperControl.AspectRatio = 3.0 / 2.0;
+                    break;
+            }
         }
     }
 }

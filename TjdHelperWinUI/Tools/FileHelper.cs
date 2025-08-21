@@ -7,6 +7,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage;
 using WinRT.Interop;
 using System.Collections.Generic;
+using Windows.Storage.Streams;
 
 namespace TjdHelperWinUI.Tools
 {
@@ -142,7 +143,6 @@ namespace TjdHelperWinUI.Tools
             return resultFiles;
         }
 
-
         private static void ValidateParameters(string filePath, int chunkSize)
         {
             if (string.IsNullOrEmpty(filePath))
@@ -151,6 +151,38 @@ namespace TjdHelperWinUI.Tools
                 throw new FileNotFoundException("文件未找到", filePath);
             if (chunkSize <= 0)
                 throw new ArgumentOutOfRangeException(nameof(chunkSize), "分片大小必须大于0");
+        }
+
+        public static async Task SaveImageAsync(Window window, InMemoryRandomAccessStream imageStream)
+        {
+            var savePicker = new FileSavePicker();
+
+            // 关键：在 WinUI 3 里必须手动绑定窗口句柄
+            var hWnd = WindowNative.GetWindowHandle(window);
+            InitializeWithWindow.Initialize(savePicker, hWnd);
+
+            // 设置保存文件类型和默认文件名
+            savePicker.FileTypeChoices.Add("PNG 图片", new List<string>() { ".png" });
+            savePicker.SuggestedFileName = "cropped_image" + DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            StorageFile file = await savePicker.PickSaveFileAsync();
+            if (file != null)
+            {
+                using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    imageStream.Seek(0);
+                    await RandomAccessStream.CopyAndCloseAsync(
+                        imageStream.GetInputStreamAt(0),
+                        fileStream.GetOutputStreamAt(0));
+                }
+
+                NotificationHelper.Show("成功", $"图片已保存到: {file.Path}");
+                FileHelper.OpenFolder(Path.GetDirectoryName(file.Path) ?? string.Empty);
+            }
+            else
+            {
+                NotificationHelper.Show("提示", "保存已取消");
+            }
         }
     }
 }
