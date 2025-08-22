@@ -42,12 +42,14 @@
 
             <!--  右侧  -->
             <PersonPicture
+                x:Name="PersonPictureCtrl"
                 Grid.Column="2"
                 Width="20"
                 Margin="0,0,10,0"
                 HorizontalAlignment="Right"
                 DisplayName="Jerry Tang"
-                Foreground="{ThemeResource SystemAccentColor}" />
+                Foreground="{ThemeResource SystemAccentColor}"
+                PointerPressed="PersonPictureCtrl_PointerPressed" />
         </Grid>
 
         <NavigationView
@@ -164,5 +166,15 @@
             <Frame x:Name="MainFrame" />
 
         </NavigationView>
+
+        <TeachingTip
+            x:Name="TestButton1TeachingTip"
+            Title="TjdHelperWinUI Tool"
+            Subtitle="Developed by Jerry Tang."
+            Target="{x:Bind PersonPictureCtrl}">
+            <TeachingTip.IconSource>
+                <SymbolIconSource Symbol="Contact"/>
+            </TeachingTip.IconSource>
+        </TeachingTip>
     </Grid>
 </Window>

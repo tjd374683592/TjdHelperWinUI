@@ -28,15 +28,13 @@
             IsExpanded="True">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Border
                     x:Name="SideContent"
-                    MinWidth="500"
-                    MaxWidth="1000"
                     Margin="5"
                     Padding="5"
                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"

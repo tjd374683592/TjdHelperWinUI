@@ -247,5 +247,10 @@ namespace TjdHelperWinUI
             }
             return NavigationViewPaneDisplayMode.Left; // д╛хож╣
         }
+
+        private void PersonPictureCtrl_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            TestButton1TeachingTip.IsOpen = true;
+        }
     }
 }
