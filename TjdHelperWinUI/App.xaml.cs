@@ -70,6 +70,7 @@ namespace TjdHelperWinUI
             services.AddScoped<MediaConverterPageViewModel>();
             services.AddScoped<FileHelperPageViewModel>();
             services.AddScoped<RichEditPageViewModel>();
+            services.AddScoped<EverythingPageViewModel>();
             Services = services.BuildServiceProvider();
 
             m_window = new MainWindow();

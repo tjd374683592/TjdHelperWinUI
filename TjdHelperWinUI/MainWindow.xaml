@@ -160,6 +160,11 @@
                     Content="Markdown"
                     Icon="Highlight"
                     Tag="MarkdownPage" />
+
+                <NavigationViewItem
+                    Content="search"
+                    Icon="Zoom"
+                    Tag="EverythingPage" />
             </NavigationView.MenuItems>
 
             <!--  内容区域  -->
@@ -173,7 +178,7 @@
             Subtitle="Developed by Jerry Tang."
             Target="{x:Bind PersonPictureCtrl}">
             <TeachingTip.IconSource>
-                <SymbolIconSource Symbol="Contact"/>
+                <SymbolIconSource Symbol="Contact" />
             </TeachingTip.IconSource>
         </TeachingTip>
     </Grid>
