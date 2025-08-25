@@ -1,3 +1,3 @@
 一个学习使用的demo
-![image](https://github.com/user-attachments/assets/debaca05-aecf-47ad-92ab-efe47ad316c0)
-![动画](https://github.com/user-attachments/assets/4422f10e-50c6-4a3b-b870-e14cfbacd496)
+<img width="1414" height="920" alt="explorer_iiUYZprTMg" src="https://github.com/user-attachments/assets/8be9506e-4aa6-4e5b-a3df-703f32879372" />
+![动画](https://github.com/user-attachments/assets/f647a13f-d329-4207-9da3-bdae0189b361)
