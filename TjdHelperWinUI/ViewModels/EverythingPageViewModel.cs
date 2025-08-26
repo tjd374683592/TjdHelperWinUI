@@ -18,11 +18,13 @@ namespace TjdHelperWinUI.ViewModels
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public ObservableCollection<SearchResultItem> SearchResults { get; set; } = new();
-        private EverythingHelper _helper;
+        private readonly EverythingHelper _helper;
+        private readonly IMessageService _messageService;
 
-        public EverythingPageViewModel()
+        public EverythingPageViewModel(IMessageService? messageService = null)
         {
             _helper = new EverythingHelper();
+            _messageService = messageService ?? new MessageService();
 
             StartSearchingCommand = new RelayCommand(async (obj) => await StartSearchingCommandExecute());
 
@@ -37,7 +39,7 @@ namespace TjdHelperWinUI.ViewModels
             );
 
             DeleteCommand = new RelayCommand(
-                (obj) => DeleteCommandExecute(),
+                async (obj) => await DeleteCommandExecuteAsync(),
                 (obj) => SelectedItem != null
             );
         }
@@ -72,6 +74,7 @@ namespace TjdHelperWinUI.ViewModels
         }
 
         public ICommand StartSearchingCommand { get; set; }
+
         private async Task StartSearchingCommandExecute()
         {
             try
@@ -151,9 +154,17 @@ namespace TjdHelperWinUI.ViewModels
         }
 
         public ICommand DeleteCommand { get; set; }
-        private void DeleteCommandExecute()
+        private async Task DeleteCommandExecuteAsync()
         {
             if (SelectedItem == null) return;
+
+            bool confirm = await _messageService.ShowConfirmDialogAsync(
+                "删除确认",
+                $"确定要删除文件 \"{SelectedItem.Name}\" 吗？"
+            );
+
+            if (!confirm) return;
+
             try
             {
                 var filePath = Path.Combine(SelectedItem.Directory, SelectedItem.Name);
@@ -164,7 +175,7 @@ namespace TjdHelperWinUI.ViewModels
             }
             catch (Exception ex)
             {
-                NotificationHelper.Show("错误", $"删除失败: {ex.Message}");
+                await _messageService.ShowMessageAsync("错误", $"删除失败: {ex.Message}");
             }
         }
         #endregion
