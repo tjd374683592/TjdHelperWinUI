@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using TjdHelperWinUI.Models;
 using TjdHelperWinUI.Tools;
@@ -33,6 +34,23 @@ namespace TjdHelperWinUI.Pages
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 App.Services.GetService<EverythingPageViewModel>().StartSearchingCommand.Execute(null);
+            }
+        }
+        private void ResultsGrid_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            var depObj = e.OriginalSource as DependencyObject;
+
+            while (depObj != null)
+            {
+                // 找到有 DataContext 的元素
+                var dataContext = (depObj as FrameworkElement)?.DataContext;
+                if (dataContext != null && ((FrameworkElement)depObj).DataContext is TjdHelperWinUI.Models.SearchResultItem)
+                {
+                    ResultsGrid.SelectedItem = dataContext;
+                    break;
+                }
+
+                depObj = VisualTreeHelper.GetParent(depObj);
             }
         }
     }

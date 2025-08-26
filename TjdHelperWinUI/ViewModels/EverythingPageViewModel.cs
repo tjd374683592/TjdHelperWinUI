@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TjdHelperWinUI.Models;
@@ -15,24 +14,39 @@ namespace TjdHelperWinUI.ViewModels
     public class EverythingPageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public ObservableCollection<SearchResultItem> SearchResults { get; set; } = new();
-
         private EverythingHelper _helper;
 
-        /// <summary>
-        /// 搜索关键词
-        /// </summary>
-        private string _searchKeywords;
+        public EverythingPageViewModel()
+        {
+            _helper = new EverythingHelper();
 
+            StartSearchingCommand = new RelayCommand(async (obj) => await StartSearchingCommandExecute());
+
+            OpenFileCommand = new RelayCommand(
+                (obj) => OpenFileCommandExecute(),
+                (obj) => SelectedItem != null
+            );
+
+            OpenDirectoryCommand = new RelayCommand(
+                (obj) => OpenDirectoryCommandExecute(),
+                (obj) => SelectedItem != null
+            );
+
+            DeleteCommand = new RelayCommand(
+                (obj) => DeleteCommandExecute(),
+                (obj) => SelectedItem != null
+            );
+        }
+
+        #region 搜索相关
+        private string _searchKeywords;
         public string SearchKeywords
         {
-            get { return _searchKeywords; }
+            get => _searchKeywords;
             set
             {
                 if (_searchKeywords != value)
@@ -43,42 +57,116 @@ namespace TjdHelperWinUI.ViewModels
             }
         }
 
-        public ICommand StartSearchingCommand { get; set; }
-
-        public EverythingPageViewModel()
+        private bool _isSearching;
+        public bool IsSearching
         {
-            _helper = new EverythingHelper();
-
-            StartSearchingCommand = new RelayCommand(StartSearchingCommandExecute);
-        }
-
-        private void StartSearchingCommandExecute(object obj)
-        {
-            // 清空现有结果
-            SearchResults.Clear();
-            _helper.EnsureEverythingRunning();
-
-            // 执行搜索
-            _helper.Search(SearchKeywords);
-
-            // 获取前 50 条结果
-            var searchItemArray = _helper.GetAllResults(50);
-
-            // 遍历填充 ObservableCollection
-            for (int i = 0; i < searchItemArray.Length; i++)
+            get => _isSearching;
+            set
             {
-                var item = searchItemArray[i];
-
-                // 添加到 SearchResults 集合
-                SearchResults.Add(new SearchResultItem
+                if (_isSearching != value)
                 {
-                    Id = i + 1,
-                    Name = item.Name.Trim(),
-                    Directory = item.Directory.Trim(),
-                    Size = item.Size,
-                    DateModified = item.DateModified
-                });
+                    _isSearching = value;
+                    OnPropertyChanged(nameof(IsSearching));
+                }
             }
         }
+
+        public ICommand StartSearchingCommand { get; set; }
+        private async Task StartSearchingCommandExecute()
+        {
+            try
+            {
+                IsSearching = true;
+
+                var results = await Task.Run(() =>
+                {
+                    _helper.EnsureEverythingRunning();
+                    _helper.Search(SearchKeywords);
+                    return _helper.GetAllResults(50);
+                });
+
+                SearchResults.Clear();
+                foreach (var item in results.Select((r, i) => new SearchResultItem
+                {
+                    Id = i + 1,
+                    Name = r.Name.Trim(),
+                    Directory = r.Directory.Trim(),
+                    Size = r.Size,
+                    DateModified = r.DateModified
+                }))
+                {
+                    SearchResults.Add(item);
+                }
+            }
+            finally
+            {
+                IsSearching = false;
+            }
+        }
+        #endregion
+
+        #region 选中行 + 命令
+        private SearchResultItem _selectedItem;
+        public SearchResultItem SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                if (_selectedItem != value)
+                {
+                    _selectedItem = value;
+                    OnPropertyChanged(nameof(SelectedItem));
+
+                    // 通知命令 CanExecute 改变
+                    ((RelayCommand)OpenFileCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)OpenDirectoryCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)DeleteCommand).RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public ICommand OpenFileCommand { get; set; }
+        private void OpenFileCommandExecute()
+        {
+            if (SelectedItem == null) return;
+
+            string fullPath = Path.Combine(SelectedItem.Directory, SelectedItem.Name);
+
+            if (File.Exists(fullPath))
+            {
+                Process.Start(new ProcessStartInfo(fullPath) { UseShellExecute = true });
+            }
+            else
+            {
+                NotificationHelper.Show("错误", $"文件不存在: {fullPath}");
+            }
+        }
+
+        public ICommand OpenDirectoryCommand { get; set; }
+        private void OpenDirectoryCommandExecute()
+        {
+            if (SelectedItem == null) return;
+
+            FileHelper.OpenFolder(SelectedItem.Directory);
+        }
+
+        public ICommand DeleteCommand { get; set; }
+        private void DeleteCommandExecute()
+        {
+            if (SelectedItem == null) return;
+            try
+            {
+                var filePath = Path.Combine(SelectedItem.Directory, SelectedItem.Name);
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+
+                SearchResults.Remove(SelectedItem);
+            }
+            catch (Exception ex)
+            {
+                NotificationHelper.Show("错误", $"删除失败: {ex.Message}");
+            }
+        }
+        #endregion
     }
 }
