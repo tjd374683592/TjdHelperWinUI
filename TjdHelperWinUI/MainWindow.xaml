@@ -162,7 +162,7 @@
                     Tag="MarkdownPage" />
 
                 <NavigationViewItem
-                    Content="search"
+                    Content="Everything"
                     Icon="Zoom"
                     Tag="EverythingPage" />
             </NavigationView.MenuItems>
