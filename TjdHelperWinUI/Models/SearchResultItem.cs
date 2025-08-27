@@ -15,6 +15,6 @@ namespace TjdHelperWinUI.Models
         public string Name { get; set; } = string.Empty;
         public string Directory { get; set; } = string.Empty;
         public DateTime? DateModified { get; set; }
-        public long Size { get; set; }
+        public string Size { get; set; }
     }
 }

@@ -90,7 +90,7 @@
                     <controls:DataGridTextColumn
                         Width="120"
                         Binding="{Binding Size}"
-                        Header="Size(KB)" />
+                        Header="Size" />
                     <controls:DataGridTextColumn
                         Width="180"
                         Binding="{Binding DateModified}"

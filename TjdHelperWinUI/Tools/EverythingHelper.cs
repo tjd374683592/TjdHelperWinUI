@@ -107,11 +107,23 @@ namespace TjdHelperWinUI.Tools
         /// <summary>
         /// 获取指定索引的文件大小（字节）
         /// </summary>
-        public long GetResultSize(int index)
+        public string GetResultSize(int index)
         {
             if (Everything_GetResultSize(index, out long size))
-                return size / 1024; // 转换为 KB
-            return 0;
+            {
+                if (size == -1)
+                    return "Folder";
+
+                if (size < 1024)
+                    return $"{size} B";
+                else if (size < 1024 * 1024)
+                    return $"{size / 1024.0:F2} KB";
+                else if (size < 1024L * 1024 * 1024)
+                    return $"{size / 1024.0 / 1024.0:F2} MB";
+                else
+                    return $"{size / 1024.0 / 1024.0 / 1024.0:F2} GB";
+            }
+            return "0 B";
         }
 
         /// <summary>
@@ -167,9 +179,6 @@ namespace TjdHelperWinUI.Tools
         /// </summary>
         public bool EnsureEverythingRunning()
         {
-            // 如果有服务，尝试启动（但不 return）
-            TryEnsureServiceRunning("Everything");
-
             // 启动 Everything.exe (隐藏)
             if (!File.Exists(_everythingPath))
                 return false;
@@ -195,26 +204,6 @@ namespace TjdHelperWinUI.Tools
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// 确保服务运行（如果存在）
-        /// </summary>
-        private void TryEnsureServiceRunning(string serviceName)
-        {
-            try
-            {
-                using var sc = new ServiceController(serviceName);
-                if (sc.Status != ServiceControllerStatus.Running)
-                {
-                    sc.Start();
-                    sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(5));
-                }
-            }
-            catch (Exception ex)
-            {
-                NotificationHelper.Show(ex.Message);
-            }
         }
 
         #endregion
