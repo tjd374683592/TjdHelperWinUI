@@ -40,6 +40,9 @@ namespace TjdHelperWinUI.Tools
         private static extern void Everything_SetSearch(string search);
 
         [DllImport("Everything64.dll")]
+        private static extern void Everything_SetRequestFlags(uint flags);
+
+        [DllImport("Everything64.dll")]
         private static extern void Everything_Query(bool wait);
 
         [DllImport("Everything64.dll")]
@@ -49,13 +52,22 @@ namespace TjdHelperWinUI.Tools
         private static extern bool Everything_GetResultFullPathName(int index, StringBuilder buf, int bufLen);
 
         [DllImport("Everything64.dll")]
-        private static extern long Everything_GetResultSize(int index);
+        private static extern bool Everything_GetResultSize(int index, out long size);
 
         [DllImport("Everything64.dll")]
-        private static extern long Everything_GetResultDateModified(int index);
+        private static extern bool Everything_GetResultDateModified(int index, out long fileTime);
 
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern bool SetDllDirectory(string lpPathName);
+
+        #endregion
+
+        #region 常量定义
+
+        private const uint EVERYTHING_REQUEST_FILE_NAME = 0x00000001;
+        private const uint EVERYTHING_REQUEST_PATH = 0x00000002;
+        private const uint EVERYTHING_REQUEST_SIZE = 0x00000010;
+        private const uint EVERYTHING_REQUEST_DATE_MODIFIED = 0x00000040;
 
         #endregion
 
@@ -67,6 +79,12 @@ namespace TjdHelperWinUI.Tools
         public void Search(string keyword)
         {
             Everything_SetSearch(keyword);
+            Everything_SetRequestFlags(
+                EVERYTHING_REQUEST_FILE_NAME |
+                EVERYTHING_REQUEST_PATH |
+                EVERYTHING_REQUEST_SIZE |
+                EVERYTHING_REQUEST_DATE_MODIFIED
+            );
             Everything_Query(true);
         }
 
@@ -91,7 +109,9 @@ namespace TjdHelperWinUI.Tools
         /// </summary>
         public long GetResultSize(int index)
         {
-            return Everything_GetResultSize(index);
+            if (Everything_GetResultSize(index, out long size))
+                return size / 1024; // 转换为 KB
+            return 0;
         }
 
         /// <summary>
@@ -99,17 +119,18 @@ namespace TjdHelperWinUI.Tools
         /// </summary>
         public DateTime? GetResultDateModified(int index)
         {
-            long fileTime = Everything_GetResultDateModified(index);
-            if (fileTime == 0) return null;
-
-            try
+            if (Everything_GetResultDateModified(index, out long fileTime) && fileTime != 0)
             {
-                return DateTime.FromFileTimeUtc(fileTime).ToLocalTime();
+                try
+                {
+                    return DateTime.FromFileTimeUtc(fileTime).ToLocalTime();
+                }
+                catch
+                {
+                    return null;
+                }
             }
-            catch
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>
@@ -146,10 +167,6 @@ namespace TjdHelperWinUI.Tools
         /// </summary>
         public bool EnsureEverythingRunning()
         {
-            // 已经有 Everything.exe 进程
-            //if (Process.GetProcessesByName("Everything").Length > 0)
-            //    return true;
-
             // 如果有服务，尝试启动（但不 return）
             TryEnsureServiceRunning("Everything");
 
@@ -194,9 +211,9 @@ namespace TjdHelperWinUI.Tools
                     sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(5));
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // 服务不存在或无权限时，忽略即可
+                NotificationHelper.Show(ex.Message);
             }
         }
 
