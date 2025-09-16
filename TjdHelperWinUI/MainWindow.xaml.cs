@@ -54,6 +54,10 @@ namespace TjdHelperWinUI
                 // AppWindow.TitleBar.RightInset 表示右边系统按钮（最小化、最大化、关闭）的总宽度
                 // 这里动态设置 AppTitleBar 的右 Padding，让右边控件（PersonPicture）避开按钮区域
                 AppTitleBar.Padding = new Thickness(0, 0, appWindow.TitleBar.RightInset, 0);
+                if (appWindow.TitleBar.RightInset < 0)
+                {
+                    AppTitleBar.Padding = new Thickness(0, 0, 138, 0);
+                }
             };
 
             // 告诉 WinUI 使用 AppTitleBar 作为可拖拽的标题栏区域
