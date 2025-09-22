@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TjdHelperWinUI.Models;
 using TjdHelperWinUI.Tools;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace TjdHelperWinUI.ViewModels
 {
@@ -40,6 +41,16 @@ namespace TjdHelperWinUI.ViewModels
 
             DeleteCommand = new RelayCommand(
                 async (obj) => await DeleteCommandExecuteAsync(),
+                (obj) => SelectedItem != null
+            );
+
+            CopyFileNameCommand = new RelayCommand(
+                (obj) => CopyFileNameCommandExecute(),
+                (obj) => SelectedItem != null
+            );
+
+            CopyFullDirectoryCommand = new RelayCommand(
+                (obj) => CopyFullDirectoryCommandExecute(),
                 (obj) => SelectedItem != null
             );
         }
@@ -177,6 +188,32 @@ namespace TjdHelperWinUI.ViewModels
             {
                 await _messageService.ShowMessageAsync("错误", $"删除失败: {ex.Message}");
             }
+        }
+
+        public ICommand CopyFileNameCommand { get; set; }
+        private void CopyFileNameCommandExecute()
+        {
+            if (SelectedItem == null) return;
+
+            var dataPackage = new DataPackage();
+            dataPackage.SetText(SelectedItem.Name);
+            Clipboard.SetContent(dataPackage);
+
+            NotificationHelper.Show("已复制", $"文件名已复制到剪贴板: {SelectedItem.Name}");
+        }
+
+        public ICommand CopyFullDirectoryCommand { get; set; }
+        private void CopyFullDirectoryCommandExecute()
+        {
+            if (SelectedItem == null) return;
+
+            string fullPath = Path.Combine(SelectedItem.Directory, SelectedItem.Name);
+
+            var dataPackage = new DataPackage();
+            dataPackage.SetText(fullPath);
+            Clipboard.SetContent(dataPackage);
+
+            NotificationHelper.Show("已复制", $"完整路径已复制到剪贴板: {fullPath}");
         }
         #endregion
     }

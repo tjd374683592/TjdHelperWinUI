@@ -67,6 +67,18 @@
                         <MenuFlyoutSeparator />
 
                         <MenuFlyoutItem
+                            Command="{Binding CopyFileNameCommand}"
+                            IsEnabled="{Binding SelectedItem, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Text="复制文件名" />
+
+                        <MenuFlyoutItem
+                            Command="{Binding CopyFullDirectoryCommand}"
+                            IsEnabled="{Binding SelectedItem, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Text="复制完整路径" />
+
+                        <MenuFlyoutSeparator />
+
+                        <MenuFlyoutItem
                             Command="{Binding DeleteCommand}"
                             IsEnabled="{Binding SelectedItem, Converter={StaticResource BoolToVisibilityConverter}}"
                             Text="删除" />
