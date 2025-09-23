@@ -22,6 +22,7 @@
     <None Remove="Pages\EverythingPage.xaml" />
     <None Remove="Pages\FileHelperPage.xaml" />
     <None Remove="Pages\HomePage.xaml" />
+    <None Remove="Pages\HtmlPage.xaml" />
     <None Remove="Pages\JsonFormatPage.xaml" />
     <None Remove="Pages\MarkdownPage.xaml" />
     <None Remove="Pages\MediaConverterPage.xaml" />
@@ -183,6 +184,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\HtmlPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\EverythingPage.xaml">

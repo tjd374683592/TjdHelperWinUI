@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Page
-    x:Class="TjdHelperWinUI.Pages.MarkdownPage"
+    x:Class="TjdHelperWinUI.Pages.HtmlPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mdcontrols="using:CommunityToolkit.Labs.WinUI.MarkdownTextBlock"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
@@ -24,7 +23,7 @@
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch"
             ExpandDirection="Down"
-            Header="Markdown"
+            Header="Html"
             IsExpanded="True">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -35,30 +34,30 @@
 
                 <Border
                     x:Name="SideContent"
-                    Padding="5"
+                    Grid.Column="0"
                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource SystemAccentColor}"
                     BorderThickness="1"
                     CornerRadius="3">
-                    <ScrollViewer Grid.Column="0">
 
-                        <mdcontrols:MarkdownTextBlock
-                            x:Name="MarkdownTextBlock1"
-                            Config="{x:Bind LiveMarkdownConfig, Mode=OneTime}"
-                            Text="{x:Bind MarkdownTextBox.Text, Mode=OneWay}" />
-
-                    </ScrollViewer>
+                    <!--  WebView2 预览  -->
+                    <WebView2
+                        x:Name="PreviewWebView"
+                        Margin="0"
+                        DefaultBackgroundColor="Transparent" />
                 </Border>
+
                 <controls:GridSplitter Grid.Column="1" />
 
                 <ScrollViewer Grid.Column="2">
                     <TextBox
-                        x:Name="MarkdownTextBox"
+                        x:Name="HtmlInputBox"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         AcceptsReturn="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        TextChanged="HtmlInputBox_TextChanged"
                         TextWrapping="Wrap" />
                 </ScrollViewer>
             </Grid>

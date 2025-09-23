@@ -103,7 +103,7 @@
                             Tag="EncryptHelperPage" />
                         <NavigationViewItem
                             Content="Encoding Converter"
-                            Icon="Globe"
+                            Icon="Font"
                             Tag="EnDecodePage" />
                         <NavigationViewItem
                             Content="Time Converter"
@@ -146,6 +146,19 @@
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
+                <NavigationViewItem Content="Preview" Icon="PreviewLink">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem
+                            Content="Markdown"
+                            Icon="FontIncrease"
+                            Tag="MarkdownPage" />
+                        <NavigationViewItem
+                            Content="Html"
+                            Icon="World"
+                            Tag="HtmlPage" />
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+
                 <NavigationViewItem
                     Content="Json Format"
                     Icon="Edit"
@@ -155,11 +168,6 @@
                     Content="Rich Edit"
                     Icon="Keyboard"
                     Tag="RichEditPage" />
-
-                <NavigationViewItem
-                    Content="Markdown"
-                    Icon="Highlight"
-                    Tag="MarkdownPage" />
 
                 <NavigationViewItem
                     Content="Everything"
