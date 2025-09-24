@@ -55,6 +55,8 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         AcceptsReturn="True"
+                        DragOver="HtmlInputBox_DragOver"
+                        Drop="HtmlInputBox_Drop"
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                         ScrollViewer.VerticalScrollBarVisibility="Auto"
                         TextChanged="HtmlInputBox_TextChanged"

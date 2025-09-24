@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls.Primitives;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -51,6 +52,11 @@ namespace TjdHelperWinUI.ViewModels
 
             CopyFullDirectoryCommand = new RelayCommand(
                 (obj) => CopyFullDirectoryCommandExecute(),
+                (obj) => SelectedItem != null
+            );
+
+            CommandLineCommand = new RelayCommand(
+                (obj) => CommandLineCommandExecute(),
                 (obj) => SelectedItem != null
             );
         }
@@ -214,6 +220,22 @@ namespace TjdHelperWinUI.ViewModels
             Clipboard.SetContent(dataPackage);
 
             NotificationHelper.Show("已复制", $"完整路径已复制到剪贴板: {fullPath}");
+        }
+
+
+        public ICommand CommandLineCommand { get; set; }
+        private void CommandLineCommandExecute()
+        {
+            if (SelectedItem == null) return;
+
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/K cd /d \"{SelectedItem.Directory}\"",
+                UseShellExecute = true // 必须为true，才能打开独立窗口
+            };
+
+            Process.Start(psi);
         }
         #endregion
     }

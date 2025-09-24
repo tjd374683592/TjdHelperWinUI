@@ -78,6 +78,13 @@
                         <MenuFlyoutSeparator />
 
                         <MenuFlyoutItem
+                            Command="{Binding CommandLineCommand}"
+                            IsEnabled="{Binding SelectedItem, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Text="CMD" />
+
+                        <MenuFlyoutSeparator />
+
+                        <MenuFlyoutItem
                             Command="{Binding DeleteCommand}"
                             IsEnabled="{Binding SelectedItem, Converter={StaticResource BoolToVisibilityConverter}}"
                             Text="删除" />
