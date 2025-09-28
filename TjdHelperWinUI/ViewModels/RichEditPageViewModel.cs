@@ -1,9 +1,15 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Input;
+﻿using Microsoft.UI.Text;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Text;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Windows.Input;
 using TjdHelperWinUI.Tools;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 
 namespace TjdHelperWinUI.ViewModels
 {
@@ -178,25 +184,28 @@ namespace TjdHelperWinUI.ViewModels
             }
         }
 
+        private StorageFile _currentFile;
 
+        public StorageFile CurrentFile
+        {
+            get => _currentFile;
+            set
+            {
+                if (_currentFile != value)
+                {
+                    _currentFile = value;
+                    OnPropertyChanged(nameof(CurrentFile));
+                }
+            }
+        }
         #endregion
 
         #region 命令
-
-        /// <summary>
-        /// 撤销命令
-        /// </summary>
         public ICommand UndoCommand { get; set; }
-
-        /// <summary>
-        /// 重做命令
-        /// </summary>
         public ICommand RedoCommand { get; set; }
-
-        /// <summary>
-        /// 粘贴命令
-        /// </summary>
         public ICommand PasteCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand SaveAsCommand { get; set; }
 
         #endregion
 
@@ -208,9 +217,47 @@ namespace TjdHelperWinUI.ViewModels
             UndoCommand = new RelayCommand(UndoCommandExecute);
             RedoCommand = new RelayCommand(RedoCommandExecute);
             PasteCommand = new RelayCommand(PasteCommandExecute);
+            SaveCommand = new RelayCommand(SaveCommandExecute);
+            SaveAsCommand = new RelayCommand(SaveAsCommandExecute);
         }
 
         #region 命令方法
+        public async void SaveCommandExecute(object obj)
+        {
+            if (Editor == null) return;
+
+            // 获取 RichEditBox 中的文本
+            Editor.Document.GetText(TextGetOptions.None, out string text);
+
+            if (_currentFile != null)
+            {
+                // 如果已有文件路径，直接覆盖保存
+                File.WriteAllText(_currentFile.Path, text);
+                NotificationHelper.Show("保存成功", $"文件已保存到 {_currentFile.Path}");
+            }
+            else
+            {
+                SaveAsCommandExecute(null);
+            }
+        }
+
+        public async void SaveAsCommandExecute(object obj)
+        {
+            if (Editor == null) return;
+
+            // 获取 RichEditBox 中的文本
+            Editor.Document.GetText(TextGetOptions.None, out string text);
+
+            byte[] data = System.Text.Encoding.UTF8.GetBytes(text);
+
+            // 调用 SaveFileAsync，允许用户输入任意扩展名
+            await FileHelper.SaveFileAsync(
+                App.MainWindow,
+                data,
+                "example", // 默认文件名（不带扩展名）
+                new Dictionary<string, List<string>>() { { "文本文件", new List<string> { ".txt" } } }
+            );
+        }
 
         /// <summary>
         /// 执行撤销操作

@@ -1,59 +1,113 @@
 ﻿using Microsoft.Windows.AppNotifications.Builder;
 using Microsoft.Windows.AppNotifications;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Windows.Data.Xml.Dom;
+using Windows.UI.Notifications;
 
 namespace TjdHelperWinUI.Tools
 {
     public static class NotificationHelper
     {
+        private const string AppId = "TjdHelperWinUI"; // 用于 Unpackaged 模式
+        private static readonly string IconPath =
+            "file:///" + System.IO.Path.Combine(AppContext.BaseDirectory, "Assets", "Square44x44Logo.scale-200.png").Replace("\\", "/");
+
         /// <summary>
-        /// 显示简单的两行文本通知。
+        /// 判断当前应用是否有 Identity（即是否打包/稀疏包）。
         /// </summary>
-        /// <param name="title">第一行标题</param>
-        /// <param name="message">第二行正文</param>
+        private static bool HasIdentity()
+        {
+            try
+            {
+                // 如果是 Unpackaged，调用会抛异常
+                var dummy = Windows.ApplicationModel.Package.Current.Id;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 显示两行文本通知。
+        /// </summary>
         public static void Show(string title, string message)
         {
-            var notification = new AppNotificationBuilder()
-                .AddText(title)
-                .AddText(message)
-                .BuildNotification();
+            if (HasIdentity())
+            {
+                // 用 AppNotificationManager（现代 API，需要 Identity）
+                var notification = new AppNotificationBuilder()
+                    .AddText(title)
+                    .AddText(message)
+                    .BuildNotification();
 
-            AppNotificationManager.Default.Show(notification);
+                AppNotificationManager.Default.Show(notification);
+            }
+            else
+            {
+                // 回退到 ToastNotificationManager（旧 API，无需 Identity）
+                var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText02);
+
+                // 文本
+                var stringElements = toastXml.GetElementsByTagName("text");
+                stringElements[0].AppendChild(toastXml.CreateTextNode(title));
+                stringElements[1].AppendChild(toastXml.CreateTextNode(message));
+
+                // 图标
+                var imageElements = toastXml.GetElementsByTagName("image");
+                imageElements[0].Attributes.GetNamedItem("src").NodeValue = IconPath;
+
+                var toast = new ToastNotification(toastXml);
+                ToastNotificationManager.CreateToastNotifier(AppId).Show(toast);
+            }
         }
 
         /// <summary>
-        /// 显示一行文本通知（只含标题）。
+        /// 显示单行文本通知。
         /// </summary>
-        /// <param name="title">通知文本</param>
         public static void Show(string title)
         {
-            var notification = new AppNotificationBuilder()
-                .AddText(title)
-                .BuildNotification();
+            if (HasIdentity())
+            {
+                var notification = new AppNotificationBuilder()
+                    .AddText(title)
+                    .BuildNotification();
 
-            AppNotificationManager.Default.Show(notification);
+                AppNotificationManager.Default.Show(notification);
+            }
+            else
+            {
+                var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText01);
+
+                // 文本
+                var stringElements = toastXml.GetElementsByTagName("text");
+                stringElements[0].AppendChild(toastXml.CreateTextNode(title));
+
+                // 图标
+                var imageElements = toastXml.GetElementsByTagName("image");
+                imageElements[0].Attributes.GetNamedItem("src").NodeValue = IconPath;
+
+                var toast = new ToastNotification(toastXml);
+                ToastNotificationManager.CreateToastNotifier(AppId).Show(toast);
+            }
         }
 
         /// <summary>
-        /// 显示自定义构造好的通知（扩展用途）。
+        /// 显示自定义构造好的通知（仅 Packaged 有效）。
         /// </summary>
-        /// <param name="builder">一个已配置的 AppNotificationBuilder</param>
         public static void Show(AppNotificationBuilder builder)
         {
-            var notification = builder.BuildNotification();
-            AppNotificationManager.Default.Show(notification);
+            if (HasIdentity())
+            {
+                var notification = builder.BuildNotification();
+                AppNotificationManager.Default.Show(notification);
+            }
+            else
+            {
+                // Unpackaged 下无法直接用 AppNotificationBuilder，给出提示
+                Show("通知不支持", "当前为 Unpackaged 模式，无法使用自定义通知。");
+            }
         }
-
-        // 示例用法
-        //var builder = new AppNotificationBuilder()
-        //  .AddText("警告")
-        //  .AddText("你的磁盘空间即将不足！")
-        //  .AddInlineImage(new Uri("file:///C:/Images/warning.png"));
-
-        //NotificationHelper.Show(builder);
     }
 }

@@ -117,9 +117,11 @@ namespace TjdHelperWinUI.Pages
 
         private async void Editor_Drop(object sender, DragEventArgs e)
         {
-            await FileDropHandler.HandleDropAsync(
-                e,
-                OnRichEditTextLoaded);
+            var file = await FileDropHandler.HandleDropAsync(e, OnRichEditTextLoaded);
+            if (file != null)
+            {
+                ViewModel.CurrentFile = file;
+            }
         }
 
         private async Task OnRichEditTextLoaded(string text)

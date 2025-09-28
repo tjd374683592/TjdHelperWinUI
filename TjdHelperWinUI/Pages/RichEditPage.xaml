@@ -47,6 +47,22 @@
 
                     <AppBarSeparator />
 
+                    <!--  新增：保存按钮  -->
+                    <AppBarButton x:Name="SaveTextButton" Command="{Binding SaveCommand}" Label="Save">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE74E;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+
+                    <!--  新增：另存为按钮  -->
+                    <AppBarButton x:Name="SaveAsTextButton" Command="{Binding SaveAsCommand}" Label="Save As">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE792;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+
+                    <AppBarSeparator />
+
                     <!--  字体选择下拉框  -->
                     <AppBarElementContainer>
                         <ComboBox

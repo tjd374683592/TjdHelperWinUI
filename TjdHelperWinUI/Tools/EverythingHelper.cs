@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Text;
@@ -179,7 +180,9 @@ namespace TjdHelperWinUI.Tools
         /// </summary>
         public bool EnsureEverythingRunning()
         {
-            // 启动 Everything.exe (隐藏)
+            if (Process.GetProcessesByName("Everything").Any())
+                return true;
+
             if (!File.Exists(_everythingPath))
                 return false;
 
@@ -187,23 +190,14 @@ namespace TjdHelperWinUI.Tools
             {
                 FileName = _everythingPath,
                 Arguments = "-startup",
-                CreateNoWindow = true,
                 UseShellExecute = false,
+                CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden
             };
 
             _everythingProcess = Process.Start(psi);
 
-            // 等待 Everything 初始化（最多 5 秒）
-            var sw = Stopwatch.StartNew();
-            while (sw.ElapsedMilliseconds < 5000)
-            {
-                if (Process.GetProcessesByName("Everything").Length > 0)
-                    return true;
-                Thread.Sleep(200);
-            }
-
-            return false;
+            return _everythingProcess != null;
         }
 
         #endregion

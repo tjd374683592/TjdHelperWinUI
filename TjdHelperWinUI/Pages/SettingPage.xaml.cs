@@ -36,42 +36,40 @@ namespace TjdHelperWinUI.Pages
         {
             this.InitializeComponent();
 
-            var settings = ApplicationData.Current.LocalSettings;
-            if (settings.Values.ContainsKey("PaneDisplayMode"))
+            // 使用 SettingsHelper 读取设置
+            var paneDisplayMode = SettingsHelper.GetSetting<string>("PaneDisplayMode", "Left");
+
+            if (paneDisplayMode == NavigationViewPaneDisplayMode.Left.ToString())
             {
-                var paneDisplayMode = settings.Values["PaneDisplayMode"].ToString();
-                if (paneDisplayMode == Microsoft.UI.Xaml.Controls.NavigationViewPaneDisplayMode.Left.ToString())
-                {
-                    navigationLocation.SelectedIndex = 0;
-                }
-                else if (paneDisplayMode == Microsoft.UI.Xaml.Controls.NavigationViewPaneDisplayMode.Top.ToString())
-                {
-                    navigationLocation.SelectedIndex = 1;
-                }
+                navigationLocation.SelectedIndex = 0;
+            }
+            else if (paneDisplayMode == NavigationViewPaneDisplayMode.Top.ToString())
+            {
+                navigationLocation.SelectedIndex = 1;
             }
             else
             {
                 navigationLocation.SelectedIndex = 0; // Default to Left
             }
 
-            _isInitialized = true; // ✅ 设定初始化完成
+            _isInitialized = true;
         }
 
         private void navigationLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!_isInitialized) return; // ✅ 防止初始化阶段触发逻辑
+            if (!_isInitialized) return;
 
             if (navigationLocation.SelectedIndex == 0)
             {
-                App.MainWindow.MainNavigationView.PaneDisplayMode = Microsoft.UI.Xaml.Controls.NavigationViewPaneDisplayMode.Left;
+                App.MainWindow.MainNavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Left;
             }
             else if (navigationLocation.SelectedIndex == 1)
             {
-                App.MainWindow.MainNavigationView.PaneDisplayMode = Microsoft.UI.Xaml.Controls.NavigationViewPaneDisplayMode.Top;
+                App.MainWindow.MainNavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Top;
             }
 
-            var settings = ApplicationData.Current.LocalSettings;
-            settings.Values["PaneDisplayMode"] = App.MainWindow.MainNavigationView.PaneDisplayMode.ToString();
+            // 使用 SettingsHelper 保存设置
+            SettingsHelper.SetSetting("PaneDisplayMode", App.MainWindow.MainNavigationView.PaneDisplayMode.ToString());
         }
     }
 }

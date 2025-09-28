@@ -14,6 +14,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using TjdHelperWinUI.Models;
 using TjdHelperWinUI.Pages;
+using TjdHelperWinUI.Tools;
 using TjdHelperWinUI.ViewModels; // 需要 WinRT 进行 COM 互操作
 using Windows.Graphics;
 using Windows.Storage;
@@ -241,13 +242,10 @@ namespace TjdHelperWinUI
         // 读取设置
         NavigationViewPaneDisplayMode LoadPaneDisplayMode()
         {
-            var settings = ApplicationData.Current.LocalSettings;
-            if (settings.Values.TryGetValue("PaneDisplayMode", out object value))
+            var modeString = SettingsHelper.GetSetting<string>("PaneDisplayMode", "Left");
+            if (Enum.TryParse(modeString, out NavigationViewPaneDisplayMode mode))
             {
-                if (Enum.TryParse(value.ToString(), out NavigationViewPaneDisplayMode mode))
-                {
-                    return mode;
-                }
+                return mode;
             }
             return NavigationViewPaneDisplayMode.Left; // 默认值
         }

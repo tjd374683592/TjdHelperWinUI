@@ -184,5 +184,38 @@ namespace TjdHelperWinUI.Tools
                 NotificationHelper.Show("提示", "保存已取消");
             }
         }
+
+        public static async Task SaveFileAsync(Window window, byte[] data, string defaultFileName, Dictionary<string, List<string>> fileTypes)
+        {
+            var savePicker = new FileSavePicker();
+
+            // 绑定 WinUI 3 窗口句柄
+            var hWnd = WindowNative.GetWindowHandle(window);
+            InitializeWithWindow.Initialize(savePicker, hWnd);
+
+            // 设置默认文件名
+            savePicker.SuggestedFileName = defaultFileName;
+
+            // 设置保存类型
+            foreach (var kv in fileTypes)
+            {
+                savePicker.FileTypeChoices.Add(kv.Key, kv.Value);
+            }
+
+            // 弹出保存对话框
+            StorageFile file = await savePicker.PickSaveFileAsync();
+            if (file != null)
+            {
+                using var fs = await file.OpenStreamForWriteAsync();
+                await fs.WriteAsync(data, 0, data.Length);
+
+                NotificationHelper.Show("成功", $"文件已保存到: {file.Path}");
+                FileHelper.OpenFolder(Path.GetDirectoryName(file.Path) ?? string.Empty);
+            }
+            else
+            {
+                NotificationHelper.Show("提示", "保存已取消");
+            }
+        }
     }
 }
