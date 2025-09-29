@@ -122,6 +122,8 @@ namespace TjdHelperWinUI.Pages
             {
                 ViewModel.CurrentFile = file;
             }
+
+            marqueeTextNotification.Visibility = Visibility.Visible;
         }
 
         private async Task OnRichEditTextLoaded(string text)

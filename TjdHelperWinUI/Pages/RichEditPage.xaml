@@ -4,11 +4,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:converter="using:TjdHelperWinUI.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <converter:PrefixSuffixConverter x:Key="PrefixSuffixConverter" />
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -16,10 +21,15 @@
             <RowDefinition Height="Auto" />
             <!--  内容区域行  -->
             <RowDefinition Height="*" />
+            <!--  通知区域行  -->
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!--  TabbedCommandBar（带选项卡的命令栏）  -->
-        <controls:TabbedCommandBar x:Name="CommandBar" SelectionChanged="CommandBar_SelectionChanged">
+        <controls:TabbedCommandBar
+            x:Name="CommandBar"
+            Grid.Row="0"
+            SelectionChanged="CommandBar_SelectionChanged">
             <controls:TabbedCommandBar.MenuItems>
 
                 <!--  文本编辑选项卡  -->
@@ -48,14 +58,20 @@
                     <AppBarSeparator />
 
                     <!--  新增：保存按钮  -->
-                    <AppBarButton x:Name="SaveTextButton" Command="{Binding SaveCommand}" Label="Save">
+                    <AppBarButton
+                        x:Name="SaveTextButton"
+                        Command="{Binding SaveCommand}"
+                        Label="Save">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE74E;" />
                         </AppBarButton.Icon>
                     </AppBarButton>
 
                     <!--  新增：另存为按钮  -->
-                    <AppBarButton x:Name="SaveAsTextButton" Command="{Binding SaveAsCommand}" Label="Save As">
+                    <AppBarButton
+                        x:Name="SaveAsTextButton"
+                        Command="{Binding SaveAsCommand}"
+                        Label="Save As">
                         <AppBarButton.Icon>
                             <FontIcon Glyph="&#xE792;" />
                         </AppBarButton.Icon>
@@ -197,7 +213,7 @@
         </controls:TabbedCommandBar>
 
         <!--  内容区域  -->
-        <Grid Grid.Row="1" Margin="10">
+        <Grid Grid.Row="1" Margin="5">
             <!--  文本编辑框  -->
             <RichEditBox
                 x:Name="Editor"
@@ -218,6 +234,18 @@
                 CornerRadius="5"
                 CropShape="Rectangular"
                 ThumbPlacement="All"
+                Visibility="Collapsed" />
+        </Grid>
+
+        <!--  通知区域  -->
+        <Grid Grid.Row="2" Margin="0,0,0,5">
+            <controls:MarqueeText
+                Name="marqueeTextNotification"
+                Direction="Left"
+                FontSize="16"
+                RepeatBehavior="Forever"
+                Speed="96"
+                Text="{Binding CurrentFile.Path, Converter={StaticResource PrefixSuffixConverter}, ConverterParameter='Save to: {0}'}"
                 Visibility="Collapsed" />
         </Grid>
     </Grid>

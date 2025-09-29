@@ -1,5 +1,4 @@
 ﻿using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,24 +7,22 @@ using System.Threading.Tasks;
 
 namespace TjdHelperWinUI.Converter
 {
-    public class BoolToVisibilityConverter : IValueConverter
+    public class PrefixSuffixConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is bool boolean)
+            // parameter 可以传 "value={0}" 这样的格式字符串
+            if (parameter is string format)
             {
-                return boolean ? Visibility.Visible : Visibility.Collapsed;
+                return string.Format(format, value);
             }
-            return Visibility.Collapsed;
+
+            return value?.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            if (value is Visibility visibility)
-            {
-                return visibility == Visibility.Visible;
-            }
-            return false;
+            throw new NotImplementedException();
         }
     }
 }
