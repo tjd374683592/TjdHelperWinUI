@@ -121,9 +121,13 @@ namespace TjdHelperWinUI.Pages
             if (file != null)
             {
                 ViewModel.CurrentFile = file;
+                marqueeTextNotification.Visibility = Visibility.Visible;
             }
-
-            marqueeTextNotification.Visibility = Visibility.Visible;
+            else
+            {
+                ViewModel.CurrentFile = null;
+                marqueeTextNotification.Visibility = Visibility.Collapsed;
+            }
         }
 
         private async Task OnRichEditTextLoaded(string text)

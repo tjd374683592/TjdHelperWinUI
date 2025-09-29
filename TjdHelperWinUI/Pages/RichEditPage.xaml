@@ -245,8 +245,7 @@
                 FontSize="16"
                 RepeatBehavior="Forever"
                 Speed="96"
-                Text="{Binding CurrentFile.Path, Converter={StaticResource PrefixSuffixConverter}, ConverterParameter='Save to: {0}'}"
-                Visibility="Collapsed" />
+                Text="{Binding CurrentFile.Path, Converter={StaticResource PrefixSuffixConverter}, ConverterParameter='Save to: {0}'}" />
         </Grid>
     </Grid>
 </Page>
