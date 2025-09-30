@@ -165,6 +165,7 @@ namespace TjdHelperWinUI.Tools
                     Name = Path.GetFileName(fullPath),
                     Directory = Path.GetDirectoryName(fullPath) ?? string.Empty,
                     Size = GetResultSize(i),
+                    SearchResultType = GetResultSize(i) == "Folder" ? SearchResultItemType.Folder : SearchResultItemType.File,
                     DateModified = GetResultDateModified(i)
                 };
             }

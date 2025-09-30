@@ -112,7 +112,8 @@ namespace TjdHelperWinUI.ViewModels
                     Name = r.Name.Trim(),
                     Directory = r.Directory.Trim(),
                     Size = r.Size,
-                    DateModified = r.DateModified
+                    DateModified = r.DateModified,
+                    SearchResultType = r.SearchResultType
                 }))
                 {
                     SearchResults.Add(item);
@@ -152,13 +153,21 @@ namespace TjdHelperWinUI.ViewModels
 
             string fullPath = Path.Combine(SelectedItem.Directory, SelectedItem.Name);
 
-            if (File.Exists(fullPath))
+            //File.Exists 如果 fullPath 指向的是一个文件夹路径（目录而不是文件）返回值是 false
+            if (SelectedItem.SearchResultType == SearchResultItemType.File && File.Exists(fullPath))
             {
-                Process.Start(new ProcessStartInfo(fullPath) { UseShellExecute = true });
+                try
+                {
+                    Process.Start(new ProcessStartInfo(fullPath) { UseShellExecute = true });
+                }
+                catch (Exception ex)
+                {
+                    NotificationHelper.Show("错误", ex.Message);
+                }
             }
-            else
+            else if (SelectedItem.SearchResultType == SearchResultItemType.Folder)
             {
-                NotificationHelper.Show("错误", $"文件不存在: {fullPath}");
+                FileHelper.OpenFolder(fullPath);
             }
         }
 
@@ -167,7 +176,7 @@ namespace TjdHelperWinUI.ViewModels
         {
             if (SelectedItem == null) return;
 
-            FileHelper.OpenFolder(SelectedItem.Directory);
+            FileHelper.OpenFolder(Path.Combine(SelectedItem.Directory, SelectedItem.Name));
         }
 
         public ICommand DeleteCommand { get; set; }
@@ -185,9 +194,7 @@ namespace TjdHelperWinUI.ViewModels
             try
             {
                 var filePath = Path.Combine(SelectedItem.Directory, SelectedItem.Name);
-                if (File.Exists(filePath))
-                    File.Delete(filePath);
-
+                File.Delete(filePath);
                 SearchResults.Remove(SelectedItem);
             }
             catch (Exception ex)

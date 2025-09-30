@@ -16,7 +16,7 @@ namespace TjdHelperWinUI.Pages
 {
     public sealed partial class EverythingPage : Page
     {
-        
+
 
         public EverythingPage()
         {

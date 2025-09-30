@@ -1,13 +1,15 @@
 ﻿using Microsoft.UI.Xaml;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using Windows.Storage.Pickers;
 using Windows.Storage;
-using WinRT.Interop;
-using System.Collections.Generic;
+using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using WinRT.Interop;
 
 namespace TjdHelperWinUI.Tools
 {
@@ -43,19 +45,106 @@ namespace TjdHelperWinUI.Tools
             }
         }
 
-        /// <summary>
-        /// 通过系统文件资源管理器打开指定目录
-        /// </summary>
-        /// <param name="folderPath">文件夹完整路径</param>
-        public static void OpenFolder(string folderPath)
+        public static void OpenFolder(string path)
         {
-            if (Directory.Exists(folderPath))
+            try
             {
-                Process.Start("explorer.exe", folderPath);
+                // 先尝试处理文件
+                if (TryHandleFile(path))
+                    return;
+
+                // 再尝试处理目录
+                if (TryHandleDirectory(path))
+                    return;
+
+                // 如果文件和目录都无法访问，提示路径不存在或无权限
+                NotificationHelper.Show("错误", $"路径不存在或无法访问: {path}");
             }
-            else
+            catch (Exception ex)
             {
-                NotificationHelper.Show("错误", $"文件夹不存在: {folderPath}");
+                NotificationHelper.Show("错误", $"打开资源管理器失败: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 尝试处理文件，如果存在且可访问，打开资源管理器
+        /// </summary>
+        private static bool TryHandleFile(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    var fileInfo = new FileInfo(path);
+                    if (CanAccessDirectory(fileInfo.DirectoryName))
+                    {
+                        Process.Start("explorer.exe", $"/select,\"{fileInfo.FullName}\"");
+                    }
+                    else
+                    {
+                        NotificationHelper.Show("错误", $"文件所在目录存在但没有访问权限: {fileInfo.DirectoryName}");
+                    }
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                NotificationHelper.Show("错误", ex.Message);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 尝试处理目录，如果存在且可访问，打开资源管理器
+        /// </summary>
+        private static bool TryHandleDirectory(string path)
+        {
+            try
+            {
+                // 尝试列举目录内容判断是否存在
+                Directory.EnumerateFileSystemEntries(path).FirstOrDefault();
+
+                // 如果能枚举说明目录存在且可访问
+                Process.Start("explorer.exe", $"/select,\"{path}\"");
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // 存在但无权限访问
+                NotificationHelper.Show("错误", $"文件夹存在但没有访问权限: {path}");
+                return true;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                // 目录不存在
+                NotificationHelper.Show("错误", "文件夹不存在");
+                return false;
+            }
+            catch
+            {
+                // 其他异常当作无法访问
+                NotificationHelper.Show("错误", $"无法访问文件夹: {path}");
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 判断目录是否可访问（存在且有权限）
+        /// </summary>
+        private static bool CanAccessDirectory(string directoryPath)
+        {
+            try
+            {
+                Directory.EnumerateFileSystemEntries(directoryPath).FirstOrDefault();
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+            catch
+            {
+                return true;
             }
         }
 

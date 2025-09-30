@@ -56,7 +56,7 @@
                         <MenuFlyoutItem
                             Command="{Binding OpenFileCommand}"
                             IsEnabled="{Binding SelectedItem, Converter={StaticResource BoolToVisibilityConverter}}"
-                            Text="打开文件" />
+                            Text="打开" />
 
                         <MenuFlyoutItem
                             Command="{Binding OpenDirectoryCommand}"

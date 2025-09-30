@@ -16,5 +16,12 @@ namespace TjdHelperWinUI.Models
         public string Directory { get; set; } = string.Empty;
         public DateTime? DateModified { get; set; }
         public string Size { get; set; }
+        public SearchResultItemType SearchResultType { get; set; }
+    }
+
+    public enum SearchResultItemType
+    {
+        Folder,
+        File
     }
 }
