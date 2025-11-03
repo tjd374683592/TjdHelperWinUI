@@ -219,17 +219,23 @@ namespace TjdHelperWinUI.ViewModels
                 int id = 1;
                 foreach (var item in filtered)
                 {
+                    string name = item.Name.Trim();
+                    string fullPath = Path.Combine(item.Directory, name);
+
+                    // 先从字典取描述，如果没有则尝试从文件自身获取
+                    string description = MscDescriptions.TryGetValue(name, out var desc)
+                        ? desc
+                        : GetMscDescription(fullPath);
+
                     MscResults.Add(new SearchResultItem
                     {
                         Id = id++,
-                        Name = item.Name.Trim(),
+                        Name = name,
                         Directory = item.Directory.Trim(),
                         Size = item.Size,
                         DateModified = item.DateModified,
                         SearchResultType = item.SearchResultType,
-                        Description = MscDescriptions.TryGetValue(item.Name.Trim(), out var desc)
-                            ? desc
-                            : string.Empty
+                        Description = description
                     });
                 }
             }
@@ -238,7 +244,30 @@ namespace TjdHelperWinUI.ViewModels
                 IsSearchingMsc = false;
             }
         }
+
+        // 获取 MSC 文件自身描述
+        private static string GetMscDescription(string path)
+        {
+            if (!File.Exists(path)) return string.Empty;
+
+            try
+            {
+                var versionInfo = FileVersionInfo.GetVersionInfo(path);
+                if (!string.IsNullOrWhiteSpace(versionInfo.FileDescription))
+                    return versionInfo.FileDescription;
+
+                if (!string.IsNullOrWhiteSpace(versionInfo.ProductName))
+                    return versionInfo.ProductName;
+
+                return Path.GetFileNameWithoutExtension(path);
+            }
+            catch
+            {
+                return Path.GetFileNameWithoutExtension(path);
+            }
+        }
         #endregion
+
 
         #region 打开目录 / 执行
         private void OpenSelectedItemDirectory(SearchResultItem? item)
