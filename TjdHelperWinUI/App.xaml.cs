@@ -71,6 +71,7 @@ namespace TjdHelperWinUI
             services.AddScoped<FileHelperPageViewModel>();
             services.AddScoped<RichEditPageViewModel>();
             services.AddScoped<EverythingPageViewModel>();
+            services.AddScoped<CplMscSearchPageViewModel>();
             Services = services.BuildServiceProvider();
 
             m_window = new MainWindow();

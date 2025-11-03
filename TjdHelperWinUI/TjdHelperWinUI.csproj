@@ -16,6 +16,7 @@
     <None Remove="Assets\GalleryHeaderImage.png" />
     <None Remove="Assets\logo.ico" />
     <None Remove="Pages\AddressHelperPage.xaml" />
+    <None Remove="Pages\CplMscSearchPage.xaml" />
     <None Remove="Pages\DebugNotePage.xaml" />
     <None Remove="Pages\EncryptHelperPage.xaml" />
     <None Remove="Pages\EnDecodePage.xaml" />
@@ -185,6 +186,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\CplMscSearchPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\PostmanPage.xaml">

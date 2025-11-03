@@ -17,6 +17,7 @@ namespace TjdHelperWinUI.Models
         public DateTime? DateModified { get; set; }
         public string Size { get; set; }
         public SearchResultItemType SearchResultType { get; set; }
+        public string Description { get; set; } = string.Empty; 
     }
 
     public enum SearchResultItemType

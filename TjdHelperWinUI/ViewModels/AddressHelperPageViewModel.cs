@@ -108,8 +108,7 @@ namespace TjdHelperWinUI.ViewModels
 
                 if (vsize <= 0)
                 {
-                    //((MainWindowViewModel)Application.Current.MainWindow.DataContext).ShowFlyOut = true;
-                    //((MainWindowViewModel)Application.Current.MainWindow.DataContext).LogInfo = $"结束地址：{StrEndAddress} 必须大于起始地址：{StrStartAddress}";
+                    NotificationHelper.Show("注意", $"结束地址：{StrEndAddress} 必须大于起始地址：{StrStartAddress}");
                 }
 
                 StrVSize = "Size:  " + vsize + " byte    " + vsize / 1024 + "KB    " + vsize / 1024 / 1024 + "MB";
@@ -118,6 +117,7 @@ namespace TjdHelperWinUI.ViewModels
             {
                 //((MainWindowViewModel)Application.Current.MainWindow.DataContext).ShowFlyOut = true;
                 //((MainWindowViewModel)Application.Current.MainWindow.DataContext).LogInfo = "Exception: " + ex.Message;
+                NotificationHelper.Show("注意", ex.Message);
             }
         }
 

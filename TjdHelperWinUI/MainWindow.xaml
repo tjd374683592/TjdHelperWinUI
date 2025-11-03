@@ -141,6 +141,11 @@
                             Content="Library"
                             Icon="OutlineStar"
                             Tag="DebugNotePage" />
+                        <NavigationViewItem Content="Control/Services" Tag="CplMscSearchPage">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE950;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
