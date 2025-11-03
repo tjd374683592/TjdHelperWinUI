@@ -23,6 +23,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBox
@@ -35,8 +37,17 @@
             <Button
                 Grid.Column="1"
                 MinWidth="80"
+                Margin="0,0,5,0"
                 Command="{Binding StartSearchingCommand}"
                 Content="search" />
+
+            <TextBlock
+                Grid.Column="2"
+                Margin="0,0,5,0"
+                VerticalAlignment="Center"
+                Text="Show Length:" />
+
+            <TextBox Grid.Column="3" Text="{Binding EverytingResultShowLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
 
         <!--  内容区  -->

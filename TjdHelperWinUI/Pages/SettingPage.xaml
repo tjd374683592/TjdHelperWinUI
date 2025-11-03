@@ -43,7 +43,6 @@
                         <RepositionThemeTransition />
                     </StackPanel.ChildrenTransitions>
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Appearance" />
-
                     <toolkit:SettingsCard Header="Navigation style">
                         <toolkit:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xF594;" />
@@ -52,6 +51,17 @@
                             <ComboBoxItem Content="Left" IsSelected="True" />
                             <ComboBoxItem Content="Top" />
                         </ComboBox>
+                    </toolkit:SettingsCard>
+
+                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Postman Main Page" />
+                    <toolkit:SettingsCard Header="Postman Project Url">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xF594;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <TextBox
+                            x:Name="txtPostmanProjectUrl"
+                            Width="825"
+                            TextChanged="txtPostmanProjectUrl_TextChanged" />
                     </toolkit:SettingsCard>
 
                 </StackPanel>

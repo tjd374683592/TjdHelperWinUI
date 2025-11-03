@@ -117,10 +117,17 @@
                             Content="QR Code"
                             Icon="Camera"
                             Tag="QRCodePage" />
+                        <NavigationViewItem
+                            Content="Media Converter"
+                            Icon="MusicInfo"
+                            Tag="MediaConverterPage" />
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
-                <NavigationViewItem Content="Debug" Icon="Library">
+                <NavigationViewItem Content="Windows">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE977;" />
+                    </NavigationViewItem.Icon>
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem
                             Content="Win Error Code"
@@ -134,15 +141,6 @@
                             Content="Library"
                             Icon="OutlineStar"
                             Tag="DebugNotePage" />
-                    </NavigationViewItem.MenuItems>
-                </NavigationViewItem>
-
-                <NavigationViewItem Content="Media" Icon="MusicInfo">
-                    <NavigationViewItem.MenuItems>
-                        <NavigationViewItem
-                            Content="Media Converter"
-                            Icon="Play"
-                            Tag="MediaConverterPage" />
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
@@ -173,6 +171,12 @@
                     Content="Everything"
                     Icon="Zoom"
                     Tag="EverythingPage" />
+
+                <NavigationViewItem Content="Postman" Tag="PostmanPage">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE99A;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <!--  内容区域  -->

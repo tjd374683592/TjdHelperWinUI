@@ -187,6 +187,11 @@
     <Folder Include="Controls\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Pages\PostmanPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Pages\HtmlPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

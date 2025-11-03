@@ -33,6 +33,7 @@ namespace TjdHelperWinUI
     {
         // MainWindow.xaml.cs
         public NavigationView MainNavigationView { get; private set; }  // 必须是 public
+        public Frame MainWindowNavigationFrame { get; set; }
         public MainWindow()
         {
             this.InitializeComponent();
@@ -67,11 +68,12 @@ namespace TjdHelperWinUI
             //设置 Mica 背景
             TrySetMicaBackground();
 
-            SetWindowSizeAndCenter(1400, 900); // 设置窗口大小并居中
+            SetWindowSizeAndCenter(1450, 900); // 设置窗口大小并居中
 
             MainNavigationView = this.MainNavigation;
             MainNavigationView.PaneDisplayMode = LoadPaneDisplayMode();
 
+            MainWindowNavigationFrame = this.MainFrame;
         }
 
         /// <summary>

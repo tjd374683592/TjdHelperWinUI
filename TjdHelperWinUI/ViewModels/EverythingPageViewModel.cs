@@ -25,6 +25,8 @@ namespace TjdHelperWinUI.ViewModels
 
         public EverythingPageViewModel(IMessageService? messageService = null)
         {
+            EverytingResultShowLength = 50;
+
             _helper = new EverythingHelper();
             _messageService = messageService ?? new MessageService();
 
@@ -90,6 +92,20 @@ namespace TjdHelperWinUI.ViewModels
             }
         }
 
+        private int _everytingResultShowLength;
+        public int EverytingResultShowLength
+        {
+            get => _everytingResultShowLength;
+            set
+            {
+                if (_everytingResultShowLength != value)
+                {
+                    _everytingResultShowLength = value;
+                    OnPropertyChanged(nameof(EverytingResultShowLength));
+                }
+            }
+        }
+
         public ICommand StartSearchingCommand { get; set; }
 
         private async Task StartSearchingCommandExecute()
@@ -102,7 +118,7 @@ namespace TjdHelperWinUI.ViewModels
                 {
                     _helper.EnsureEverythingRunning();
                     _helper.Search(SearchKeywords);
-                    return _helper.GetAllResults(50);
+                    return _helper.GetAllResults(EverytingResultShowLength);
                 });
 
                 SearchResults.Clear();

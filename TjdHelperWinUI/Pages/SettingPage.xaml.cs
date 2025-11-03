@@ -52,6 +52,12 @@ namespace TjdHelperWinUI.Pages
                 navigationLocation.SelectedIndex = 0; // Default to Left
             }
 
+            var postmanUrl = SettingsHelper.GetSetting<string>("PostmanProjectUrl");
+            if (!string.IsNullOrEmpty(postmanUrl))
+            {
+                txtPostmanProjectUrl.Text = postmanUrl;
+            }
+
             _isInitialized = true;
         }
 
@@ -70,6 +76,12 @@ namespace TjdHelperWinUI.Pages
 
             // 使用 SettingsHelper 保存设置
             SettingsHelper.SetSetting("PaneDisplayMode", App.MainWindow.MainNavigationView.PaneDisplayMode.ToString());
+        }
+
+        private void txtPostmanProjectUrl_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SettingsHelper.SetSetting("PostmanProjectUrl", txtPostmanProjectUrl.Text);
+            NotificationHelper.Show("注意", "Postman Project Url更新成功");
         }
     }
 }
