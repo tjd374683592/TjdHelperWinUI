@@ -58,6 +58,10 @@ namespace TjdHelperWinUI.Pages
                 txtPostmanProjectUrl.Text = postmanUrl;
             }
 
+            // ⭐ 自动选中系统主题
+            bool isDark = SystemThemeHelper.IsSystemDarkTheme();
+            cmbWindowsTheme.SelectedIndex = isDark ? 0 : 1; // 0 = Dark, 1 = Light
+
             _isInitialized = true;
         }
 
@@ -76,6 +80,23 @@ namespace TjdHelperWinUI.Pages
 
             // 使用 SettingsHelper 保存设置
             SettingsHelper.SetSetting("PaneDisplayMode", App.MainWindow.MainNavigationView.PaneDisplayMode.ToString());
+        }
+
+        private void cmbWindowsTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_isInitialized) return;
+
+            var selectedItem = (cmbWindowsTheme.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            if (selectedItem == "Dark")
+            {
+                SystemThemeHelper.SetSystemTheme(true);
+                SettingsHelper.SetSetting("WindowsTheme", "Dark");
+            }
+            else if (selectedItem == "Light")
+            {
+                SystemThemeHelper.SetSystemTheme(false);
+                SettingsHelper.SetSetting("WindowsTheme", "Light");
+            }
         }
 
         private void txtPostmanProjectUrl_TextChanged(object sender, TextChangedEventArgs e)

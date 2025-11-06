@@ -64,6 +64,17 @@
                             TextChanged="txtPostmanProjectUrl_TextChanged" />
                     </toolkit:SettingsCard>
 
+                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Windows System Theme" />
+                    <toolkit:SettingsCard Header="Theme">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xF594;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ComboBox x:Name="cmbWindowsTheme" SelectionChanged="cmbWindowsTheme_SelectionChanged">
+                            <ComboBoxItem Content="Dark" IsSelected="True" />
+                            <ComboBoxItem Content="Light" />
+                        </ComboBox>
+                    </toolkit:SettingsCard>
+
                 </StackPanel>
             </Border>
         </ScrollView>
