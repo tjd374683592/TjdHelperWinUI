@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using TjdHelperWinUI.Models;
@@ -20,11 +19,10 @@ namespace TjdHelperWinUI.Tools
         private readonly string _everythingPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\Tools\Everything.exe");
         private readonly string _everythingdllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\Tools\Everything64.dll");
 
-        private Process? _everythingProcess;  // 仅记录由我们启动的 Everything
+        private Process? _everythingProcess;
 
         public EverythingHelper()
         {
-            // 设置 DLL 搜索路径（确保可以找到 Resources\Tools\Everything64.dll）
             string dllDir = Path.GetDirectoryName(_everythingdllPath)!;
             if (!Directory.Exists(dllDir))
                 throw new DirectoryNotFoundException($"DLL 目录不存在: {dllDir}");
@@ -64,19 +62,13 @@ namespace TjdHelperWinUI.Tools
         #endregion
 
         #region 常量定义
-
         private const uint EVERYTHING_REQUEST_FILE_NAME = 0x00000001;
         private const uint EVERYTHING_REQUEST_PATH = 0x00000002;
         private const uint EVERYTHING_REQUEST_SIZE = 0x00000010;
         private const uint EVERYTHING_REQUEST_DATE_MODIFIED = 0x00000040;
-
         #endregion
 
-        #region SDK 封装方法
-
-        /// <summary>
-        /// 执行搜索
-        /// </summary>
+        #region SDK 封装
         public void Search(string keyword)
         {
             Everything_SetSearch(keyword);
@@ -89,14 +81,8 @@ namespace TjdHelperWinUI.Tools
             Everything_Query(true);
         }
 
-        /// <summary>
-        /// 获取结果数量
-        /// </summary>
         public int ResultCount => Everything_GetNumResults();
 
-        /// <summary>
-        /// 获取指定索引的完整路径
-        /// </summary>
         public string? GetResult(int index)
         {
             var sb = new StringBuilder(MAX_PATH);
@@ -105,9 +91,6 @@ namespace TjdHelperWinUI.Tools
             return null;
         }
 
-        /// <summary>
-        /// 获取指定索引的文件大小（字节）
-        /// </summary>
         public string GetResultSize(int index)
         {
             if (Everything_GetResultSize(index, out long size))
@@ -115,40 +98,24 @@ namespace TjdHelperWinUI.Tools
                 if (size == -1)
                     return "Folder";
 
-                if (size < 1024)
-                    return $"{size} B";
-                else if (size < 1024 * 1024)
-                    return $"{size / 1024.0:F2} KB";
-                else if (size < 1024L * 1024 * 1024)
-                    return $"{size / 1024.0 / 1024.0:F2} MB";
-                else
-                    return $"{size / 1024.0 / 1024.0 / 1024.0:F2} GB";
+                if (size < 1024) return $"{size} B";
+                if (size < 1024 * 1024) return $"{size / 1024.0:F2} KB";
+                if (size < 1024L * 1024 * 1024) return $"{size / 1024.0 / 1024.0:F2} MB";
+                return $"{size / 1024.0 / 1024.0 / 1024.0:F2} GB";
             }
             return "0 B";
         }
 
-        /// <summary>
-        /// 获取指定索引的修改时间
-        /// </summary>
         public DateTime? GetResultDateModified(int index)
         {
             if (Everything_GetResultDateModified(index, out long fileTime) && fileTime != 0)
             {
-                try
-                {
-                    return DateTime.FromFileTimeUtc(fileTime).ToLocalTime();
-                }
-                catch
-                {
-                    return null;
-                }
+                try { return DateTime.FromFileTimeUtc(fileTime).ToLocalTime(); }
+                catch { return null; }
             }
             return null;
         }
 
-        /// <summary>
-        /// 获取所有结果，可限制前 N 条
-        /// </summary>
         public SearchResultItem[] GetAllResults(int maxResults = 0)
         {
             int count = ResultCount;
@@ -171,18 +138,13 @@ namespace TjdHelperWinUI.Tools
             }
             return results;
         }
-
         #endregion
 
-        #region Everything 自动启动逻辑
-
-        /// <summary>
-        /// 确保 Everything.exe 已经在运行
-        /// </summary>
+        #region Everything 启动逻辑（增强版）
         public bool EnsureEverythingRunning()
         {
             if (Process.GetProcessesByName("Everything").Any())
-                return true;
+                return WaitUntilEverythingReady();
 
             if (!File.Exists(_everythingPath))
                 return false;
@@ -190,21 +152,58 @@ namespace TjdHelperWinUI.Tools
             var psi = new ProcessStartInfo
             {
                 FileName = _everythingPath,
-                Arguments = "-startup",
-                UseShellExecute = false,
+                Arguments = "-startup -minimized",
+                UseShellExecute = true,
+                Verb = "runas",
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden
             };
 
-            _everythingProcess = Process.Start(psi);
+            try
+            {
+                _everythingProcess = Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"启动 Everything 失败: {ex.Message}");
+                return false;
+            }
 
-            return _everythingProcess != null;
+            return WaitUntilEverythingReady();
         }
 
+        private static bool WaitUntilEverythingReady(int timeoutMs = 10000)
+        {
+            var sw = Stopwatch.StartNew();
+
+            while (sw.ElapsedMilliseconds < timeoutMs)
+            {
+                if (IsEverythingAvailable())
+                    return true;
+
+                Thread.Sleep(500);
+            }
+
+            Debug.WriteLine("等待 Everything IPC 超时。");
+            return false;
+        }
+
+        private static bool IsEverythingAvailable()
+        {
+            try
+            {
+                Everything_SetSearch("test");
+                Everything_Query(true);
+                return Everything_GetNumResults() >= 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         #endregion
 
-        #region 资源清理
-
+        #region 清理
         public void Dispose()
         {
             try
@@ -218,11 +217,7 @@ namespace TjdHelperWinUI.Tools
             catch { }
         }
 
-        ~EverythingHelper()
-        {
-            Dispose();
-        }
-
+        ~EverythingHelper() => Dispose();
         #endregion
     }
 }

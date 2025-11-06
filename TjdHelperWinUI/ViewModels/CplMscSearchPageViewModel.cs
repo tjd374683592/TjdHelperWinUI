@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TjdHelperWinUI.Models;
@@ -156,8 +157,30 @@ namespace TjdHelperWinUI.ViewModels
                 var results = await Task.Run(() =>
                 {
                     _helper.EnsureEverythingRunning();
-                    _helper.Search("*.cpl");
-                    return _helper.GetAllResults(500);
+
+                    SearchResultItem[] items = Array.Empty<SearchResultItem>();
+                    const int maxRetries = 10;
+                    const int delayMs = 500;
+
+                    for (int attempt = 0; attempt < maxRetries; attempt++)
+                    {
+                        try
+                        {
+                            _helper.Search("*.cpl");
+                            items = _helper.GetAllResults(500);
+
+                            if (items.Length > 0)
+                                break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Everything 查询 *.cpl 第 {attempt + 1} 次失败: {ex.Message}");
+                        }
+
+                        Thread.Sleep(delayMs);
+                    }
+
+                    return items;
                 });
 
                 var filtered = FilterAndPrioritizeResults(results);
@@ -210,8 +233,30 @@ namespace TjdHelperWinUI.ViewModels
                 var results = await Task.Run(() =>
                 {
                     _helper.EnsureEverythingRunning();
-                    _helper.Search("*.msc");
-                    return _helper.GetAllResults(500);
+
+                    SearchResultItem[] items = Array.Empty<SearchResultItem>();
+                    const int maxRetries = 10;
+                    const int delayMs = 500;
+
+                    for (int attempt = 0; attempt < maxRetries; attempt++)
+                    {
+                        try
+                        {
+                            _helper.Search("*.msc");
+                            items = _helper.GetAllResults(500);
+
+                            if (items.Length > 0)
+                                break;
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Everything 查询 *.msc 第 {attempt + 1} 次失败: {ex.Message}");
+                        }
+
+                        Thread.Sleep(delayMs);
+                    }
+
+                    return items;
                 });
 
                 var filtered = FilterAndPrioritizeResults(results);
@@ -221,8 +266,6 @@ namespace TjdHelperWinUI.ViewModels
                 {
                     string name = item.Name.Trim();
                     string fullPath = Path.Combine(item.Directory, name);
-
-                    // 先从字典取描述，如果没有则尝试从文件自身获取
                     string description = MscDescriptions.TryGetValue(name, out var desc)
                         ? desc
                         : GetMscDescription(fullPath);
