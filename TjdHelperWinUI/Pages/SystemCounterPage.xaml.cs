@@ -209,7 +209,7 @@ namespace TjdHelperWinUI.Pages
                 // 顶部文字
                 CpuText.Text = $"CPU: {cpuPercent}%";
                 MemText.Text = $"Memory: {totalMemoryMB - memAvailableMB:F1}MB / {totalMemoryMB:F0}MB";
-                DiskText.Text = $"磁盘活动时间: {diskActive:F1}%";
+                DiskText.Text = $"Disk Time: {diskActive:F1}%";
                 NetText.Text = $"{netInterfaceName}: Rx {netRxKB:F1} KB/s / Tx {netTxKB:F1} KB/s";
 
                 // X轴滚动
