@@ -129,7 +129,7 @@ namespace TjdHelperWinUI.Pages
                 MaxLimit = netMaxKB * 1.1, // 初始最大值 +10%
                 ShowSeparatorLines = true,
                 SeparatorsPaint = new SolidColorPaint(SKColors.Gray.WithAlpha(50), 1),
-                Labeler = value => $"{value:F0} KB/s"
+                Labeler = value => $"{value:F0}"
             };
             NetChart.YAxes = new Axis[] { netYAxis };
 
