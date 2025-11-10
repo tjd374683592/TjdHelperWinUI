@@ -146,6 +146,11 @@
                                 <FontIcon Glyph="&#xE950;" />
                             </NavigationViewItem.Icon>
                         </NavigationViewItem>
+                        <NavigationViewItem Content="Counter" Tag="SystemCounterPage">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xEC48;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
