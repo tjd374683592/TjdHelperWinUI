@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -12,19 +6,25 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
-using Microsoft.Extensions.DependencyInjection;
-using TjdHelperWinUI.ViewModels;
-using System.Reflection;
-using Windows.UI.WebUI;
 using Microsoft.Web.WebView2.Core;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
-using Windows.UI.ViewManagement;
-using Windows.UI;
-using TjdHelperWinUI.Tools;
-using System.Text.Json;
-using Windows.ApplicationModel.DataTransfer;
-using Windows.Storage;
 using System.Threading.Tasks;
+using TjdHelperWinUI.Tools;
+using TjdHelperWinUI.ViewModels;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.UI;
+using Windows.UI.ViewManagement;
+using Windows.UI.WebUI;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -87,7 +87,9 @@ namespace TjdHelperWinUI.Pages
                 string content = monacoPostMsgStr.Split("->")[1];
                 viewModel.StrJsonPrase = content;
                 viewModel.CompresseJsonCommandExecute(null);
-                await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent('{viewModel.StrJsonPrase}')");
+                string safe = JsonConvert.SerializeObject(viewModel.StrJsonPrase);
+                await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent({safe})");
+
             }
 
             //转义Json
@@ -96,21 +98,25 @@ namespace TjdHelperWinUI.Pages
                 string content = monacoPostMsgStr.Split("->")[1];
                 viewModel.StrJsonPrase = content;
                 viewModel.SerializeJsonCommandExecute(null);
-                string escapedJson = JsonSerializer.Serialize(viewModel.StrJsonPrase);
-                string trimmed = escapedJson.Substring(1, escapedJson.Length - 2); // 去掉前后引号
-                string script = $"setEditorContent('{trimmed}')";
-                await MonacoWebView.CoreWebView2.ExecuteScriptAsync(script);
+
+                // 使用 JSON 安全编码（包含转换后的转义字符串）
+                string safe = JsonConvert.SerializeObject(viewModel.StrJsonPrase);
+                await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent({safe})");
             }
 
-            //去转义Json
+
+            // 去转义Json
             if (monacoPostMsgStr.StartsWith("deSerializeJson->"))
             {
                 string content = monacoPostMsgStr.Split("->")[1];
                 viewModel.StrJsonPrase = content;
                 viewModel.DeserializeJsonCommandExecute(null);
-                string script = $"setEditorContent('{viewModel.StrJsonPrase}')";
-                await MonacoWebView.CoreWebView2.ExecuteScriptAsync(script);
+
+                // 同样用 JSON 安全编码
+                string safe = JsonConvert.SerializeObject(viewModel.StrJsonPrase);
+                await MonacoWebView.CoreWebView2.ExecuteScriptAsync($"setEditorContent({safe})");
             }
+
         }
         #endregion
 
@@ -297,7 +303,7 @@ namespace TjdHelperWinUI.Pages
         private async Task OnMonacoTextLoaded(string text)
         {
             await MonacoWebView.CoreWebView2.ExecuteScriptAsync(
-                $"setEditorContent({JsonSerializer.Serialize(text)});");
+                $"setEditorContent({JsonConvert.SerializeObject(text)});");
         }
 
         private async Task OnMonacoHighlightLang(string lang)
