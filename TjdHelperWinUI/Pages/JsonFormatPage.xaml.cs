@@ -312,5 +312,16 @@ namespace TjdHelperWinUI.Pages
                 $"setEditorLanguage('{lang}');");
         }
 
+        private async void btnSearchClicked(object sender, RoutedEventArgs e)
+        {
+            if (MonacoWebView.CoreWebView2 == null)
+                return;
+
+            string keyword = SearchBox.Text ?? "";
+
+            // 无论 keyword 是否为空，都传给前端 JS
+            string script = $"highlightSearchLines({JsonConvert.SerializeObject(keyword)});";
+            await MonacoWebView.CoreWebView2.ExecuteScriptAsync(script);
+        }
     }
 }

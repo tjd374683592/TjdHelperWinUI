@@ -54,6 +54,14 @@
                 box-shadow: 0 0 5px 2px #00d8ffcc, 0 0 10px 4px #0080c7cc;
             }
         }
+
+        .myLineHighlight {
+            background-color: #FFFF00;
+        }
+
+        .myLineHighlightText {
+            color: black !important;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +153,41 @@
         function getEditorTheme() {
             return currentTheme;
         }
+
+        //高亮整行
+        let lineHighlightDecorations = [];
+
+        function highlightSearchLines(keyword) {
+            const model = editor.getModel();
+            if (!model) return;
+
+            // 清理之前的整行高亮
+            if (lineHighlightDecorations.length > 0) {
+                lineHighlightDecorations = editor.deltaDecorations(lineHighlightDecorations, []);
+            }
+
+            // 如果 keyword 为空或全空格，不进行搜索，但之前的高亮已经清掉
+            if (!keyword || keyword.trim() === "") return;
+
+            // 查找匹配
+            const matches = model.findMatches(keyword, true, false, false, null, true);
+
+            // 整行高亮
+            const newDecorations = matches.map(m => {
+                const lineNumber = m.range.startLineNumber;
+                return {
+                    range: new monaco.Range(lineNumber, 1, lineNumber, model.getLineMaxColumn(lineNumber)),
+                    options: {
+                        isWholeLine: true,
+                        className: "myLineHighlight",       // 整行背景
+                        inlineClassName: "myLineHighlightText" // 强制文字颜色
+                    }
+                };
+            });
+
+            lineHighlightDecorations = editor.deltaDecorations([], newDecorations);
+        }
+
     </script>
 </body>
 </html>

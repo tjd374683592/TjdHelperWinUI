@@ -63,14 +63,15 @@
                         Margin="0,5,5,5"
                         Command="{Binding ShowJsonTreeCommand}"
                         Content="切换Monaco/TreeView" />
-                    <TextBlock
-                        Margin="0,5,5,5"
-                        VerticalAlignment="Center"
-                        Text="Value:" />
                     <TextBox
-                        MinWidth="300"
+                        x:Name="SearchBox"
+                        MinWidth="200"
+                        Margin="20,5,5,5"
+                        PlaceholderText="搜索关键字..." />
+                    <Button
                         Margin="0,5,5,5"
-                        Text="{Binding StrJsonPrase, Mode=TwoWay}" />
+                        Click="btnSearchClicked"
+                        Content="搜索" />
                 </StackPanel>
             </Grid>
         </Expander>
