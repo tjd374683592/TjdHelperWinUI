@@ -31,7 +31,6 @@ namespace TjdHelperWinUI.Pages
         {
             this.InitializeComponent();
             _liveConfig = new MarkdownConfig();
-
         }
         public MarkdownConfig LiveMarkdownConfig
         {

@@ -1,0 +1,89 @@
+<Page
+    x:Class="TjdHelperWinUI.Pages.DeepSeekPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="Page_Loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Expander
+            Grid.Row="0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            ExpandDirection="Down"
+            Header="DeepSeek"
+            IsExpanded="True">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border
+                    Grid.Row="0"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource SystemAccentColor}"
+                    BorderThickness="1"
+                    CornerRadius="3">
+
+                    <TextBox
+                        x:Name="tbDeepSeekResponse"
+                        AcceptsReturn="True"
+                        IsReadOnly="True"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        TextWrapping="Wrap" />
+
+                </Border>
+
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        x:Name="tbInput"
+                        MaxHeight="200"
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Center"
+                        AcceptsReturn="True"
+                        PlaceholderText="询问任何问题"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        Text="{Binding StrQuery, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap">
+                        <TextBox.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Enter" Invoked="OnEnterKeyInvoked" />
+                        </TextBox.KeyboardAccelerators>
+                    </TextBox>
+
+                    <Button
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Command="{Binding ChatCompletionCommand}">
+                        <FontIcon Glyph="{Binding SendButtonGlyph}" />
+                    </Button>
+
+                    <Button
+                        Grid.Column="2"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Command="{Binding ClearChatCommand}"
+                        Content="新会话" />
+                </Grid>
+            </Grid>
+        </Expander>
+    </Grid>
+</Page>

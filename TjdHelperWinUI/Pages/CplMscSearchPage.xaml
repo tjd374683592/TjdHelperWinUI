@@ -25,10 +25,11 @@
                 x:Name="DgCplResults"
                 AutoGenerateColumns="False"
                 CanUserResizeColumns="True"
-                HeadersVisibility="Column"
-                RightTapped="CplResultsGrid_RightTapped"
                 DoubleTapped="CplResultsGrid_DoubleTapped"
+                HeadersVisibility="Column"
+                IsReadOnly="True"
                 ItemsSource="{Binding CplResults}"
+                RightTapped="CplResultsGrid_RightTapped"
                 SelectedItem="{Binding SelectedCplItem, Mode=TwoWay}"
                 SelectionMode="Single">
 
@@ -81,13 +82,14 @@
         <!--  Msc DataGrid  -->
         <Grid Grid.Column="1" Margin="2,0,0,0">
             <controls:DataGrid
+                x:Name="DgMscResults"
                 AutoGenerateColumns="False"
                 CanUserResizeColumns="True"
-                HeadersVisibility="Column"
-                x:Name="DgMscResults"
-                RightTapped="MscResultsGrid_RightTapped"
                 DoubleTapped="MscResultsGrid_DoubleTapped"
+                HeadersVisibility="Column"
+                IsReadOnly="True"
                 ItemsSource="{Binding MscResults}"
+                RightTapped="MscResultsGrid_RightTapped"
                 SelectedItem="{Binding SelectedMscItem, Mode=TwoWay}"
                 SelectionMode="Single">
 

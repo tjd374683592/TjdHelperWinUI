@@ -72,6 +72,7 @@ namespace TjdHelperWinUI
             services.AddScoped<RichEditPageViewModel>();
             services.AddScoped<EverythingPageViewModel>();
             services.AddScoped<CplMscSearchPageViewModel>();
+            services.AddScoped<DeepSeekPageViewModel>();
             Services = services.BuildServiceProvider();
 
             m_window = new MainWindow();

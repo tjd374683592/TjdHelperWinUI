@@ -121,6 +121,11 @@
                             Content="Media Converter"
                             Icon="MusicInfo"
                             Tag="MediaConverterPage" />
+                        <NavigationViewItem Content="Postman" Tag="PostmanPage">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE774;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 
@@ -182,7 +187,7 @@
                     Icon="Zoom"
                     Tag="EverythingPage" />
 
-                <NavigationViewItem Content="Postman" Tag="PostmanPage">
+                <NavigationViewItem Content="DeepSeek" Tag="DeepSeekPage">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE99A;" />
                     </NavigationViewItem.Icon>

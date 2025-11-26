@@ -41,6 +41,7 @@ namespace TjdHelperWinUI.Pages
         public JsonFormatPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
 
             if (Content is FrameworkElement rootElement)
             {

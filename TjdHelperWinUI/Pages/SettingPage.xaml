@@ -53,10 +53,21 @@
                         </ComboBox>
                     </toolkit:SettingsCard>
 
+                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="DeepSeek" />
+                    <toolkit:SettingsCard Header="API Key">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE8D7;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <TextBox
+                            x:Name="txtDeepSeekAPIKey"
+                            Width="825"
+                            TextChanged="txtDeepSeekAPIKeyTextChanged" />
+                    </toolkit:SettingsCard>
+
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Postman Main Page" />
                     <toolkit:SettingsCard Header="Postman Project Url">
                         <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xF594;" />
+                            <FontIcon Glyph="&#xE774;" />
                         </toolkit:SettingsCard.HeaderIcon>
                         <TextBox
                             x:Name="txtPostmanProjectUrl"
@@ -67,7 +78,7 @@
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Windows System Theme" />
                     <toolkit:SettingsCard Header="Theme">
                         <toolkit:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xF594;" />
+                            <FontIcon Glyph="&#xE793;" />
                         </toolkit:SettingsCard.HeaderIcon>
                         <ComboBox x:Name="cmbWindowsTheme" SelectionChanged="cmbWindowsTheme_SelectionChanged">
                             <ComboBoxItem Content="Dark" IsSelected="True" />

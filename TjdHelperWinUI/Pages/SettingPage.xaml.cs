@@ -58,6 +58,12 @@ namespace TjdHelperWinUI.Pages
                 txtPostmanProjectUrl.Text = postmanUrl;
             }
 
+            var deepSeekAPIKey = SettingsHelper.GetSetting<string>("DeepSeekAPIKey");
+            if (!string.IsNullOrEmpty(deepSeekAPIKey))
+            {
+                txtDeepSeekAPIKey.Text = deepSeekAPIKey;
+            }
+
             // ⭐ 自动选中系统主题
             bool isDark = SystemThemeHelper.IsSystemDarkTheme();
             cmbWindowsTheme.SelectedIndex = isDark ? 0 : 1; // 0 = Dark, 1 = Light
@@ -103,6 +109,12 @@ namespace TjdHelperWinUI.Pages
         {
             SettingsHelper.SetSetting("PostmanProjectUrl", txtPostmanProjectUrl.Text);
             NotificationHelper.Show("注意", "Postman Project Url更新成功");
+        }
+
+        private void txtDeepSeekAPIKeyTextChanged(object sender, TextChangedEventArgs e)
+        {
+            SettingsHelper.SetSetting("DeepSeekAPIKey", txtDeepSeekAPIKey.Text);
+            NotificationHelper.Show("注意", "DeepSeek API Key更新成功");
         }
     }
 }

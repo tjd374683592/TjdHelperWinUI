@@ -82,7 +82,8 @@ namespace TjdHelperWinUI.ViewModels
             new PageInfo { Name = "Settings", PageType = typeof(Pages.SettingPage) },
             new PageInfo { Name = "Postman", PageType = typeof(Pages.PostmanPage) },
             new PageInfo { Name = "Control/Services", PageType = typeof(Pages.CplMscSearchPage) },
-            new PageInfo { Name = "Counter", PageType = typeof(Pages.SystemCounterPage) }
+            new PageInfo { Name = "Counter", PageType = typeof(Pages.SystemCounterPage) },
+            new PageInfo { Name = "DeepSeek", PageType = typeof(Pages.DeepSeekPage) }
         };
 
         public MainWindowViewModel()
