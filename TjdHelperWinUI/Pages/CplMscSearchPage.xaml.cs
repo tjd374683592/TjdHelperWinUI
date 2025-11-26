@@ -30,6 +30,7 @@ namespace TjdHelperWinUI.Pages
         public CplMscSearchPage()
         {
             InitializeComponent();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
 
             if (Content is FrameworkElement rootElement)
             {

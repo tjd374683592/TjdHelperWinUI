@@ -21,6 +21,7 @@ namespace TjdHelperWinUI.Pages
         public EverythingPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
 
             if (Content is FrameworkElement rootElement)
             {

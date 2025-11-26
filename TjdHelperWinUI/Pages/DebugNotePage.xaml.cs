@@ -34,6 +34,7 @@ namespace TjdHelperWinUI.Pages
         public DebugNotePage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
             LoadBookmarks();
         }
 

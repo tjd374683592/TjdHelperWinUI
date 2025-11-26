@@ -30,6 +30,7 @@ namespace TjdHelperWinUI.Pages
         public MarkdownPage()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
             _liveConfig = new MarkdownConfig();
         }
         public MarkdownConfig LiveMarkdownConfig

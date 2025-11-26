@@ -28,6 +28,7 @@ public sealed partial class HtmlPage : Page
     public HtmlPage()
     {
         InitializeComponent();
+        this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         InitializeWebView();
     }
 

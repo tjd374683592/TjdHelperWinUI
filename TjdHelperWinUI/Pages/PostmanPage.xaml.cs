@@ -27,6 +27,7 @@ namespace TjdHelperWinUI.Pages
         public PostmanPage()
         {
             InitializeComponent();
+            this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
