@@ -1,18 +1,20 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityToolkit.WinUI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media.Imaging;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using TjdHelperWinUI.Tools;
 using TjdHelperWinUI.ViewModels;
-using Windows.Storage.Streams;
 using Windows.Storage;
-using Windows.System;
-using System.Threading.Tasks;
-using CommunityToolkit.WinUI.Controls;
 using Windows.Storage.Pickers;
-using System.Collections.Generic;
+using Windows.Storage.Streams;
+using Windows.System;
 using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -48,8 +50,19 @@ namespace TjdHelperWinUI.Pages
 
         private async Task LoadImage()
         {
-            var file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Assets/GalleryHeaderImage.png"));
-            await ImageCropperControl.LoadImageFromFile(file);
+            // 1. 获取文件路径
+            var filePath = Path.Combine(AppContext.BaseDirectory, "Assets", "GalleryHeaderImage.png");
+
+            // 2. 打开文件流
+            using var stream = File.OpenRead(filePath);
+            var randomAccessStream = stream.AsRandomAccessStream(); // System.IO.Stream -> IRandomAccessStream
+
+            // 3. 创建 WriteableBitmap
+            var bitmap = new WriteableBitmap(1, 1); // 先给宽高1，之后会从流更新
+            await bitmap.SetSourceAsync(randomAccessStream);
+
+            // 4. 设置到 ImageCropper
+            ImageCropperControl.Source = bitmap;
         }
 
         private void RichEditPage_Loaded(object sender, RoutedEventArgs e)
@@ -137,7 +150,7 @@ namespace TjdHelperWinUI.Pages
             await Task.CompletedTask; // 占位，保持 async 方法签名
         }
 
-        private void CommandBar_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private async void CommandBar_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             var tabbedBar = sender as TabbedCommandBar;
             var selectedTab = tabbedBar.SelectedItem as TabbedCommandBarItem;
@@ -152,7 +165,7 @@ namespace TjdHelperWinUI.Pages
                 Editor.Visibility = Visibility.Collapsed;
                 ImageCropperControl.Visibility = Visibility.Visible;
 
-                LoadImage();
+                await LoadImage();
             }
         }
 

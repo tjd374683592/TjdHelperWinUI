@@ -91,9 +91,10 @@ namespace TjdHelperWinUI.ViewModels
             var userInput = StrQuery;
             StrQuery = "";
 
+            // ⬇ 用户输入后换两行
             App.MainWindow.DispatcherQueue.TryEnqueue(() =>
             {
-                OnNewDelta?.Invoke($"\r\n🧑 你：{userInput}\r\n");
+                OnNewDelta?.Invoke($"\r\n🧑 你：{userInput}\r\n\r\n");
             });
 
             _deepSeek.AddUserMessage(userInput);
@@ -111,7 +112,7 @@ namespace TjdHelperWinUI.ViewModels
                     {
                         App.MainWindow.DispatcherQueue.TryEnqueue(() =>
                         {
-                            OnNewDelta?.Invoke("\n🤖 DeepSeek：");
+                            OnNewDelta?.Invoke("🤖 DeepSeek：");
                         });
 
                         _sbMarkdown.Clear();
@@ -129,6 +130,16 @@ namespace TjdHelperWinUI.ViewModels
 
                             _sbMarkdown.Append(formattedDelta);
                         });
+
+                        // ⬇ DeepSeek 输出结束后追加换行 + 分割线
+                        App.MainWindow.DispatcherQueue.TryEnqueue(() =>
+                        {
+                            // ⬇ DeepSeek 输出结束后追加换行 + 分割线 + 再换行保证下一次输入不会贴在后面
+                            App.MainWindow.DispatcherQueue.TryEnqueue(() =>
+                            {
+                                OnNewDelta?.Invoke($"\r\n\r\n-------------------------------------------------------------------------------------------\r\n\r\n");
+                            });
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -139,9 +150,7 @@ namespace TjdHelperWinUI.ViewModels
                     }
                 }, token);
             }
-            catch (OperationCanceledException)
-            {
-            }
+            catch (OperationCanceledException) { }
             finally
             {
                 IsStreaming = false;
