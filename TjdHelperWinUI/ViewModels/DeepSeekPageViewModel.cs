@@ -60,6 +60,20 @@ namespace TjdHelperWinUI.ViewModels
             }
         }
 
+        private string _strShowFinMarkdown;
+        public string StrShowFinMarkdown
+        {
+            get => _strShowFinMarkdown;
+            set
+            {
+                if (_strShowFinMarkdown != value)
+                {
+                    _strShowFinMarkdown = value;
+                    OnPropertyChanged(nameof(StrShowFinMarkdown));
+                }
+            }
+        }
+
         public ICommand ChatCompletionCommand { get; }
         public ICommand ClearChatCommand { get; }
 
@@ -91,6 +105,10 @@ namespace TjdHelperWinUI.ViewModels
             var userInput = StrQuery;
             StrQuery = "";
 
+            _sbMarkdown.AppendLine("🧑 你：");
+            _sbMarkdown.AppendLine(userInput);
+            _sbMarkdown.AppendLine();
+
             // ⬇ 用户输入后换两行
             App.MainWindow.DispatcherQueue.TryEnqueue(() =>
             {
@@ -110,12 +128,11 @@ namespace TjdHelperWinUI.ViewModels
                 {
                     try
                     {
+                        _sbMarkdown.AppendLine("🤖 DeepSeek：");
                         App.MainWindow.DispatcherQueue.TryEnqueue(() =>
                         {
                             OnNewDelta?.Invoke("🤖 DeepSeek：");
                         });
-
-                        _sbMarkdown.Clear();
 
                         await _deepSeek.StreamReplyAsync(delta =>
                         {
@@ -134,10 +151,16 @@ namespace TjdHelperWinUI.ViewModels
                         // ⬇ DeepSeek 输出结束后追加换行 + 分割线
                         App.MainWindow.DispatcherQueue.TryEnqueue(() =>
                         {
-                            // ⬇ DeepSeek 输出结束后追加换行 + 分割线 + 再换行保证下一次输入不会贴在后面
                             App.MainWindow.DispatcherQueue.TryEnqueue(() =>
                             {
                                 OnNewDelta?.Invoke($"\r\n\r\n-------------------------------------------------------------------------------------------\r\n\r\n");
+
+                                // ⬇ 每轮结束写入Markdown最终内容（多轮累积）
+                                _sbMarkdown.AppendLine();
+                                _sbMarkdown.AppendLine("\r\n---\r\n");  // 分割每条回复
+                                _sbMarkdown.AppendLine();
+
+                                StrShowFinMarkdown = _sbMarkdown.ToString(); // <-- 🔥 多轮越来越长
                             });
                         });
                     }

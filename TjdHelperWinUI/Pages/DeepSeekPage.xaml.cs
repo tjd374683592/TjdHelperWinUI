@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityToolkit.Labs.WinUI.MarkdownTextBlock;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -12,7 +13,8 @@ namespace TjdHelperWinUI.Pages
 {
     public sealed partial class DeepSeekPage : Page
     {
-        // 强类型 ViewModel 属性
+        private MarkdownConfig _liveConfig;
+
         private DeepSeekPageViewModel ViewModel { get; }
 
         public DeepSeekPage()
@@ -46,6 +48,8 @@ namespace TjdHelperWinUI.Pages
                     scrollViewer?.ChangeView(null, double.MaxValue, null);
                 });
             };
+
+            _liveConfig = new MarkdownConfig();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -87,6 +91,12 @@ namespace TjdHelperWinUI.Pages
                     ViewModel.ChatCompletionCommand.Execute(null);
             }
             // Alt + Enter 则直接换行，不处理
+        }
+
+        public MarkdownConfig LiveMarkdownConfig
+        {
+            get => _liveConfig;
+            set => _liveConfig = value;
         }
     }
 }
