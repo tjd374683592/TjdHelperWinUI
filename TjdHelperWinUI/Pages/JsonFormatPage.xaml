@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:TjdHelperWinUI.Pages"
     xmlns:local1="using:TjdHelperWinUI.Converter"
+    xmlns:local2="using:System.Text.Json.Nodes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     SizeChanged="JsonFormatPage_SizeChanged"
@@ -90,11 +91,21 @@
             ItemsSource="{Binding Nodes}"
             Visibility="{Binding IsTreeViewShown, Converter={StaticResource BoolToVisibility}}">
             <TreeView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="local2:JsonNode">
                     <TreeViewItem
                         Content="{Binding NameAndValue}"
                         IsExpanded="True"
-                        ItemsSource="{Binding Children}" />
+                        ItemsSource="{Binding Children}"
+                        PointerPressed="TreeViewItem_PointerPressed">
+
+                        <TreeViewItem.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Click="CopyValue_Click" Text="复制Value" />
+                                <MenuFlyoutItem Click="CopyKeyValue_Click" Text="复制Key:Value" />
+                            </MenuFlyout>
+                        </TreeViewItem.ContextFlyout>
+
+                    </TreeViewItem>
                 </DataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>

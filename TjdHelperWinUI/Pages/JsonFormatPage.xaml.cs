@@ -324,5 +324,35 @@ namespace TjdHelperWinUI.Pages
             string script = $"highlightSearchLines({JsonConvert.SerializeObject(keyword)});";
             await MonacoWebView.CoreWebView2.ExecuteScriptAsync(script);
         }
+
+        private void TreeViewItem_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            // 判断是否右键
+            if (e.GetCurrentPoint(null).Properties.IsRightButtonPressed)
+            {
+                if (sender is TreeViewItem clickedItem)
+                {
+                    clickedItem.IsSelected = true; // 实现右键选中
+                }
+            }
+        }
+
+        private void CopyValue_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as MenuFlyoutItem)?.DataContext is JsonNode node)
+            {
+                ClipboardHelper.CopyToClipboard(node.Value ?? "");
+            }
+        }
+
+        private void CopyKeyValue_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as MenuFlyoutItem)?.DataContext is JsonNode node)
+            {
+                string text = $"{node.Name}: {node.Value}";
+                ClipboardHelper.CopyToClipboard(text);
+            }
+        }
+
     }
 }

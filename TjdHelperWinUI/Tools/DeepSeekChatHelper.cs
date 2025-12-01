@@ -46,7 +46,7 @@ namespace TjdHelperWinUI.Tools
             _messages.Add(new Message { Role = "system", Content = "你是一个有礼貌的助手" });
         }
 
-        public async Task<string> GetReplyAsync(int maxTokens = 4096, double temperature = 1.0)
+        public async Task<string> GetReplyAsync(int maxTokens = 8192, double temperature = 1.0)
         {
             var requestBody = new
             {

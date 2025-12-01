@@ -223,10 +223,7 @@ namespace TjdHelperWinUI.ViewModels
         private void CopyFileNameCommandExecute()
         {
             if (SelectedItem == null) return;
-
-            var dataPackage = new DataPackage();
-            dataPackage.SetText(SelectedItem.Name);
-            Clipboard.SetContent(dataPackage);
+            ClipboardHelper.CopyToClipboard(SelectedItem.Name);
 
             NotificationHelper.Show("已复制", $"文件名已复制到剪贴板: {SelectedItem.Name}");
         }
@@ -237,10 +234,7 @@ namespace TjdHelperWinUI.ViewModels
             if (SelectedItem == null) return;
 
             string fullPath = Path.Combine(SelectedItem.Directory, SelectedItem.Name);
-
-            var dataPackage = new DataPackage();
-            dataPackage.SetText(fullPath);
-            Clipboard.SetContent(dataPackage);
+            ClipboardHelper.CopyToClipboard(fullPath);
 
             NotificationHelper.Show("已复制", $"完整路径已复制到剪贴板: {fullPath}");
         }
