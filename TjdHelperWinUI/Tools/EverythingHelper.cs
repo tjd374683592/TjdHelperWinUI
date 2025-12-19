@@ -71,14 +71,17 @@ namespace TjdHelperWinUI.Tools
         #region SDK 封装
         public void Search(string keyword)
         {
-            Everything_SetSearch(keyword);
-            Everything_SetRequestFlags(
-                EVERYTHING_REQUEST_FILE_NAME |
-                EVERYTHING_REQUEST_PATH |
-                EVERYTHING_REQUEST_SIZE |
-                EVERYTHING_REQUEST_DATE_MODIFIED
-            );
-            Everything_Query(true);
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                Everything_SetSearch(keyword);
+                Everything_SetRequestFlags(
+                    EVERYTHING_REQUEST_FILE_NAME |
+                    EVERYTHING_REQUEST_PATH |
+                    EVERYTHING_REQUEST_SIZE |
+                    EVERYTHING_REQUEST_DATE_MODIFIED
+                );
+                Everything_Query(true);
+            }
         }
 
         public int ResultCount => Everything_GetNumResults();
