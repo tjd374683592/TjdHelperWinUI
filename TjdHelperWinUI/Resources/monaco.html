@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- 引入 Monaco Editor 的 AMD 加载器 -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+
     <style>
-        /* 让 html、body 和编辑器容器占满全屏，且无滚动条 */
         html, body, #editor {
             margin: 0;
             width: 100%;
@@ -14,47 +14,57 @@
             overflow: hidden;
         }
 
-            /* 拖拽时给 body 添加的类，背景变淡蓝色提示拖拽状态 */
             body.drag-over {
                 position: relative;
-                background-color: rgba(0, 120, 180, 0.04);
+                background: radial-gradient( circle at center, rgba(80, 160, 255, 0.10), rgba(10, 15, 20, 0.02) 60% );
             }
 
-                /* 拖拽状态下，body 伪元素显示提示文本 */
                 body.drag-over::before {
-                    content: "释放以打开文件"; /* 提示文字 */
+                    content: "📄  释放以打开文件";
                     position: absolute;
-                    top: 50%; /* 垂直居中 */
-                    left: 50%; /* 水平居中 */
-                    transform: translate(-50%, -50%); /* 精确居中 */
-                    padding: 8px 20px; /* 内边距 */
-                    font-size: 16px;
+                    inset: 0;
+                    margin: auto;
+                    width: max-content;
+                    height: max-content;
+                    padding: 14px 28px;
+                    font-size: 14.5px;
                     font-weight: 500;
-                    color: #fff !important; /* 强制白色文字 */
-                    background: rgba(15, 20, 30, 0.5); /* 半透明暗背景 */
-                    border-radius: 12px; /* 圆角 */
-                    border: 1.5px solid #00a3e0; /* 蓝色边框 */
-                    z-index: 9999; /* 置顶 */
-                    pointer-events: none; /* 不阻止鼠标事件 */
-                    animation: glowShadow 2s ease-in-out infinite; /* 呼吸发光动画 */
-                    text-shadow: 0 0 5px #00d8ffcc; /* 文字光晕，增强可见度 */
+                    letter-spacing: 0.35px;
+                    color: rgba(235, 245, 255, 0.92);
+                    background: linear-gradient( 180deg, rgba(40, 48, 60, 0.85), rgba(28, 34, 44, 0.85) );
+                    border-radius: 12px;
+                    border: 1px solid rgba(120, 200, 255, 0.35);
+                    backdrop-filter: blur(10px) saturate(140%);
+                    -webkit-backdrop-filter: blur(10px) saturate(140%);
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+                    pointer-events: none;
+                    z-index: 9999;
+                    animation: dragPulseModern 1.6s ease-in-out infinite;
                 }
 
-        /* 呼吸发光动画关键帧，阴影大小和强度循环变化 */
-        @keyframes glowShadow {
+        @keyframes dragPulseModern {
             0% {
-                box-shadow: 0 0 5px 2px #00d8ffcc, 0 0 10px 4px #0080c7cc;
+                opacity: 0.9;
+                transform: scale(0.985);
+                border-color: rgba(120, 200, 255, 0.25);
             }
 
             50% {
-                box-shadow: 0 0 8px 3px #00d8ffee, 0 0 16px 6px #005f9fee;
+                opacity: 1;
+                transform: scale(1);
+                border-color: rgba(160, 220, 255, 0.45);
             }
 
             100% {
-                box-shadow: 0 0 5px 2px #00d8ffcc, 0 0 10px 4px #0080c7cc;
+                opacity: 0.9;
+                transform: scale(0.985);
+                border-color: rgba(120, 200, 255, 0.25);
             }
         }
 
+
+
+        /* ===== 搜索整行高亮 ===== */
         .myLineHighlight {
             background-color: #FFFF00;
         }
@@ -64,45 +74,44 @@
         }
     </style>
 </head>
+
 <body>
-    <!-- Monaco 编辑器挂载容器 -->
     <div id="editor"></div>
 
     <script>
-        // 配置 Monaco 编辑器资源路径
-        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
-
-        let editor;
-        let currentTheme = "vs-dark"; // 默认编辑器主题为深色
-
-        // 加载编辑器主模块，创建编辑器实例
-        require(["vs/editor/editor.main"], function () {
-            editor = monaco.editor.create(document.getElementById('editor'), {
-                value: ``,           // 初始内容为空
-                language: "json",    // 默认语言为 JSON
-                wordWrap: "on",      // 启用自动换行
-                theme: currentTheme  // 使用当前主题
-            });
-
-            // 窗口大小变化时重新计算编辑器布局
-            window.addEventListener('resize', () => {
-                if (editor) editor.layout();
-            });
-        });
-
-        // 用于追踪拖拽进入和离开的次数，避免闪烁问题
-        let dragCounter = 0;
-
-        // 拖拽进入页面时触发，增加计数器并显示拖拽样式
-        window.addEventListener('dragenter', e => {
-            e.preventDefault(); // 阻止浏览器默认打开文件行为
-            dragCounter++;
-            if (dragCounter === 1) {
-                document.body.classList.add('drag-over'); // 第一次进入才加类
+        require.config({
+            paths: {
+                'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs'
             }
         });
 
-        // 拖拽离开页面或元素时触发，减少计数器，计数器为 0 时移除样式
+        let editor;
+        let currentTheme = "vs-dark";
+
+        require(["vs/editor/editor.main"], function () {
+            editor = monaco.editor.create(document.getElementById('editor'), {
+                value: ``,
+                language: "json",
+                wordWrap: "on",
+                theme: currentTheme
+            });
+
+            window.addEventListener('resize', () => {
+                editor && editor.layout();
+            });
+        });
+
+        /* ===== 拖拽逻辑（防闪烁） ===== */
+        let dragCounter = 0;
+
+        window.addEventListener('dragenter', e => {
+            e.preventDefault();
+            dragCounter++;
+            if (dragCounter === 1) {
+                document.body.classList.add('drag-over');
+            }
+        });
+
         window.addEventListener('dragleave', e => {
             e.preventDefault();
             dragCounter--;
@@ -111,37 +120,30 @@
             }
         });
 
-        // 拖拽悬停时阻止默认行为，保持拖拽状态
         window.addEventListener('dragover', e => {
             e.preventDefault();
         });
 
-        // 放下拖拽文件时触发，重置计数器，移除样式
         window.addEventListener('drop', e => {
             e.preventDefault();
             dragCounter = 0;
             document.body.classList.remove('drag-over');
-            // TODO: 这里可以添加处理拖拽文件内容的逻辑
+            // TODO: 处理文件内容
         });
 
-        // 以下函数为 C# 通过 WebView2 调用接口
-
-        // 设置编辑器语言
+        /* ===== WebView2 接口 ===== */
         function setEditorLanguage(lang) {
             monaco.editor.setModelLanguage(editor.getModel(), lang);
         }
 
-        // 设置编辑器内容
         function setEditorContent(content) {
-            if (editor) editor.setValue(content);
+            editor && editor.setValue(content);
         }
 
-        // 格式化当前编辑器文档
         function formatCode() {
-            if (editor) editor.getAction('editor.action.formatDocument').run();
+            editor && editor.getAction('editor.action.formatDocument').run();
         }
 
-        // 设置编辑器主题
         function setEditorTheme(theme) {
             if (editor) {
                 monaco.editor.setTheme(theme);
@@ -149,45 +151,46 @@
             }
         }
 
-        // 获取当前主题名称
         function getEditorTheme() {
             return currentTheme;
         }
 
-        //高亮整行
+        /* ===== 搜索整行高亮 ===== */
         let lineHighlightDecorations = [];
 
         function highlightSearchLines(keyword) {
             const model = editor.getModel();
             if (!model) return;
 
-            // 清理之前的整行高亮
             if (lineHighlightDecorations.length > 0) {
-                lineHighlightDecorations = editor.deltaDecorations(lineHighlightDecorations, []);
+                lineHighlightDecorations =
+                    editor.deltaDecorations(lineHighlightDecorations, []);
             }
 
-            // 如果 keyword 为空或全空格，不进行搜索，但之前的高亮已经清掉
             if (!keyword || keyword.trim() === "") return;
 
-            // 查找匹配
             const matches = model.findMatches(keyword, true, false, false, null, true);
 
-            // 整行高亮
             const newDecorations = matches.map(m => {
-                const lineNumber = m.range.startLineNumber;
+                const line = m.range.startLineNumber;
                 return {
-                    range: new monaco.Range(lineNumber, 1, lineNumber, model.getLineMaxColumn(lineNumber)),
+                    range: new monaco.Range(
+                        line,
+                        1,
+                        line,
+                        model.getLineMaxColumn(line)
+                    ),
                     options: {
                         isWholeLine: true,
-                        className: "myLineHighlight",       // 整行背景
-                        inlineClassName: "myLineHighlightText" // 强制文字颜色
+                        className: "myLineHighlight",
+                        inlineClassName: "myLineHighlightText"
                     }
                 };
             });
 
-            lineHighlightDecorations = editor.deltaDecorations([], newDecorations);
+            lineHighlightDecorations =
+                editor.deltaDecorations([], newDecorations);
         }
-
     </script>
 </body>
 </html>
