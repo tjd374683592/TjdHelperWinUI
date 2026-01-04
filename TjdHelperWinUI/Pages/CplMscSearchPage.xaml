@@ -59,7 +59,7 @@
                         Binding="{Binding Name}"
                         Header="Name" />
                     <controls:DataGridTextColumn
-                        Width="Auto"
+                        Width="*"
                         Binding="{Binding Description}"
                         Header="Description" />
                     <controls:DataGridTextColumn
@@ -119,7 +119,7 @@
                         Binding="{Binding Name}"
                         Header="Name" />
                     <controls:DataGridTextColumn
-                        Width="Auto"
+                        Width="*"
                         Binding="{Binding Description}"
                         Header="Description" />
                     <controls:DataGridTextColumn

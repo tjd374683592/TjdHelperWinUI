@@ -156,6 +156,11 @@
                                 <FontIcon Glyph="&#xEC48;" />
                             </NavigationViewItem.Icon>
                         </NavigationViewItem>
+                        <NavigationViewItem Content="Network" Tag="NetworkPage">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xEC27;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
 

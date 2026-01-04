@@ -28,6 +28,7 @@
     <None Remove="Pages\JsonFormatPage.xaml" />
     <None Remove="Pages\MarkdownPage.xaml" />
     <None Remove="Pages\MediaConverterPage.xaml" />
+    <None Remove="Pages\NetworkPage.xaml" />
     <None Remove="Pages\QRCodePage.xaml" />
     <None Remove="Pages\RichEditPage.xaml" />
     <None Remove="Pages\SettingPage.xaml" />
@@ -209,6 +210,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\NetworkPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\DeepSeekPage.xaml">
