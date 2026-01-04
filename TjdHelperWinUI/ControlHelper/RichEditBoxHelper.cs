@@ -52,7 +52,7 @@ namespace TjdHelperWinUI.ControlHelper
 
                 // 从 RichEditBox 获取纯文本
                 richEditBox.Document.GetText(TextGetOptions.None, out string currentText);
-                SetPlainText(richEditBox, currentText);
+                SetPlainText(richEditBox, currentText.TrimEnd('\r'));
 
                 _isUpdating = false;
             };
