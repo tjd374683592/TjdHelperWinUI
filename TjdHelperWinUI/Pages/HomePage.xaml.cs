@@ -1,7 +1,5 @@
-using CommunityToolkit.WinUI.Animations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media.Animation;
 using System;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -17,18 +15,6 @@ namespace TjdHelperWinUI.Pages
         public HomePage()
         {
             this.InitializeComponent();
-        }
-
-        private void OnImageOpened(object sender, RoutedEventArgs e)
-        {
-            AnimateImage();
-        }
-
-        private void AnimateImage()
-        {
-            AnimationBuilder.Create()
-            .Scale(1, 1.1f, duration: TimeSpan.FromMilliseconds(4000), easingMode: EasingMode.EaseOut)
-            .Start(HeroImage);
         }
     }
 }
