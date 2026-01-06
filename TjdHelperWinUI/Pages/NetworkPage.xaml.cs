@@ -1,38 +1,85 @@
+using CommunityToolkit.WinUI.Helpers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using TjdHelperWinUI.ViewModels;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Windows.Networking;
+using Windows.Networking.Connectivity;
 
 namespace TjdHelperWinUI.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class NetworkPage : Page
     {
+        private DispatcherQueue _dispatcher;
+
         public NetworkPage()
         {
             InitializeComponent();
 
+            _dispatcher = DispatcherQueue.GetForCurrentThread();
+
             if (Content is FrameworkElement rootElement)
             {
-                // 从 DI 容器中获取 ViewModel
                 rootElement.DataContext = App.Services.GetService<NetworkPageViewModel>();
+            }
+
+            UpdateNetworkUI();
+
+            NetworkHelper.Instance.NetworkChanged += Instance_NetworkChanged;
+            Unloaded += NetworkPage_Unloaded;
+        }
+
+        private void Instance_NetworkChanged(object? sender, System.EventArgs e)
+        {
+            _dispatcher.TryEnqueue(UpdateNetworkUI);
+        }
+
+        private void NetworkPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            NetworkHelper.Instance.NetworkChanged -= Instance_NetworkChanged;
+        }
+
+        private void UpdateNetworkUI()
+        {
+            var info = NetworkHelper.Instance.ConnectionInformation;
+
+            IsInternetAvailableText.Text = info.IsInternetAvailable ? "Yes" : "No";
+            IsInternetOnMeteredConnectionText.Text = info.IsInternetOnMeteredConnection ? "Yes" : "No";
+            ConnectionTypeText.Text = info.ConnectionType.ToString();
+            SignalBarsText.Text = info.SignalStrength.GetValueOrDefault(0).ToString();
+            NetworkNamesText.Text = string.Join(", ", info.NetworkNames);
+
+            // 获取当前网络的 IP 地址
+            var profile = NetworkInformation.GetInternetConnectionProfile();
+            if (profile?.NetworkAdapter != null)
+            {
+                var hostNames = NetworkInformation.GetHostNames()
+                    .Where(hn => hn.IPInformation?.NetworkAdapter?.NetworkAdapterId == profile.NetworkAdapter.NetworkAdapterId);
+
+                // IPv4
+                var ipv4s = hostNames
+                    .Where(hn => hn.Type == HostNameType.Ipv4)
+                    .Select(hn => hn.CanonicalName);
+
+                // IPv6
+                var ipv6s = hostNames
+                    .Where(hn => hn.Type == HostNameType.Ipv6)
+                    .Select(hn => hn.CanonicalName);
+
+                // 可以分开显示
+                string ipText = "";
+                if (ipv4s.Any())
+                    ipText += "IPv4: " + string.Join(", ", ipv4s);
+                if (ipv6s.Any())
+                    ipText += (ipText.Length > 0 ? "\n" : "") + "IPv6: " + string.Join(", ", ipv6s);
+
+                IpAddressText.Text = ipText;
+            }
+            else
+            {
+                IpAddressText.Text = "N/A";
             }
         }
     }

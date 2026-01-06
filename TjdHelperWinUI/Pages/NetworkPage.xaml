@@ -11,12 +11,105 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0" Margin="3">
+            <Border
+                Padding="12"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+
+                <Grid ColumnSpacing="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Internet" />
+                        <TextBlock
+                            x:Name="IsInternetAvailableText"
+                            FontSize="16"
+                            FontWeight="SemiBold" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Metered" />
+                        <TextBlock
+                            x:Name="IsInternetOnMeteredConnectionText"
+                            FontSize="16"
+                            FontWeight="SemiBold" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Connection" />
+                        <TextBlock
+                            x:Name="ConnectionTypeText"
+                            FontSize="16"
+                            FontWeight="SemiBold" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3">
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Signal" />
+                        <TextBlock
+                            x:Name="SignalBarsText"
+                            FontSize="16"
+                            FontWeight="SemiBold" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="4">
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="Network" />
+                        <TextBlock
+                            x:Name="NetworkNamesText"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="5">
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="IP Address" />
+                        <TextBlock
+                            x:Name="IpAddressText"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            TextTrimming="CharacterEllipsis"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+        </Grid>
+
+
         <Expander
-            Grid.Row="0"
+            Grid.Row="1"
+            Margin="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
