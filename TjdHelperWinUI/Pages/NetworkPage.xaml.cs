@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Linq;
 using TjdHelperWinUI.Tools;
 using TjdHelperWinUI.ViewModels;
@@ -84,26 +85,35 @@ namespace TjdHelperWinUI.Pages
             }
         }
 
-        private void HighlightPidButton_Click(object sender, RoutedEventArgs e)
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!int.TryParse(PidSearchBox.Text.Trim(), out int pid))
-                return;
+            string searchText = SearchBox.Text.Trim();
 
-            HighlightDataGridRow(DgTcpPorts, pid);
-            HighlightDataGridRow(DgUdpPorts, pid);
+            HighlightDataGridRow(DgTcpPorts, searchText);
+            HighlightDataGridRow(DgUdpPorts, searchText);
         }
 
-        private void HighlightDataGridRow(CommunityToolkit.WinUI.UI.Controls.DataGrid dataGrid, int pid)
+        private void HighlightDataGridRow(CommunityToolkit.WinUI.UI.Controls.DataGrid dataGrid, string searchText)
         {
+            if (string.IsNullOrWhiteSpace(searchText))
+                return;
+
             dataGrid.SelectedItems.Clear();
+
+            // 尝试把输入解析为 PID
+            bool isPid = int.TryParse(searchText.Trim(), out int pid);
 
             if (dataGrid.ItemsSource is System.Collections.IEnumerable items)
             {
                 foreach (var item in items)
                 {
-                    if (item is NetworkPortModel port && port.PID == pid)
+                    if (item is NetworkPortModel port)
                     {
-                        dataGrid.SelectedItems.Add(item);
+                        // 高亮条件：PID 匹配 或 ProcessName 匹配
+                        if ((isPid && port.PID == pid) || (!isPid && port.ProcessName.Contains(searchText, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            dataGrid.SelectedItems.Add(item);
+                        }
                     }
                 }
             }
@@ -111,8 +121,5 @@ namespace TjdHelperWinUI.Pages
             if (dataGrid.SelectedItems.Count > 0)
                 dataGrid.ScrollIntoView(dataGrid.SelectedItems[0], null);
         }
-
-
-
     }
 }

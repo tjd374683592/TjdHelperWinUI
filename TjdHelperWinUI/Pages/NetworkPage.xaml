@@ -139,9 +139,9 @@
                     VerticalAlignment="Top"
                     Orientation="Horizontal"
                     Spacing="5">
-                    <TextBlock VerticalAlignment="Center" Text="Search PID:" />
-                    <TextBox x:Name="PidSearchBox" Width="200" />
-                    <Button Click="HighlightPidButton_Click" Content="Highlight" />
+                    <TextBlock VerticalAlignment="Center" Text="Search PID/Process:" />
+                    <TextBox x:Name="SearchBox" Width="200" />
+                    <Button Click="SearchButton_Click" Content="Highlight" />
                 </StackPanel>
 
                 <!--  TCP 端口 DataGrid  -->
