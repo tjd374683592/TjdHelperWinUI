@@ -4,6 +4,7 @@ using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System.Linq;
+using TjdHelperWinUI.Tools;
 using TjdHelperWinUI.ViewModels;
 using Windows.Networking;
 using Windows.Networking.Connectivity;
@@ -82,5 +83,36 @@ namespace TjdHelperWinUI.Pages
                 IpAddressText.Text = "N/A";
             }
         }
+
+        private void HighlightPidButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(PidSearchBox.Text.Trim(), out int pid))
+                return;
+
+            HighlightDataGridRow(DgTcpPorts, pid);
+            HighlightDataGridRow(DgUdpPorts, pid);
+        }
+
+        private void HighlightDataGridRow(CommunityToolkit.WinUI.UI.Controls.DataGrid dataGrid, int pid)
+        {
+            dataGrid.SelectedItems.Clear();
+
+            if (dataGrid.ItemsSource is System.Collections.IEnumerable items)
+            {
+                foreach (var item in items)
+                {
+                    if (item is NetworkPortModel port && port.PID == pid)
+                    {
+                        dataGrid.SelectedItems.Add(item);
+                    }
+                }
+            }
+
+            if (dataGrid.SelectedItems.Count > 0)
+                dataGrid.ScrollIntoView(dataGrid.SelectedItems[0], null);
+        }
+
+
+
     }
 }

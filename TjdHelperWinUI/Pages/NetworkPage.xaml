@@ -12,6 +12,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -106,9 +107,11 @@
             </Border>
         </Grid>
 
+        <!--  新增 PID 搜索区域  -->
+
 
         <Expander
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -119,13 +122,30 @@
             IsExpanded="True">
 
             <Grid ColumnSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Margin="3"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal"
+                    Spacing="5">
+                    <TextBlock VerticalAlignment="Center" Text="Search PID:" />
+                    <TextBox x:Name="PidSearchBox" Width="200" />
+                    <Button Click="HighlightPidButton_Click" Content="Highlight" />
+                </StackPanel>
+
                 <!--  TCP 端口 DataGrid  -->
-                <Grid Grid.Column="0">
+                <Grid Grid.Row="1" Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="2*" />
@@ -149,7 +169,7 @@
                         HeadersVisibility="Column"
                         IsReadOnly="True"
                         ItemsSource="{Binding TcpPortList}"
-                        SelectionMode="Single">
+                        SelectionMode="Extended">
                         <controls:DataGrid.Columns>
                             <controls:DataGridTextColumn
                                 Width="150"
@@ -218,7 +238,7 @@
                 </Grid>
 
                 <!--  UDP 端口 DataGrid  -->
-                <Grid Grid.Column="1">
+                <Grid Grid.Row="1" Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -240,7 +260,7 @@
                         HeadersVisibility="Column"
                         IsReadOnly="True"
                         ItemsSource="{Binding UdpPortList}"
-                        SelectionMode="Single">
+                        SelectionMode="Extended">
                         <controls:DataGrid.Columns>
                             <controls:DataGridTextColumn
                                 Width="Auto"
