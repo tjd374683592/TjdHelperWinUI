@@ -247,6 +247,12 @@
                 Speed="96"
                 Text="{Binding CurrentFile.Path, Converter={StaticResource PrefixSuffixConverter}, ConverterParameter='Save to: {0}'}"
                 Visibility="Collapsed" />
+
+            <TextBlock
+                Name="txtImageInfo"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Right"
+                Visibility="Collapsed" />
         </Grid>
     </Grid>
 </Page>

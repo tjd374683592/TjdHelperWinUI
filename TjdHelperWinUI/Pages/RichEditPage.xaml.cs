@@ -11,6 +11,8 @@ using System.IO;
 using System.Threading.Tasks;
 using TjdHelperWinUI.Tools;
 using TjdHelperWinUI.ViewModels;
+using Windows.Foundation;
+using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
@@ -157,13 +159,22 @@ namespace TjdHelperWinUI.Pages
 
             if (selectedTab == TextEditTab)
             {
+                StopCropMonitor();
                 Editor.Visibility = Visibility.Visible;
+                if (!string.IsNullOrEmpty(marqueeTextNotification.Text))
+                {
+                    marqueeTextNotification.Visibility = Visibility.Visible;
+                }
                 ImageCropperControl.Visibility = Visibility.Collapsed;
+                txtImageInfo.Visibility = Visibility.Collapsed;
             }
             else if (selectedTab == ImageCropTab)
             {
+                StartCropMonitor();
                 Editor.Visibility = Visibility.Collapsed;
                 ImageCropperControl.Visibility = Visibility.Visible;
+                marqueeTextNotification.Visibility = Visibility.Collapsed;
+                txtImageInfo.Visibility = Visibility.Visible;
 
                 await LoadImage();
             }
@@ -273,5 +284,57 @@ namespace TjdHelperWinUI.Pages
                     break;
             }
         }
+
+
+        /// <summary>
+        /// 处理显示分辨率
+        /// </summary>
+        #region 处理显示分辨率
+        private DispatcherTimer _cropTimer;
+        private Rect _lastRect = Rect.Empty;
+
+        private void StartCropMonitor()
+        {
+            if (_cropTimer != null)
+                return;
+
+            _cropTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(100)
+            };
+
+            _cropTimer.Tick += CropTimer_Tick;
+            _cropTimer.Start();
+        }
+
+
+
+        private void StopCropMonitor()
+        {
+            if (_cropTimer == null)
+                return;
+
+            _cropTimer.Stop();
+            _cropTimer.Tick -= CropTimer_Tick;
+            _cropTimer = null;
+
+            _lastRect = Rect.Empty;
+        }
+
+        private void CropTimer_Tick(object sender, object e)
+        {
+            var rect = ImageCropperControl.CroppedRegion;
+
+            if (rect == _lastRect)
+                return;
+
+            _lastRect = rect;
+
+            int w = (int)rect.Width;
+            int h = (int)rect.Height;
+
+            txtImageInfo.Text = $"{w} × {h} px";
+        }
+        #endregion
     }
 }
