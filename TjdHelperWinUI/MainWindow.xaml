@@ -135,25 +135,25 @@
                     </NavigationViewItem.Icon>
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem
+                            Content="Library"
+                            Icon="OutlineStar"
+                            Tag="DebugNotePage" />
+                        <NavigationViewItem
                             Content="Win Error Code"
                             Icon="Zoom"
                             Tag="WinErrorCodePage" />
+                        <NavigationViewItem Content="Counter" Tag="SystemCounterPage">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xEC48;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
                         <NavigationViewItem
                             Content="Address Calc"
                             Icon="Calculator"
                             Tag="AddressHelperPage" />
-                        <NavigationViewItem
-                            Content="Library"
-                            Icon="OutlineStar"
-                            Tag="DebugNotePage" />
                         <NavigationViewItem Content="Control/Services" Tag="CplMscSearchPage">
                             <NavigationViewItem.Icon>
                                 <FontIcon Glyph="&#xE950;" />
-                            </NavigationViewItem.Icon>
-                        </NavigationViewItem>
-                        <NavigationViewItem Content="Counter" Tag="SystemCounterPage">
-                            <NavigationViewItem.Icon>
-                                <FontIcon Glyph="&#xEC48;" />
                             </NavigationViewItem.Icon>
                         </NavigationViewItem>
                         <NavigationViewItem Content="Network" Tag="NetworkPage">
@@ -161,9 +161,13 @@
                                 <FontIcon Glyph="&#xEC27;" />
                             </NavigationViewItem.Icon>
                         </NavigationViewItem>
+                        <NavigationViewItem Content="Cim" Tag="CimPage">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xEC27;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
                     </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
-
                 <NavigationViewItem Content="Preview" Icon="PreviewLink">
                     <NavigationViewItem.MenuItems>
                         <NavigationViewItem

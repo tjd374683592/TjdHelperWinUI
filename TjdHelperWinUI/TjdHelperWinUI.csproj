@@ -16,6 +16,7 @@
     <None Remove="Assets\GalleryHeaderImage.png" />
     <None Remove="Assets\logo.ico" />
     <None Remove="Pages\AddressHelperPage.xaml" />
+    <None Remove="Pages\CimPage.xaml" />
     <None Remove="Pages\CplMscSearchPage.xaml" />
     <None Remove="Pages\DebugNotePage.xaml" />
     <None Remove="Pages\DeepSeekPage.xaml" />
@@ -147,6 +148,7 @@
     <PackageReference Include="CommunityToolkit.Labs.WinUI.Controls.MarqueeText" Version="0.1.250919-build.2256" />
     <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.2.251219" />
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.251219" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.HeaderedControls" Version="8.2.251219" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.ImageCropper" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
@@ -162,6 +164,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.3.2" />
+    <PackageReference Include="Microsoft.Management.Infrastructure" Version="3.0.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.6901" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251003001" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
@@ -212,6 +215,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\CimPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\NetworkPage.xaml">
