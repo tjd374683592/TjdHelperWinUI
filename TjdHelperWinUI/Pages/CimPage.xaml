@@ -39,6 +39,7 @@
                     Margin="5"
                     Header="Namespaces"
                     ItemsSource="{Binding RootNodes, Mode=OneWay}"
+                    RightTapped="Item_RightTapped"
                     SelectionChanged="HeaderedTreeView_SelectionChanged">
                     <controls:HeaderedTreeView.HeaderTemplate>
                         <DataTemplate>
@@ -71,6 +72,7 @@
                         Grid.Row="1"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding Classes, Mode=OneWay}"
+                        RightTapped="Item_RightTapped"
                         SelectedItem="{Binding SelectedClass, Mode=TwoWay}" />
                 </Grid>
 
@@ -88,7 +90,10 @@
                         FontWeight="SemiBold"
                         Text="Members" />
 
-                    <TreeView Grid.Row="1" ItemsSource="{Binding Properties}">
+                    <TreeView
+                        Grid.Row="1"
+                        ItemsSource="{Binding Properties}"
+                        RightTapped="Item_RightTapped">
                         <TreeView.ItemTemplate>
                             <DataTemplate x:DataType="models:CimTreeNode">
                                 <TreeViewItem
@@ -112,7 +117,10 @@
                         FontWeight="SemiBold"
                         Text="Instance" />
 
-                    <TreeView Grid.Row="1" ItemsSource="{Binding Instances}">
+                    <TreeView
+                        Grid.Row="1"
+                        ItemsSource="{Binding Instances}"
+                        RightTapped="Item_RightTapped">
                         <TreeView.ItemTemplate>
                             <DataTemplate x:DataType="models:CimTreeNode">
                                 <TreeViewItem

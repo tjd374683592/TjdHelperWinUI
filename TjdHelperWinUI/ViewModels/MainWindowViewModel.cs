@@ -84,7 +84,8 @@ namespace TjdHelperWinUI.ViewModels
             new PageInfo { Name = "Control/Services", PageType = typeof(Pages.CplMscSearchPage) },
             new PageInfo { Name = "Counter", PageType = typeof(Pages.SystemCounterPage) },
             new PageInfo { Name = "DeepSeek", PageType = typeof(Pages.DeepSeekPage) },
-            new PageInfo { Name = "Network", PageType = typeof(Pages.NetworkPage) }
+            new PageInfo { Name = "Network", PageType = typeof(Pages.NetworkPage) },
+            new PageInfo { Name = "Cim Explorer", PageType = typeof(Pages.CimPage) }
         };
 
         public MainWindowViewModel()

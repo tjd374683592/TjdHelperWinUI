@@ -170,8 +170,8 @@ namespace TjdHelperWinUI.ViewModels
                 IsExpanded = true
             };
 
-            foreach(var m in c.CimClassMethods.OrderBy(x => x.Name))
-{
+            foreach (var m in c.CimClassMethods.OrderBy(x => x.Name))
+            {
                 methodGroup.Children.Add(new CimTreeNode
                 {
                     Name = BuildMethodDisplayName(m),
