@@ -19,21 +19,21 @@
         <Expander
             Grid.Row="0"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
+            VerticalAlignment="Top"
             HorizontalContentAlignment="Stretch"
             ExpandDirection="Down"
-            Header="Cim"
+            Header="Cim Explorer"
             IsExpanded="True">
 
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
-                <!--  左侧 Namespace  -->
+                <!--  Namespace  -->
                 <controls:HeaderedTreeView
                     Grid.Column="0"
                     Margin="5"
@@ -55,7 +55,7 @@
                     </controls:HeaderedTreeView.ItemTemplate>
                 </controls:HeaderedTreeView>
 
-                <!--  中间 Class，独立滚动  -->
+                <!--  Class  -->
                 <Grid Grid.Column="1" Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -75,7 +75,7 @@
                 </Grid>
 
 
-                <!--  右侧 Property  -->
+                <!--  Property / Method  -->
                 <Grid Grid.Column="2" Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -86,14 +86,21 @@
                         Grid.Row="0"
                         Margin="0,0,0,5"
                         FontWeight="SemiBold"
-                        Text="Property" />
+                        Text="Members" />
 
-                    <ListView
-                        Grid.Row="1"
-                        DisplayMemberPath="Name"
-                        ItemsSource="{Binding Properties, Mode=OneWay}" />
+                    <TreeView Grid.Row="1" ItemsSource="{Binding Properties}">
+                        <TreeView.ItemTemplate>
+                            <DataTemplate x:DataType="models:CimTreeNode">
+                                <TreeViewItem
+                                    Content="{Binding Name}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                                    ItemsSource="{Binding Children}" />
+                            </DataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
                 </Grid>
 
+                <!--  Instance + Property  -->
                 <Grid Grid.Column="3" Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -101,13 +108,22 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock
-                        Grid.Row="0"
                         Margin="0,0,0,5"
                         FontWeight="SemiBold"
                         Text="Instance" />
 
-                    <Button Grid.Row="1" Content="instance" />
+                    <TreeView Grid.Row="1" ItemsSource="{Binding Instances}">
+                        <TreeView.ItemTemplate>
+                            <DataTemplate x:DataType="models:CimTreeNode">
+                                <TreeViewItem
+                                    Content="{Binding Name}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}"
+                                    ItemsSource="{Binding Children}" />
+                            </DataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
                 </Grid>
+
 
             </Grid>
         </Expander>

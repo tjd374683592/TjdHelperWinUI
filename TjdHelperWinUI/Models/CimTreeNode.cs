@@ -28,7 +28,8 @@ namespace TjdHelperWinUI.Models
         Namespace,
         Class,
         Property,
-        Method
+        Method,
+        Instance,
+        Group
     }
-
 }

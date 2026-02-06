@@ -128,6 +128,7 @@ namespace TjdHelperWinUI.ViewModels
                 _selectedClass = value;
                 OnPropertyChanged(nameof(SelectedClass));
                 LoadPropertiesForClass(value);
+                LoadInstancesForClass(value);
             }
         }
 
@@ -137,18 +138,124 @@ namespace TjdHelperWinUI.ViewModels
         private void LoadPropertiesForClass(CimTreeNode? classNode)
         {
             _properties.Clear();
-            if (classNode?.Tag is CimClass c)
+
+            if (classNode?.Tag is not CimClass c)
+                return;
+
+            // 根分组：Properties
+            var propGroup = new CimTreeNode
             {
-                foreach (var p in c.CimClassProperties)
+                Name = "Properties",
+                NodeType = CimNodeType.Group,
+                HasChildren = true,
+                IsExpanded = true
+            };
+
+            foreach (var p in c.CimClassProperties.OrderBy(x => x.Name))
+            {
+                propGroup.Children.Add(new CimTreeNode
                 {
-                    _properties.Add(new CimTreeNode
+                    Name = $"{p.Name} : {p.CimType}",
+                    NodeType = CimNodeType.Property,
+                    Tag = p
+                });
+            }
+
+            // 根分组：Methods
+            var methodGroup = new CimTreeNode
+            {
+                Name = "Methods",
+                NodeType = CimNodeType.Group,
+                HasChildren = true,
+                IsExpanded = true
+            };
+
+            foreach(var m in c.CimClassMethods.OrderBy(x => x.Name))
+{
+                methodGroup.Children.Add(new CimTreeNode
+                {
+                    Name = BuildMethodDisplayName(m),
+                    NodeType = CimNodeType.Method,
+                    Tag = m
+                });
+            }
+
+            _properties.Add(propGroup);
+            _properties.Add(methodGroup);
+        }
+
+
+        private static string BuildMethodDisplayName(CimMethodDeclaration m)
+        {
+            var parameters = m.Parameters
+                .Select(p => $"{p.Name} : {p.CimType}");
+
+            var paramText = string.Join(", ", parameters);
+
+            return $"{m.Name}({paramText})";
+        }
+
+
+        private ObservableCollection<CimTreeNode> _instances = new();
+        public ObservableCollection<CimTreeNode> Instances => _instances;
+
+        private void LoadInstancesForClass(CimTreeNode? classNode)
+        {
+            _instances.Clear();
+
+            if (classNode?.Tag is not CimClass c ||
+                SelectedNamespace?.Tag is not string ns)
+                return;
+
+            using var session = CimSession.Create("localhost");
+
+            try
+            {
+                var instances = session.EnumerateInstances(
+                    ns,
+                    c.CimSystemProperties.ClassName);
+
+                foreach (var inst in instances)
+                {
+                    var instanceNode = new CimTreeNode
                     {
-                        Name = $"{p.Name} : {p.CimType}",
-                        NodeType = CimNodeType.Property,
-                        Tag = p
-                    });
+                        Name = BuildInstanceDisplayName(inst),
+                        NodeType = CimNodeType.Instance,
+                        Tag = inst,
+                        HasChildren = true
+                    };
+
+                    // 👇 把 instance 的 property 直接挂成子节点，对 instance 的 property 按名字排序
+                    foreach (var p in inst.CimInstanceProperties.OrderBy(x => x.Name))
+                    {
+                        instanceNode.Children.Add(new CimTreeNode
+                        {
+                            Name = $"{p.Name} : {p.Value}",
+                            NodeType = CimNodeType.Property,
+                            Tag = p
+                        });
+                    }
+
+                    _instances.Add(instanceNode);
                 }
             }
+            catch
+            {
+                // 权限 / provider 不支持 instance
+            }
         }
+
+        private static string BuildInstanceDisplayName(CimInstance inst)
+        {
+            var keys = inst.CimInstanceProperties
+                .Where(p => p.Flags.HasFlag(CimFlags.Key))
+                .Select(p => $"{p.Name}={p.Value}");
+
+            return keys.Any()
+                ? string.Join(", ", keys)
+                : inst.CimSystemProperties.ClassName;
+        }
+
+
     }
 }

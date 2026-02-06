@@ -161,9 +161,9 @@
                                 <FontIcon Glyph="&#xEC27;" />
                             </NavigationViewItem.Icon>
                         </NavigationViewItem>
-                        <NavigationViewItem Content="Cim" Tag="CimPage">
+                        <NavigationViewItem Content="Cim Explorer" Tag="CimPage">
                             <NavigationViewItem.Icon>
-                                <FontIcon Glyph="&#xEC27;" />
+                                <FontIcon Glyph="&#xF73D;" />
                             </NavigationViewItem.Icon>
                         </NavigationViewItem>
                     </NavigationViewItem.MenuItems>
