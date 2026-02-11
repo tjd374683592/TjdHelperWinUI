@@ -45,7 +45,12 @@
                         <mdcontrols:MarkdownTextBlock
                             x:Name="MarkdownTextBlock1"
                             Config="{x:Bind LiveMarkdownConfig, Mode=OneTime}"
-                            Text="{x:Bind MarkdownTextBox.Text, Mode=OneWay}" />
+                            Text="{x:Bind MarkdownTextBox.Text, Mode=OneWay}"
+                            UseAutoLinks="True"
+                            UseEmphasisExtras="True"
+                            UseListExtras="True"
+                            UsePipeTables="True"
+                            UseTaskLists="True" />
 
                     </ScrollViewer>
                 </Border>

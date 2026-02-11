@@ -50,7 +50,8 @@ namespace TjdHelperWinUI.Pages
                 {
                     RestartAsAdministrator();
                 }
-                else {
+                else
+                {
                     App.MainWindow.MainWindowNavigationFrame.Navigate(typeof(HomePage));
                 }
             }

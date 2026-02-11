@@ -143,7 +143,15 @@ namespace TjdHelperWinUI.ViewModels
                 return;
 
             // 根分组：Properties
-            var propGroup = new CimTreeNode
+            var keyPropGroup = new CimTreeNode
+            {
+                Name = "Key Properties",
+                NodeType = CimNodeType.Group,
+                HasChildren = true,
+                IsExpanded = true
+            };
+
+            var regularPropGroup = new CimTreeNode
             {
                 Name = "Properties",
                 NodeType = CimNodeType.Group,
@@ -153,18 +161,31 @@ namespace TjdHelperWinUI.ViewModels
 
             foreach (var p in c.CimClassProperties.OrderBy(x => x.Name))
             {
-                propGroup.Children.Add(new CimTreeNode
+                var node = new CimTreeNode
                 {
                     Name = $"{p.Name} : {p.CimType}",
                     NodeType = CimNodeType.Property,
                     Tag = p
-                });
+                };
+
+                if (p.Flags.HasFlag(CimFlags.Key))
+                    keyPropGroup.Children.Add(node);
+                else
+                    regularPropGroup.Children.Add(node);
             }
 
             // 根分组：Methods
-            var methodGroup = new CimTreeNode
+            var staticMethodGroup = new CimTreeNode
             {
-                Name = "Methods",
+                Name = "Static Methods",
+                NodeType = CimNodeType.Group,
+                HasChildren = true,
+                IsExpanded = true
+            };
+
+            var instanceMethodGroup = new CimTreeNode
+            {
+                Name = "Instance Methods",
                 NodeType = CimNodeType.Group,
                 HasChildren = true,
                 IsExpanded = true
@@ -172,17 +193,35 @@ namespace TjdHelperWinUI.ViewModels
 
             foreach (var m in c.CimClassMethods.OrderBy(x => x.Name))
             {
-                methodGroup.Children.Add(new CimTreeNode
+                var isStatic = m.Qualifiers.Any(q => string.Equals(q.Name, "Static", System.StringComparison.OrdinalIgnoreCase)
+                                                     && q.Value is bool b && b);
+
+                var methodNode = new CimTreeNode
                 {
                     Name = BuildMethodDisplayName(m),
                     NodeType = CimNodeType.Method,
-                    Tag = m
-                });
+                    Tag = m,
+                    IsStaticMethod = isStatic
+                };
+
+                if (isStatic)
+                    staticMethodGroup.Children.Add(methodNode);
+                else
+                    instanceMethodGroup.Children.Add(methodNode);
             }
 
-            _properties.Add(propGroup);
-            _properties.Add(methodGroup);
+            // 添加到根节点集合
+            if (keyPropGroup.Children.Count > 0)
+                _properties.Add(keyPropGroup);
+            if (regularPropGroup.Children.Count > 0)
+                _properties.Add(regularPropGroup);
+
+            if (staticMethodGroup.Children.Count > 0)
+                _properties.Add(staticMethodGroup);
+            if (instanceMethodGroup.Children.Count > 0)
+                _properties.Add(instanceMethodGroup);
         }
+
 
 
         private static string BuildMethodDisplayName(CimMethodDeclaration m)

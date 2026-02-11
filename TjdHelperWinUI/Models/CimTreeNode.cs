@@ -21,6 +21,8 @@ namespace TjdHelperWinUI.Models
         public bool HasChildren { get; set; }
 
         public bool IsExpanded { get; set; }
+
+        public bool IsStaticMethod { get; set; }
     }
 
     public enum CimNodeType
