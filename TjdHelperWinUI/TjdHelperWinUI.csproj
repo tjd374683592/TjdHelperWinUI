@@ -149,7 +149,7 @@
     <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.2.251219" />
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.251219" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.HeaderedControls" Version="8.2.251219" />
-    <PackageReference Include="CommunityToolkit.WinUI.Controls.ImageCropper" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.ImageCropper" Version="8.2.251219" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.250402" />
@@ -169,9 +169,9 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251003001" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="QRCoder" Version="1.7.0" />
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="10.0.0-rc.2.25502.107" />
-    <PackageReference Include="System.Management" Version="10.0.0-rc.2.25502.107" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.10" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="10.0.3" />
+    <PackageReference Include="System.Management" Version="10.0.3" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="10.0.3" />
     <PackageReference Include="ZXing.Net" Version="0.16.11" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.14" />
   </ItemGroup>

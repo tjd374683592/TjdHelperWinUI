@@ -266,7 +266,7 @@ namespace TjdHelperWinUI.Tools
                 }
 
                 NotificationHelper.Show("成功", $"图片已保存到: {file.Path}");
-                OpenFolder(Path.GetDirectoryName(file.Path) ?? string.Empty);
+                OpenFolder(file.Path ?? string.Empty);
             }
             else
             {
@@ -299,7 +299,7 @@ namespace TjdHelperWinUI.Tools
                 await fs.WriteAsync(data, 0, data.Length);
 
                 NotificationHelper.Show("成功", $"文件已保存到: {file.Path}");
-                FileHelper.OpenFolder(Path.GetDirectoryName(file.Path) ?? string.Empty);
+                OpenFolder(file.Path ?? string.Empty);
             }
             else
             {
