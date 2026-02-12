@@ -1,16 +1,12 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Ionic.Zip;
+using Microsoft.UI.Xaml;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TjdHelperWinUI.Tools;
-using Ionic.Zip;
 
 namespace TjdHelperWinUI.ViewModels
 {
