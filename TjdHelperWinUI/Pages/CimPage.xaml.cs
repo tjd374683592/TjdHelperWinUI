@@ -42,7 +42,7 @@ namespace TjdHelperWinUI.Pages
 
         private async void CimPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!IsAdministrator())
+            if (!AdminUtilsHelper.IsAdministrator())
             {
                 //不是管理员权限启动
                 bool confirm = await ShowDiag();
@@ -75,14 +75,6 @@ namespace TjdHelperWinUI.Pages
             bool confirm = await messageService.ShowConfirmDialogAsync("该模块需要 管理员权限 使用", "确定要 run as admin 吗");
 
             return confirm;
-        }
-
-        // 检测是否为管理员
-        static bool IsAdministrator()
-        {
-            using WindowsIdentity identity = WindowsIdentity.GetCurrent();
-            WindowsPrincipal principal = new WindowsPrincipal(identity);
-            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
         // 以管理员权限重新启动自己

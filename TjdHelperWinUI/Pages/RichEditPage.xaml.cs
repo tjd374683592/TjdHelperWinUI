@@ -216,7 +216,14 @@ namespace TjdHelperWinUI.Pages
             }
             catch (Exception ex)
             {
-                NotificationHelper.Show("保存失败", ex.Message);
+                if (AdminUtilsHelper.IsAdministrator())
+                {
+                    NotificationHelper.Show("失败，当前应用以管理员权限运行", "FileSavePicker属于沙箱组件，它依赖于 当前用户桌面会话 进行交互。\r\n当以管理员权限启动时，进程上下文已经切换到 管理员会话。");
+                }
+                else
+                {
+                    NotificationHelper.Show("保存失败", ex.Message);
+                }
             }
         }
 
