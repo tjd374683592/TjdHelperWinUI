@@ -45,7 +45,7 @@
                 x:Name="PersonPictureCtrl"
                 Grid.Column="2"
                 Width="20"
-                Margin="0,0,10,0"
+                Margin="0,3,10,0"
                 HorizontalAlignment="Right"
                 DisplayName="Jerry Tang"
                 Foreground="{ThemeResource SystemAccentColor}"

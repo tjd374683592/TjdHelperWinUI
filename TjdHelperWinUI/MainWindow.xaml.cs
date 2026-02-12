@@ -53,14 +53,19 @@ namespace TjdHelperWinUI
             // 监听窗口变化事件（比如最大化、缩小、DPI 变化等）
             appWindow.Changed += (s, e) =>
             {
-                // AppWindow.TitleBar.RightInset 表示右边系统按钮（最小化、最大化、关闭）的总宽度
-                // 这里动态设置 AppTitleBar 的右 Padding，让右边控件（PersonPicture）避开按钮区域
-                AppTitleBar.Padding = new Thickness(0, 0, appWindow.TitleBar.RightInset, 0);
-                if (appWindow.TitleBar.RightInset < 0)
-                {
-                    AppTitleBar.Padding = new Thickness(0, 0, 138, 0);
-                }
+                var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+                // 获取 DPI 缩放
+                double dpiScale = DpiHelper.GetWindowDpiScale(hwnd);
+
+                // 将 RightInset 转换为逻辑像素
+                double rightInsetDIP = appWindow.TitleBar.RightInset / dpiScale;
+                if (rightInsetDIP < 0)
+                    rightInsetDIP = 138;
+
+                AppTitleBar.Padding = new Thickness(0, 0, rightInsetDIP, 0);
             };
+
 
             // 告诉 WinUI 使用 AppTitleBar 作为可拖拽的标题栏区域
             SetTitleBar(AppTitleBar);
