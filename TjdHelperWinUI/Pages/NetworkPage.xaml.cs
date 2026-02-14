@@ -1,4 +1,4 @@
-using CommunityToolkit.WinUI.Helpers;
+ï»¿using CommunityToolkit.WinUI.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
@@ -53,7 +53,7 @@ namespace TjdHelperWinUI.Pages
             SignalBarsText.Text = info.SignalStrength.GetValueOrDefault(0).ToString();
             NetworkNamesText.Text = string.Join(", ", info.NetworkNames);
 
-            // »ñÈ¡µ±Ç°ÍøÂçµÄ IP µØÖ·
+            // èŽ·å–å½“å‰ç½‘ç»œçš„ IP åœ°å€
             var profile = NetworkInformation.GetInternetConnectionProfile();
             if (profile?.NetworkAdapter != null)
             {
@@ -70,7 +70,7 @@ namespace TjdHelperWinUI.Pages
                     .Where(hn => hn.Type == HostNameType.Ipv6)
                     .Select(hn => hn.CanonicalName);
 
-                // ¿ÉÒÔ·Ö¿ªÏÔÊ¾
+                // å¯ä»¥åˆ†å¼€æ˜¾ç¤º
                 string ipText = "";
                 if (ipv4s.Any())
                     ipText += "IPv4: " + string.Join(", ", ipv4s);
@@ -99,9 +99,9 @@ namespace TjdHelperWinUI.Pages
                 return;
 
             dataGrid.SelectedItems.Clear();
+            searchText = searchText.Trim();
 
-            // ³¢ÊÔ°ÑÊäÈë½âÎöÎª PID
-            bool isPid = int.TryParse(searchText.Trim(), out int pid);
+            bool isNumber = int.TryParse(searchText, out int number);
 
             if (dataGrid.ItemsSource is System.Collections.IEnumerable items)
             {
@@ -109,11 +109,35 @@ namespace TjdHelperWinUI.Pages
                 {
                     if (item is NetworkPortModel port)
                     {
-                        // ¸ßÁÁÌõ¼þ£ºPID Æ¥Åä »ò ProcessName Æ¥Åä
-                        if ((isPid && port.PID == pid) || (!isPid && port.ProcessName.Contains(searchText, StringComparison.OrdinalIgnoreCase)))
+                        bool match = false;
+
+                        if (isNumber)
                         {
-                            dataGrid.SelectedItems.Add(item);
+                            // 1ï¸ PID
+                            if (port.PID == number)
+                                match = true;
+
+                            // 2ï¸ æœ¬åœ°ç«¯å£ï¼ˆTCP / UDP éƒ½æœ‰ï¼‰
+                            if (port.LocalPort == number)
+                                match = true;
+
+                            // 3ï¸ è¿œç¨‹ç«¯å£ï¼ˆåªå¯¹ TCP æœ‰æ„ä¹‰ï¼‰
+                            if (!string.IsNullOrEmpty(port.RemoteAddress) &&
+                                port.RemotePort == number)
+                                match = true;
                         }
+                        else
+                        {
+                            // 4ï¸ è¿›ç¨‹å
+                            if (!string.IsNullOrEmpty(port.ProcessName) &&
+                                port.ProcessName.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                            {
+                                match = true;
+                            }
+                        }
+
+                        if (match)
+                            dataGrid.SelectedItems.Add(item);
                     }
                 }
             }
@@ -121,5 +145,6 @@ namespace TjdHelperWinUI.Pages
             if (dataGrid.SelectedItems.Count > 0)
                 dataGrid.ScrollIntoView(dataGrid.SelectedItems[0], null);
         }
+
     }
 }

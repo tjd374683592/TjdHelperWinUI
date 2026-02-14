@@ -139,7 +139,7 @@
                     VerticalAlignment="Top"
                     Orientation="Horizontal"
                     Spacing="5">
-                    <TextBlock VerticalAlignment="Center" Text="Search PID/Process:" />
+                    <TextBlock VerticalAlignment="Center" Text="Search PID/Process/Port:" />
                     <TextBox x:Name="SearchBox" Width="200" />
                     <Button Click="SearchButton_Click" Content="Highlight" />
                 </StackPanel>
