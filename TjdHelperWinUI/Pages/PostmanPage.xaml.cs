@@ -30,8 +30,15 @@ namespace TjdHelperWinUI.Pages
             this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
 
+        private bool _isInitialized = false;
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            if (_isInitialized)
+                return;
+
+            _isInitialized = true;
+
             var postmanProjectUrl = SettingsHelper.GetSetting<string>("PostmanProjectUrl");
             if (!string.IsNullOrEmpty(postmanProjectUrl))
             {
