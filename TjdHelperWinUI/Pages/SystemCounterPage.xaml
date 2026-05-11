@@ -10,64 +10,197 @@
     Background="{x:Null}"
     mc:Ignorable="d">
 
-    <Grid Margin="10">
+    <Grid Margin="10" RowSpacing="10" ColumnSpacing="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <!--  CPU  -->
-        <Grid Grid.Row="0">
-            <lvc:CartesianChart x:Name="CpuChart" Background="Transparent" />
-            <TextBlock
-                x:Name="CpuText"
-                Margin="0,10,10,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                FontSize="14"
-                FontWeight="Bold"
-                Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
-        </Grid>
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Padding="14"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="10">
+            <Grid RowSpacing="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-        <!--  内存  -->
-        <Grid Grid.Row="1">
-            <lvc:CartesianChart x:Name="MemChart" Background="Transparent" />
-            <TextBlock
-                x:Name="MemText"
-                Margin="0,10,10,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                FontSize="14"
-                FontWeight="Bold"
-                Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
-        </Grid>
+                <StackPanel Spacing="4">
+                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="磁盘容量" />
+                    <TextBlock
+                        x:Name="DiskSummaryText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="加载中..." />
+                </StackPanel>
 
-        <!--  磁盘  -->
-        <Grid Grid.Row="2">
-            <lvc:CartesianChart x:Name="DiskChart" Background="Transparent" />
-            <TextBlock
-                x:Name="DiskText"
-                Margin="0,10,10,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                FontSize="14"
-                FontWeight="Bold"
-                Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
-        </Grid>
+                <ScrollViewer
+                    Grid.Row="1"
+                    VerticalScrollBarVisibility="Auto"
+                    VerticalScrollMode="Auto">
+                    <ListView
+                        x:Name="DriveListView"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        IsItemClickEnabled="False"
+                        SelectionMode="None">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,0,0,8"
+                                    Padding="12"
+                                    Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                                    CornerRadius="10"
+                                    RightTapped="DriveItem_RightTapped">
+                                    <StackPanel Spacing="8">
+                                        <Grid ColumnSpacing="12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
-        <!--  网络  -->
-        <Grid Grid.Row="3">
-            <lvc:CartesianChart x:Name="NetChart" Background="Transparent" />
-            <TextBlock
-                x:Name="NetText"
-                Margin="0,10,10,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                FontSize="14"
-                FontWeight="Bold"
-                Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
-        </Grid>
+                                            <TextBlock
+                                                FontSize="15"
+                                                FontWeight="SemiBold"
+                                                Text="{Binding DisplayName}" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{Binding UsagePercentText}" />
+                                        </Grid>
+
+                                        <ProgressBar
+                                            Height="8"
+                                            Maximum="100"
+                                            Value="{Binding UsagePercent}" />
+
+                                        <Grid ColumnSpacing="12">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{Binding FreeText}" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{Binding CapacityText}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <Border
+            Grid.Row="0"
+            Grid.Column="1"
+            Padding="14"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="10">
+            <Grid RowSpacing="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Spacing="4">
+                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="CPU" />
+                    <TextBlock
+                        x:Name="CpuText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="加载中..." />
+                </StackPanel>
+
+                <lvc:CartesianChart
+                    x:Name="CpuChart"
+                    Grid.Row="1"
+                    Background="Transparent" />
+            </Grid>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Padding="14"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="10">
+            <Grid RowSpacing="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Spacing="4">
+                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="内存" />
+                    <TextBlock
+                        x:Name="MemText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="加载中..." />
+                </StackPanel>
+
+                <lvc:CartesianChart
+                    x:Name="MemChart"
+                    Grid.Row="1"
+                    Background="Transparent" />
+            </Grid>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Padding="14"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="10">
+            <Grid RowSpacing="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Spacing="4">
+                    <TextBlock FontSize="18" FontWeight="SemiBold" Text="网络" />
+                    <TextBlock
+                        x:Name="NetText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="加载中..." />
+                </StackPanel>
+
+                <lvc:CartesianChart
+                    x:Name="NetChart"
+                    Grid.Row="1"
+                    Background="Transparent" />
+            </Grid>
+        </Border>
     </Grid>
 </Page>
