@@ -92,15 +92,20 @@
 
                     <StackPanel Grid.Column="5">
                         <TextBlock
+                            x:Name="IpAddressLabelText"
                             FontSize="12"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="IP Address" />
-                        <TextBlock
-                            x:Name="IpAddressText"
-                            FontSize="16"
-                            FontWeight="SemiBold"
-                            TextTrimming="CharacterEllipsis"
-                            TextWrapping="Wrap" />
+                        <ScrollViewer
+                            HorizontalScrollBarVisibility="Auto"
+                            HorizontalScrollMode="Enabled"
+                            VerticalScrollBarVisibility="Disabled"
+                            VerticalScrollMode="Disabled">
+                            <StackPanel
+                                x:Name="IpAddressPanel"
+                                Orientation="Horizontal"
+                                Spacing="0" />
+                        </ScrollViewer>
                     </StackPanel>
 
                 </Grid>

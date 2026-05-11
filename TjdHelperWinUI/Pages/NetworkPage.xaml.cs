@@ -1,12 +1,17 @@
-﻿using CommunityToolkit.WinUI.Helpers;
+using CommunityToolkit.WinUI.Helpers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TjdHelperWinUI.Tools;
 using TjdHelperWinUI.ViewModels;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Networking;
 using Windows.Networking.Connectivity;
 
@@ -63,26 +68,128 @@ namespace TjdHelperWinUI.Pages
                 // IPv4
                 var ipv4s = hostNames
                     .Where(hn => hn.Type == HostNameType.Ipv4)
-                    .Select(hn => hn.CanonicalName);
+                    .Select(hn => hn.CanonicalName)
+                    .Distinct()
+                    .ToList();
 
                 // IPv6
                 var ipv6s = hostNames
                     .Where(hn => hn.Type == HostNameType.Ipv6)
-                    .Select(hn => hn.CanonicalName);
+                    .Select(hn => hn.CanonicalName)
+                    .Distinct()
+                    .ToList();
 
-                // 可以分开显示
-                string ipText = "";
-                if (ipv4s.Any())
-                    ipText += "IPv4: " + string.Join(", ", ipv4s);
-                if (ipv6s.Any())
-                    ipText += (ipText.Length > 0 ? "\n" : "") + "IPv6: " + string.Join(", ", ipv6s);
-
-                IpAddressText.Text = ipText;
+                RenderIpAddresses(ipv4s, ipv6s);
             }
             else
             {
-                IpAddressText.Text = "N/A";
+                RenderIpAddresses([], []);
             }
+        }
+
+        private void RenderIpAddresses(IReadOnlyList<string> ipv4s, IReadOnlyList<string> ipv6s)
+        {
+            IpAddressPanel.Children.Clear();
+
+            if (ipv4s.Count == 0 && ipv6s.Count == 0)
+            {
+                AddInlineText("N/A", isSecondary: false);
+                return;
+            }
+
+            bool hasPreviousSection = false;
+
+            if (ipv4s.Count > 0)
+            {
+                AddIpSection("IPv4", ipv4s, hasPreviousSection);
+                hasPreviousSection = true;
+            }
+
+            if (ipv6s.Count > 0)
+            {
+                AddIpSection("IPv6", ipv6s, hasPreviousSection);
+            }
+        }
+
+        private void AddIpSection(string label, IReadOnlyList<string> addresses, bool hasPreviousSection)
+        {
+            if (addresses.Count == 0)
+            {
+                return;
+            }
+
+            if (hasPreviousSection)
+            {
+                IpAddressPanel.Children.Add(new Border { Width = 20 });
+            }
+
+            IpAddressPanel.Children.Add(new TextBlock
+            {
+                Text = $"{label}: ",
+                FontSize = 16,
+                TextWrapping = TextWrapping.NoWrap,
+                Foreground = GetIpVersionLabelBrush()
+            });
+
+            for (int i = 0; i < addresses.Count; i++)
+            {
+                string address = addresses[i];
+                var addressTextBlock = new TextBlock
+                {
+                    Text = address,
+                    Tag = address,
+                    FontSize = 16,
+                    FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
+                    Margin = new Thickness(0, 0, 0, 0),
+                    TextWrapping = TextWrapping.NoWrap
+                };
+
+                addressTextBlock.Tapped += IpAddressItem_Tapped;
+                IpAddressPanel.Children.Add(addressTextBlock);
+
+                if (i < addresses.Count - 1)
+                {
+                    AddInlineText(", ", isSecondary: true);
+                }
+            }
+        }
+
+        private void AddInlineText(string text, bool isSecondary = true)
+        {
+            IpAddressPanel.Children.Add(new TextBlock
+            {
+                Text = text,
+                FontSize = 16,
+                TextWrapping = TextWrapping.NoWrap,
+                Foreground = isSecondary
+                    ? IpAddressLabelText.Foreground
+                    : NetworkNamesText.Foreground
+            });
+        }
+
+        private Brush GetIpVersionLabelBrush()
+        {
+            if (ActualTheme == ElementTheme.Light)
+            {
+                return new SolidColorBrush(Colors.Black);
+            }
+
+            return IpAddressLabelText.Foreground;
+        }
+
+        private void IpAddressItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (sender is not TextBlock textBlock || textBlock.Tag is not string ipAddress || string.IsNullOrWhiteSpace(ipAddress))
+            {
+                NotificationHelper.Show("复制失败", "当前没有可复制的 IP 地址。");
+                return;
+            }
+
+            var dataPackage = new DataPackage();
+            dataPackage.SetText(ipAddress);
+            Clipboard.SetContent(dataPackage);
+
+            NotificationHelper.Show("IP 已复制", $"已经复制了 {ipAddress}");
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
