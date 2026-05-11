@@ -42,7 +42,18 @@
                     <StackPanel.ChildrenTransitions>
                         <RepositionThemeTransition />
                     </StackPanel.ChildrenTransitions>
-                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Appearance" />
+                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Application Settings" />
+                    <toolkit:SettingsCard Header="App theme">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE706;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ComboBox x:Name="cmbAppTheme" SelectionChanged="cmbAppTheme_SelectionChanged">
+                            <ComboBoxItem Content="Default" />
+                            <ComboBoxItem Content="Dark" />
+                            <ComboBoxItem Content="Light" />
+                        </ComboBox>
+                    </toolkit:SettingsCard>
+
                     <toolkit:SettingsCard Header="Navigation style">
                         <toolkit:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xF594;" />
@@ -75,7 +86,7 @@
                             TextChanged="txtPostmanProjectUrl_TextChanged" />
                     </toolkit:SettingsCard>
 
-                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Windows System Theme" />
+                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="System Settings" />
                     <toolkit:SettingsCard Header="Theme">
                         <toolkit:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE793;" />

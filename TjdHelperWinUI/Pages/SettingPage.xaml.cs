@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -64,6 +64,15 @@ namespace TjdHelperWinUI.Pages
                 txtDeepSeekAPIKey.Text = deepSeekAPIKey;
             }
 
+            var appTheme = App.MainWindow?.GetCurrentAppTheme() ?? ElementTheme.Default;
+            cmbAppTheme.SelectedIndex = appTheme switch
+            {
+                ElementTheme.Default => 0,
+                ElementTheme.Dark => 1,
+                ElementTheme.Light => 2,
+                _ => 0
+            };
+
             // ⭐ 自动选中系统主题
             bool isDark = SystemThemeHelper.IsSystemDarkTheme();
             cmbWindowsTheme.SelectedIndex = isDark ? 0 : 1; // 0 = Dark, 1 = Light
@@ -103,6 +112,22 @@ namespace TjdHelperWinUI.Pages
                 SystemThemeHelper.SetSystemTheme(false);
                 SettingsHelper.SetSetting("WindowsTheme", "Light");
             }
+        }
+
+        private void cmbAppTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_isInitialized) return;
+
+            var selectedItem = (cmbAppTheme.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            var appTheme = selectedItem switch
+            {
+                "Dark" => ElementTheme.Dark,
+                "Light" => ElementTheme.Light,
+                _ => ElementTheme.Default
+            };
+
+            App.MainWindow?.ApplyAppTheme(appTheme);
+            SettingsHelper.SetSetting("AppTheme", appTheme.ToString());
         }
 
         private void txtPostmanProjectUrl_TextChanged(object sender, TextChangedEventArgs e)

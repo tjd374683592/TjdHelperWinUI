@@ -25,7 +25,7 @@
             VerticalAlignment="Top"
             FontSize="36"
             FontWeight="SemiBold"
-            Foreground="White"
+            Foreground="{ThemeResource TextFillColorPrimaryBrush}"
             Text="TjdHelperWinUI"
             TextWrapping="Wrap" />
 
