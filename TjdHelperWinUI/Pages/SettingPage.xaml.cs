@@ -37,13 +37,9 @@ namespace TjdHelperWinUI.Pages
             this.InitializeComponent();
 
             // 使用 SettingsHelper 读取设置
-            var paneDisplayMode = SettingsHelper.GetSetting<string>("PaneDisplayMode", "Left");
+            var paneDisplayMode = SettingsHelper.GetSetting<string>("PaneDisplayMode", NavigationViewPaneDisplayMode.Left.ToString());
 
-            if (paneDisplayMode == NavigationViewPaneDisplayMode.Left.ToString())
-            {
-                navigationLocation.SelectedIndex = 0;
-            }
-            else if (paneDisplayMode == NavigationViewPaneDisplayMode.Top.ToString())
+            if (paneDisplayMode == NavigationViewPaneDisplayMode.Top.ToString())
             {
                 navigationLocation.SelectedIndex = 1;
             }
@@ -88,15 +84,14 @@ namespace TjdHelperWinUI.Pages
 
             if (navigationLocation.SelectedIndex == 0)
             {
-                App.MainWindow.MainNavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Left;
+                App.MainWindow.MainNavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Auto;
+                SettingsHelper.SetSetting("PaneDisplayMode", NavigationViewPaneDisplayMode.Left.ToString());
             }
             else if (navigationLocation.SelectedIndex == 1)
             {
                 App.MainWindow.MainNavigationView.PaneDisplayMode = NavigationViewPaneDisplayMode.Top;
+                SettingsHelper.SetSetting("PaneDisplayMode", NavigationViewPaneDisplayMode.Top.ToString());
             }
-
-            // 使用 SettingsHelper 保存设置
-            SettingsHelper.SetSetting("PaneDisplayMode", App.MainWindow.MainNavigationView.PaneDisplayMode.ToString());
         }
 
         private void cmbWindowsTheme_SelectionChanged(object sender, SelectionChangedEventArgs e)

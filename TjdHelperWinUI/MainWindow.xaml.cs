@@ -386,12 +386,19 @@ namespace TjdHelperWinUI
         // 读取导航栏布局模式
         NavigationViewPaneDisplayMode LoadPaneDisplayMode()
         {
-            var modeString = SettingsHelper.GetSetting<string>("PaneDisplayMode", "Left");
+            var modeString = SettingsHelper.GetSetting<string>("PaneDisplayMode", NavigationViewPaneDisplayMode.Left.ToString());
             if (Enum.TryParse(modeString, out NavigationViewPaneDisplayMode mode))
             {
-                return mode;
+                return mode switch
+                {
+                    NavigationViewPaneDisplayMode.Top => NavigationViewPaneDisplayMode.Top,
+                    NavigationViewPaneDisplayMode.Auto => NavigationViewPaneDisplayMode.Auto,
+                    _ => NavigationViewPaneDisplayMode.Auto
+                };
             }
-            return NavigationViewPaneDisplayMode.Left; // 默认值
+
+            // "Left" 作为用户偏好的左侧导航样式，实际使用 Auto 以保留窄窗口自动折叠行为。
+            return NavigationViewPaneDisplayMode.Auto;
         }
 
         private void PersonPictureCtrl_PointerPressed(object sender, PointerRoutedEventArgs e)

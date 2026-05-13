@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿using CommunityToolkit.Labs.WinUI.MarkdownTextBlock;
+﻿﻿﻿﻿﻿﻿﻿﻿using CommunityToolkit.Labs.WinUI.MarkdownTextBlock;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
