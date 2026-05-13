@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace TjdHelperWinUI
         // MainWindow.xaml.cs
         public NavigationView MainNavigationView { get; private set; }  // 对外暴露供其他页面访问
         public Frame MainWindowNavigationFrame { get; set; }
+        private bool _hasAppliedStartupLocalization;
+        private Page _currentLocalizedPage;
         public MainWindow()
         {
             this.InitializeComponent();
@@ -82,6 +85,8 @@ namespace TjdHelperWinUI
             MainNavigationView.PaneDisplayMode = LoadPaneDisplayMode();
 
             MainWindowNavigationFrame = this.MainFrame;
+            MainFrame.Navigated += MainFrame_Navigated;
+            Activated += MainWindow_Activated;
         }
 
         /// <summary>
@@ -266,6 +271,74 @@ namespace TjdHelperWinUI
         {
             // 默认导航到首页
             MainFrame.Navigate(typeof(HomePage));
+            DispatcherQueue.TryEnqueue(LocalizationService.RefreshApplicationLanguage);
+        }
+
+        public void RefreshLocalization()
+        {
+            LocalizationService.ApplyToObject(MainNavigation);
+            LocalizationService.ApplyToObject(TestButton1TeachingTip);
+            LocalizationService.ApplyToWindow(this);
+
+            if (MainFrame.Content is Page currentPage)
+            {
+                LocalizationService.ApplyToObject(currentPage);
+            }
+        }
+
+        private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)
+        {
+            Activated -= MainWindow_Activated;
+            QueueLocalizationRefresh();
+        }
+
+        private void QueueLocalizationRefresh()
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                RefreshLocalization();
+                MainNavigation.UpdateLayout();
+                DispatcherQueue.TryEnqueue(RefreshLocalization);
+            });
+        }
+
+        private void MainFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            if (_currentLocalizedPage != null)
+            {
+                _currentLocalizedPage.Loaded -= CurrentPage_Loaded;
+            }
+
+            if (MainFrame.Content is Page currentPage)
+            {
+                _currentLocalizedPage = currentPage;
+                currentPage.Loaded -= CurrentPage_Loaded;
+                currentPage.Loaded += CurrentPage_Loaded;
+                LocalizationService.ApplyToObject(currentPage);
+            }
+
+            if (!_hasAppliedStartupLocalization)
+            {
+                _hasAppliedStartupLocalization = true;
+                DispatcherQueue.TryEnqueue(LocalizationService.RefreshApplicationLanguage);
+            }
+        }
+
+        private void CurrentPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Page currentPage)
+            {
+                return;
+            }
+
+            currentPage.Loaded -= CurrentPage_Loaded;
+
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                LocalizationService.ApplyToObject(currentPage);
+                currentPage.UpdateLayout();
+                DispatcherQueue.TryEnqueue(() => LocalizationService.ApplyToObject(currentPage));
+            });
         }
 
         /// <summary>

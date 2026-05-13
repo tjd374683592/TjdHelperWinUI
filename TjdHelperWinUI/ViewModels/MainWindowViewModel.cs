@@ -1,4 +1,4 @@
-﻿
+﻿﻿﻿﻿
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
@@ -15,6 +15,30 @@ namespace TjdHelperWinUI.ViewModels
 {
     public partial class MainWindowViewModel
     {
+        private readonly (string NameKey, Type PageType)[] _pageDefinitions =
+        {
+            ("Home", typeof(Pages.HomePage)),
+            ("Encryption", typeof(Pages.EncryptHelperPage)),
+            ("Encoding Converter", typeof(Pages.EnDecodePage)),
+            ("Time Converter", typeof(Pages.TimeHelperPage)),
+            ("File", typeof(Pages.FileHelperPage)),
+            ("QR Code", typeof(Pages.QRCodePage)),
+            ("Win Error Code", typeof(Pages.WinErrorCodePage)),
+            ("Address Calc", typeof(Pages.AddressHelperPage)),
+            ("Library", typeof(Pages.DebugNotePage)),
+            ("Json Format", typeof(Pages.JsonFormatPage)),
+            ("Media Converter", typeof(Pages.MediaConverterPage)),
+            ("Markdown", typeof(Pages.MarkdownPage)),
+            ("Rich Edit", typeof(Pages.RichEditPage)),
+            ("Settings", typeof(Pages.SettingPage)),
+            ("Postman", typeof(Pages.PostmanPage)),
+            ("Control/Services", typeof(Pages.CplMscSearchPage)),
+            ("Counter", typeof(Pages.SystemCounterPage)),
+            ("DeepSeek", typeof(Pages.DeepSeekPage)),
+            ("Network", typeof(Pages.NetworkPage)),
+            ("Cim Explorer", typeof(Pages.CimPage))
+        };
+
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -63,34 +87,23 @@ namespace TjdHelperWinUI.ViewModels
         }
         #endregion
 
-        // 在 MainWindow.xaml.cs 或 ViewModel 中定义
-        private ObservableCollection<PageInfo> _allPages = new ObservableCollection<PageInfo>
-        {
-            new PageInfo { Name = "Home", PageType = typeof(Pages.HomePage) },
-            new PageInfo { Name = "Encryption", PageType = typeof(Pages.AddressHelperPage) },
-            new PageInfo { Name = "Encoding Converter", PageType = typeof(Pages.EnDecodePage) },
-            new PageInfo { Name = "Time Converter", PageType = typeof(Pages.TimeHelperPage) },
-            new PageInfo { Name = "File", PageType = typeof(Pages.FileHelperPage) },
-            new PageInfo { Name = "QR Code", PageType = typeof(Pages.QRCodePage) },
-            new PageInfo { Name = "Win Err Code", PageType = typeof(Pages.WinErrorCodePage) },
-            new PageInfo { Name = "Address Calc", PageType = typeof(Pages.AddressHelperPage) },
-            new PageInfo { Name = "Library", PageType = typeof(Pages.DebugNotePage) },
-            new PageInfo { Name = "Json Format", PageType = typeof(Pages.JsonFormatPage) },
-            new PageInfo { Name = "Media Converter", PageType = typeof(Pages.MediaConverterPage) },
-            new PageInfo { Name = "Markdown", PageType = typeof(Pages.MarkdownPage) },
-            new PageInfo { Name = "Rich Edit", PageType = typeof(Pages.RichEditPage) },
-            new PageInfo { Name = "Settings", PageType = typeof(Pages.SettingPage) },
-            new PageInfo { Name = "Postman", PageType = typeof(Pages.PostmanPage) },
-            new PageInfo { Name = "Control/Services", PageType = typeof(Pages.CplMscSearchPage) },
-            new PageInfo { Name = "Counter", PageType = typeof(Pages.SystemCounterPage) },
-            new PageInfo { Name = "DeepSeek", PageType = typeof(Pages.DeepSeekPage) },
-            new PageInfo { Name = "Network", PageType = typeof(Pages.NetworkPage) },
-            new PageInfo { Name = "Cim Explorer", PageType = typeof(Pages.CimPage) }
-        };
+        private ObservableCollection<PageInfo> _allPages = new ObservableCollection<PageInfo>();
 
         public MainWindowViewModel()
         {
+            ReloadLocalizedPageNames();
+        }
 
+        public void ReloadLocalizedPageNames()
+        {
+            _allPages = new ObservableCollection<PageInfo>(
+                _pageDefinitions.Select(page => new PageInfo
+                {
+                    Name = LocalizationService.Translate(page.NameKey),
+                    PageType = page.PageType
+                }));
+
+            OnSearchTextChanged(StrSearchInput ?? string.Empty);
         }
 
         /// <summary>
@@ -99,14 +112,12 @@ namespace TjdHelperWinUI.ViewModels
         /// <param name="newText"></param>
         private void OnSearchTextChanged(string searchStr)
         {
-            // 在这里处理搜索逻辑，例如执行搜索、过滤数据等
-            // 根据输入过滤页面
-            var query = searchStr.ToLower();
-            var filteredPages = _allPages.Where(p => p.Name.ToLower().Contains(searchStr)).ToList();
+            var normalizedSearch = (searchStr ?? string.Empty).Trim();
+            var filteredPages = string.IsNullOrEmpty(normalizedSearch)
+                ? _allPages.ToList()
+                : _allPages.Where(p => p.Name.Contains(normalizedSearch, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
-            // 更新建议项
             SearchItemsResult.Clear();
-            // 清空并重新填充集合
             foreach (var page in filteredPages)
             {
                 SearchItemsResult.Add(page);

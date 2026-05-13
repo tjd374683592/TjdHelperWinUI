@@ -176,8 +176,8 @@
                             Width="150"
                             SelectedIndex="0"
                             SelectionChanged="ThumbPlacementCombo_SelectionChanged">
-                            <ComboBoxItem Content="All" />
-                            <ComboBoxItem Content="Corners" />
+                            <ComboBoxItem Content="All" Tag="All" />
+                            <ComboBoxItem Content="Corners" Tag="Corners" />
                         </ComboBox>
                     </AppBarElementContainer>
 
@@ -188,8 +188,8 @@
                             Width="150"
                             SelectedIndex="0"
                             SelectionChanged="CropShapeCombo_SelectionChanged">
-                            <ComboBoxItem Content="Rectangular" />
-                            <ComboBoxItem Content="Circular" />
+                            <ComboBoxItem Content="Rectangular" Tag="Rectangular" />
+                            <ComboBoxItem Content="Circular" Tag="Circular" />
                         </ComboBox>
                     </AppBarElementContainer>
 
@@ -200,12 +200,12 @@
                             Width="150"
                             SelectedIndex="0"
                             SelectionChanged="AspectRatioCombo_SelectionChanged">
-                            <ComboBoxItem Content="Custom" />
-                            <ComboBoxItem Content="Square" />
-                            <ComboBoxItem Content="Landscape(16:9)" />
-                            <ComboBoxItem Content="Portrait(9:16)" />
-                            <ComboBoxItem Content="4:3" />
-                            <ComboBoxItem Content="3:2" />
+                            <ComboBoxItem Content="Custom" Tag="Custom" />
+                            <ComboBoxItem Content="Square" Tag="Square" />
+                            <ComboBoxItem Content="Landscape(16:9)" Tag="Landscape(16:9)" />
+                            <ComboBoxItem Content="Portrait(9:16)" Tag="Portrait(9:16)" />
+                            <ComboBoxItem Content="4:3" Tag="4:3" />
+                            <ComboBoxItem Content="3:2" Tag="3:2" />
                         </ComboBox>
                     </AppBarElementContainer>
                 </controls:TabbedCommandBarItem>

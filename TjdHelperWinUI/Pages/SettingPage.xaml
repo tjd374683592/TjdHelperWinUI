@@ -64,6 +64,16 @@
                         </ComboBox>
                     </toolkit:SettingsCard>
 
+                    <toolkit:SettingsCard Header="App language">
+                        <toolkit:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE909;" />
+                        </toolkit:SettingsCard.HeaderIcon>
+                        <ComboBox x:Name="cmbAppLanguage" SelectionChanged="cmbAppLanguage_SelectionChanged">
+                            <ComboBoxItem Content="Chinese (Simplified)" Tag="zh-CN" />
+                            <ComboBoxItem Content="English" Tag="en-US" />
+                        </ComboBox>
+                    </toolkit:SettingsCard>
+
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="DeepSeek" />
                     <toolkit:SettingsCard Header="API Key">
                         <toolkit:SettingsCard.HeaderIcon>

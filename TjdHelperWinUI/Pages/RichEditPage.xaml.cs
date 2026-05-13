@@ -74,6 +74,8 @@ namespace TjdHelperWinUI.Pages
             {
                 ViewModel.Editor = Editor;
             }
+
+            QueueLocalizationRefresh();
         }
 
         private void Editor_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
@@ -178,6 +180,18 @@ namespace TjdHelperWinUI.Pages
 
                 await LoadImage();
             }
+
+            QueueLocalizationRefresh();
+        }
+
+        private void QueueLocalizationRefresh()
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                LocalizationService.ApplyToObject(this);
+                UpdateLayout();
+                DispatcherQueue.TryEnqueue(() => LocalizationService.ApplyToObject(this));
+            });
         }
 
         private async void PickButton_Click(object sender, RoutedEventArgs e)
@@ -236,7 +250,7 @@ namespace TjdHelperWinUI.Pages
         {
             if (ImageCropperControl == null) return;
 
-            var selected = (ThumbPlacementCombo.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            var selected = (ThumbPlacementCombo.SelectedItem as ComboBoxItem)?.Tag?.ToString();
             switch (selected)
             {
                 case "All":
@@ -252,7 +266,7 @@ namespace TjdHelperWinUI.Pages
         {
             if (ImageCropperControl == null) return;
 
-            var selected = (CropShapeCombo.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            var selected = (CropShapeCombo.SelectedItem as ComboBoxItem)?.Tag?.ToString();
             switch (selected)
             {
                 case "Rectangular":
@@ -268,7 +282,7 @@ namespace TjdHelperWinUI.Pages
         {
             if (ImageCropperControl == null) return;
 
-            var selected = (AspectRatioCombo.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            var selected = (AspectRatioCombo.SelectedItem as ComboBoxItem)?.Tag?.ToString();
             switch (selected)
             {
                 case "Custom":

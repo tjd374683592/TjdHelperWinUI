@@ -77,6 +77,8 @@ namespace TjdHelperWinUI.Pages
             bool isDark = SystemThemeHelper.IsSystemDarkTheme();
             cmbWindowsTheme.SelectedIndex = isDark ? 0 : 1; // 0 = Dark, 1 = Light
 
+            cmbAppLanguage.SelectedIndex = LocalizationService.GetCurrentLanguageTag() == "zh-CN" ? 0 : 1;
+
             _isInitialized = true;
         }
 
@@ -101,13 +103,12 @@ namespace TjdHelperWinUI.Pages
         {
             if (!_isInitialized) return;
 
-            var selectedItem = (cmbWindowsTheme.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            if (selectedItem == "Dark")
+            if (cmbWindowsTheme.SelectedIndex == 0)
             {
                 SystemThemeHelper.SetSystemTheme(true);
                 SettingsHelper.SetSetting("WindowsTheme", "Dark");
             }
-            else if (selectedItem == "Light")
+            else if (cmbWindowsTheme.SelectedIndex == 1)
             {
                 SystemThemeHelper.SetSystemTheme(false);
                 SettingsHelper.SetSetting("WindowsTheme", "Light");
@@ -118,11 +119,10 @@ namespace TjdHelperWinUI.Pages
         {
             if (!_isInitialized) return;
 
-            var selectedItem = (cmbAppTheme.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            var appTheme = selectedItem switch
+            var appTheme = cmbAppTheme.SelectedIndex switch
             {
-                "Dark" => ElementTheme.Dark,
-                "Light" => ElementTheme.Light,
+                1 => ElementTheme.Dark,
+                2 => ElementTheme.Light,
                 _ => ElementTheme.Default
             };
 
@@ -130,16 +130,31 @@ namespace TjdHelperWinUI.Pages
             SettingsHelper.SetSetting("AppTheme", appTheme.ToString());
         }
 
+        private void cmbAppLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_isInitialized) return;
+
+            if ((cmbAppLanguage.SelectedItem as ComboBoxItem)?.Tag is string languageTag &&
+                LocalizationService.SetLanguage(languageTag))
+            {
+                LocalizationService.RefreshApplicationLanguage();
+            }
+        }
+
         private void txtPostmanProjectUrl_TextChanged(object sender, TextChangedEventArgs e)
         {
             SettingsHelper.SetSetting("PostmanProjectUrl", txtPostmanProjectUrl.Text);
-            NotificationHelper.Show("注意", "Postman Project Url更新成功");
+            NotificationHelper.Show(
+                LocalizationService.Translate("Notice"),
+                LocalizationService.Translate("Postman Project Url updated successfully"));
         }
 
         private void txtDeepSeekAPIKeyTextChanged(object sender, TextChangedEventArgs e)
         {
             SettingsHelper.SetSetting("DeepSeekAPIKey", txtDeepSeekAPIKey.Text);
-            NotificationHelper.Show("注意", "DeepSeek API Key更新成功");
+            NotificationHelper.Show(
+                LocalizationService.Translate("Notice"),
+                LocalizationService.Translate("DeepSeek API Key updated successfully"));
         }
     }
 }

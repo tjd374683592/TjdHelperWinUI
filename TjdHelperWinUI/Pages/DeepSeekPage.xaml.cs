@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Labs.WinUI.MarkdownTextBlock;
+﻿﻿﻿﻿using CommunityToolkit.Labs.WinUI.MarkdownTextBlock;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
@@ -57,7 +57,9 @@ namespace TjdHelperWinUI.Pages
             var deepSeekAPIKey = SettingsHelper.GetSetting<string>("DeepSeekAPIKey");
             if (string.IsNullOrEmpty(deepSeekAPIKey))
             {
-                NotificationHelper.Show("注意", "请设置DeepSeek API Key");
+                NotificationHelper.Show(
+                    LocalizationService.Translate("Notice"),
+                    LocalizationService.Translate("Please set DeepSeek API Key"));
                 App.MainWindow.MainWindowNavigationFrame.Navigate(typeof(SettingPage));
             }
         }

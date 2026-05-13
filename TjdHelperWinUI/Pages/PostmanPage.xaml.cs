@@ -46,7 +46,9 @@ namespace TjdHelperWinUI.Pages
             }
             else
             {
-                NotificationHelper.Show("注意", "请设置Postman项目地址");
+                NotificationHelper.Show(
+                    LocalizationService.Translate("Notice"),
+                    LocalizationService.Translate("Please set the Postman project URL first"));
                 App.MainWindow.MainWindowNavigationFrame.Navigate(typeof(SettingPage));
             }
         }

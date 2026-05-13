@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +18,7 @@ using Microsoft.UI.Xaml.Shapes;
 using Microsoft.Extensions.DependencyInjection;
 using TjdHelperWinUI.ViewModels;
 using System.Runtime.InteropServices;
+using TjdHelperWinUI.Tools;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -47,6 +48,7 @@ namespace TjdHelperWinUI
         /// </summary>
         public App()
         {
+            LocalizationService.Initialize();
             this.InitializeComponent();
         }
 
