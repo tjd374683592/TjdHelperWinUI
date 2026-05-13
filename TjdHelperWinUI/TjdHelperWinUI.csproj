@@ -11,6 +11,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
+    <SatelliteResourceLanguages>en-US;zh-CN</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\GalleryHeaderImage.png" />
