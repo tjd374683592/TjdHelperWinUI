@@ -14,7 +14,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
 using System.Threading.Tasks;
 using TjdHelperWinUI.Tools;
 using TjdHelperWinUI.ViewModels;
@@ -42,6 +41,7 @@ namespace TjdHelperWinUI.Pages
         {
             this.InitializeComponent();
             this.NavigationCacheMode = Microsoft.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            ActualThemeChanged += JsonFormatPage_ActualThemeChanged;
 
             if (Content is FrameworkElement rootElement)
             {
@@ -63,16 +63,6 @@ namespace TjdHelperWinUI.Pages
         {
             //messge
             var monacoPostMsgStr = args.TryGetWebMessageAsString();
-
-            //更改主题
-            if (monacoPostMsgStr.Split("->")[0] == "changeTheme" && monacoPostMsgStr.Split("->")[1] == "vs-light")
-            {
-                ChangeEditorTheme("vs-dark");
-            }
-            if (monacoPostMsgStr.Split("->")[0] == "changeTheme" && monacoPostMsgStr.Split("->")[1] == "vs-dark")
-            {
-                ChangeEditorTheme("vs-light");
-            }
 
             //格式化Json
             if (monacoPostMsgStr.StartsWith("checkAndFormatJson->"))
@@ -130,6 +120,7 @@ namespace TjdHelperWinUI.Pages
             await MonacoWebView.EnsureCoreWebView2Async(); // 等待 WebView2 核心初始化
             // 监听 WebView2 的加载完成事件
             MonacoWebView.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
+            MonacoWebView.NavigationCompleted += MonacoWebView_NavigationCompleted;
 
             string appFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string htmlPath = Path.Combine(appFolder, "Resources", "monaco.html");
@@ -139,26 +130,25 @@ namespace TjdHelperWinUI.Pages
                 MonacoWebView.Source = new Uri($"file:///{htmlPath.Replace("\\", "/")}");
 
             }
-
-            ThreadPool.QueueUserWorkItem(new WaitCallback((o) =>
-            {
-                Thread.Sleep(2000);
-                DispatcherQueue.TryEnqueue(() =>
-                {
-                    if (SystemThemeHelper.IsSystemDarkTheme())
-                    {
-                        ChangeEditorTheme("vs-dark");
-                    }
-                    else
-                    {
-                        ChangeEditorTheme("vs-light");
-                    }
-
-                    LoadLanguage();
-                });
-            }));
         }
         #endregion
+
+        private void MonacoWebView_NavigationCompleted(WebView2 sender, CoreWebView2NavigationCompletedEventArgs args)
+        {
+            if (!args.IsSuccess)
+            {
+                return;
+            }
+
+            SyncEditorThemeWithAppTheme();
+            LoadLanguage();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            SyncEditorThemeWithAppTheme();
+        }
 
         #region 加载代码语言
         /// <summary>
@@ -216,6 +206,17 @@ namespace TjdHelperWinUI.Pages
         }
         #endregion
 
+        private void JsonFormatPage_ActualThemeChanged(FrameworkElement sender, object args)
+        {
+            SyncEditorThemeWithAppTheme();
+        }
+
+        private void SyncEditorThemeWithAppTheme()
+        {
+            string theme = ActualTheme == ElementTheme.Dark ? "vs-dark" : "vs-light";
+            ChangeEditorTheme(theme);
+        }
+
         #region 格式化校验Json
         /// <summary>
         /// 格式化校验Json
@@ -237,7 +238,13 @@ namespace TjdHelperWinUI.Pages
         /// <param name="e"></param>
         private async void btnChangeThemeClicked(object sender, RoutedEventArgs e)
         {
-            await MonacoWebView.ExecuteScriptAsync("window.chrome.webview.postMessage('changeTheme->'+getEditorTheme());");
+            if (MonacoWebView.CoreWebView2 == null)
+            {
+                return;
+            }
+
+            string currentTheme = await MonacoWebView.CoreWebView2.ExecuteScriptAsync("getEditorTheme()");
+            ChangeEditorTheme(currentTheme.Contains("vs-dark") ? "vs-light" : "vs-dark");
         }
 
         #endregion
