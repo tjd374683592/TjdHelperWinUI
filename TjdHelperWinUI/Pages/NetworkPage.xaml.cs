@@ -127,8 +127,7 @@ namespace TjdHelperWinUI.Pages
             {
                 Text = $"{label}: ",
                 FontSize = 16,
-                TextWrapping = TextWrapping.NoWrap,
-                Foreground = GetIpVersionLabelBrush()
+                TextWrapping = TextWrapping.NoWrap
             });
 
             for (int i = 0; i < addresses.Count; i++)
